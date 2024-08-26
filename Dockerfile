@@ -1,24 +1,16 @@
-FROM golang:1.19 AS builder
+# 使用官方的 Go 镜像作为基础镜像
+FROM golang:1.21
 
-COPY . /src
+# 安装 make 工具
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+# 设置工作目录
 WORKDIR /src
 
-RUN GOPROXY=https://goproxy.cn make build
+# 复制当前目录下的所有文件到容器的 /src 目录
+COPY . /src
 
-FROM debian:stable-slim
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		ca-certificates  \
-        netbase \
-        && rm -rf /var/lib/apt/lists/ \
-        && apt-get autoremove -y && apt-get autoclean -y
-
-COPY --from=builder /src/bin /app
-
-WORKDIR /app
-
-EXPOSE 8000
-EXPOSE 9000
-VOLUME /data/conf
-
-CMD ["./server", "-conf", "/data/conf"]
+# 默认命令，这里使用 bash 进入交互模式
+CMD ["bash"]

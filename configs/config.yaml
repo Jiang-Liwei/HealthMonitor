@@ -8,8 +8,11 @@ server:
 data:
   database:
     driver: mysql
-    source: root:root@tcp(127.0.0.1:3306)/test?parseTime=True&loc=Local
+    source: root:root@tcp(127.0.0.1:3306)/health_monitor?parseTime=True&loc=Local
   redis:
     addr: 127.0.0.1:6379
+    password: "123456"
+    db: 0
+    dial_timeout: 5s
     read_timeout: 0.2s
     write_timeout: 0.2s
