@@ -22,7 +22,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewGreeterRepo, NewRedis, NewEntClient)
+var ProviderSet = wire.NewSet(NewData, NewRedis, NewEntClient)
 
 // Data holds the database and Redis clients.
 type Data struct {
@@ -82,6 +82,7 @@ func NewRedis(c *conf.Data) *redis.Client {
 
 // NewEntClient initializes the Ent client with tracing and logging.
 func NewEntClient(c *conf.Data, logHelper *log.Helper) (*ent.Client, error) {
+	println("=============================================================================================")
 	drv, err := sql.Open(
 		c.Database.Driver,
 		c.Database.Source,
