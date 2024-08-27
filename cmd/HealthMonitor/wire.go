@@ -6,9 +6,7 @@
 package main
 
 import (
-	"HealthMonitor/internal/biz"
 	"HealthMonitor/internal/conf"
-	"HealthMonitor/internal/data"
 	"HealthMonitor/internal/server"
 	"HealthMonitor/internal/service"
 
@@ -17,7 +15,27 @@ import (
 	"github.com/google/wire"
 )
 
+// ProvideHTTPServerConfig provides the HTTP server configuration.
+func ProvideHTTPServerConfig(
+	c *conf.Server,
+	index *service.IndexService,
+	logger log.Logger,
+) server.HTTPServerConfig {
+	return server.HTTPServerConfig{
+		Conf:   c,
+		Index:  index,
+		Logger: logger,
+	}
+}
+
 // wireApp init kratos application.
 func wireApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
+	panic(wire.Build(
+		server.ProviderSet,
+		//data.ProviderSet,
+		//biz.ProviderSet,
+		service.ProviderSet,
+		ProvideHTTPServerConfig,
+		newApp,
+	))
 }

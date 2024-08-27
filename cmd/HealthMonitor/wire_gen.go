@@ -8,8 +8,8 @@ package main
 
 import (
 	"HealthMonitor/internal/conf"
-	"HealthMonitor/internal/data"
 	"HealthMonitor/internal/server"
+	"HealthMonitor/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 )
@@ -21,15 +21,27 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	dataData, cleanup, err := data.NewData(confData, logger)
-	if err != nil {
-		return nil, nil, err
-	}
-	grpcServer := server.NewGRPCServer(confServer, dataData, logger)
-	httpServer := server.NewHTTPServer(confServer, dataData, logger)
+func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+	indexService := service.NewIndexService()
+	httpServerConfig := ProvideHTTPServerConfig(confServer, indexService, logger)
+	grpcServer := server.NewGRPCServer(httpServerConfig)
+	httpServer := server.NewHTTPServer(httpServerConfig)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
-		cleanup()
 	}, nil
+}
+
+// wire.go:
+
+// ProvideHTTPServerConfig provides the HTTP server configuration.
+func ProvideHTTPServerConfig(
+	c *conf.Server,
+	index *service.IndexService,
+	logger log.Logger,
+) server.HTTPServerConfig {
+	return server.HTTPServerConfig{
+		Conf:   c,
+		Index:  index,
+		Logger: logger,
+	}
 }
