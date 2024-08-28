@@ -8,6 +8,10 @@ import (
 	"HealthMonitor/ent/adminpermission"
 	"HealthMonitor/ent/adminroles"
 	"HealthMonitor/ent/adminuser"
+	"HealthMonitor/ent/bloodstatusrecord"
+	"HealthMonitor/ent/food"
+	"HealthMonitor/ent/ingredients"
+	"HealthMonitor/ent/nutrient"
 	"HealthMonitor/ent/schema"
 	"time"
 
@@ -100,4 +104,28 @@ func init() {
 	adminuserDescID := adminuserFields[0].Descriptor()
 	// adminuser.DefaultID holds the default value on creation for the id field.
 	adminuser.DefaultID = adminuserDescID.Default.(func() uuid.UUID)
+	bloodstatusrecordFields := schema.BloodStatusRecord{}.Fields()
+	_ = bloodstatusrecordFields
+	// bloodstatusrecordDescID is the schema descriptor for id field.
+	bloodstatusrecordDescID := bloodstatusrecordFields[0].Descriptor()
+	// bloodstatusrecord.DefaultID holds the default value on creation for the id field.
+	bloodstatusrecord.DefaultID = bloodstatusrecordDescID.Default.(func() uuid.UUID)
+	foodFields := schema.Food{}.Fields()
+	_ = foodFields
+	// foodDescID is the schema descriptor for id field.
+	foodDescID := foodFields[0].Descriptor()
+	// food.DefaultID holds the default value on creation for the id field.
+	food.DefaultID = foodDescID.Default.(func() uuid.UUID)
+	ingredientsFields := schema.Ingredients{}.Fields()
+	_ = ingredientsFields
+	// ingredientsDescID is the schema descriptor for id field.
+	ingredientsDescID := ingredientsFields[0].Descriptor()
+	// ingredients.DefaultID holds the default value on creation for the id field.
+	ingredients.DefaultID = ingredientsDescID.Default.(func() uuid.UUID)
+	nutrientFields := schema.Nutrient{}.Fields()
+	_ = nutrientFields
+	// nutrientDescID is the schema descriptor for id field.
+	nutrientDescID := nutrientFields[0].Descriptor()
+	// nutrient.DefaultID holds the default value on creation for the id field.
+	nutrient.DefaultID = nutrientDescID.Default.(func() uuid.UUID)
 }

@@ -19,6 +19,14 @@ import (
 	"HealthMonitor/ent/adminroles"
 	"HealthMonitor/ent/adminuser"
 	"HealthMonitor/ent/adminuserrole"
+	"HealthMonitor/ent/bloodstatusrecord"
+	"HealthMonitor/ent/food"
+	"HealthMonitor/ent/foodingredients"
+	"HealthMonitor/ent/foodnutrients"
+	"HealthMonitor/ent/ingredients"
+	"HealthMonitor/ent/nutrient"
+	"HealthMonitor/ent/usermeal"
+	"HealthMonitor/ent/usermealfood"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -48,6 +56,22 @@ type Client struct {
 	AdminUser *AdminUserClient
 	// AdminUserRole is the client for interacting with the AdminUserRole builders.
 	AdminUserRole *AdminUserRoleClient
+	// BloodStatusRecord is the client for interacting with the BloodStatusRecord builders.
+	BloodStatusRecord *BloodStatusRecordClient
+	// Food is the client for interacting with the Food builders.
+	Food *FoodClient
+	// FoodIngredients is the client for interacting with the FoodIngredients builders.
+	FoodIngredients *FoodIngredientsClient
+	// FoodNutrients is the client for interacting with the FoodNutrients builders.
+	FoodNutrients *FoodNutrientsClient
+	// Ingredients is the client for interacting with the Ingredients builders.
+	Ingredients *IngredientsClient
+	// Nutrient is the client for interacting with the Nutrient builders.
+	Nutrient *NutrientClient
+	// UserMeal is the client for interacting with the UserMeal builders.
+	UserMeal *UserMealClient
+	// UserMealFood is the client for interacting with the UserMealFood builders.
+	UserMealFood *UserMealFoodClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -67,6 +91,14 @@ func (c *Client) init() {
 	c.AdminRoles = NewAdminRolesClient(c.config)
 	c.AdminUser = NewAdminUserClient(c.config)
 	c.AdminUserRole = NewAdminUserRoleClient(c.config)
+	c.BloodStatusRecord = NewBloodStatusRecordClient(c.config)
+	c.Food = NewFoodClient(c.config)
+	c.FoodIngredients = NewFoodIngredientsClient(c.config)
+	c.FoodNutrients = NewFoodNutrientsClient(c.config)
+	c.Ingredients = NewIngredientsClient(c.config)
+	c.Nutrient = NewNutrientClient(c.config)
+	c.UserMeal = NewUserMealClient(c.config)
+	c.UserMealFood = NewUserMealFoodClient(c.config)
 }
 
 type (
@@ -167,6 +199,14 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		AdminRoles:          NewAdminRolesClient(cfg),
 		AdminUser:           NewAdminUserClient(cfg),
 		AdminUserRole:       NewAdminUserRoleClient(cfg),
+		BloodStatusRecord:   NewBloodStatusRecordClient(cfg),
+		Food:                NewFoodClient(cfg),
+		FoodIngredients:     NewFoodIngredientsClient(cfg),
+		FoodNutrients:       NewFoodNutrientsClient(cfg),
+		Ingredients:         NewIngredientsClient(cfg),
+		Nutrient:            NewNutrientClient(cfg),
+		UserMeal:            NewUserMealClient(cfg),
+		UserMealFood:        NewUserMealFoodClient(cfg),
 	}, nil
 }
 
@@ -194,6 +234,14 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		AdminRoles:          NewAdminRolesClient(cfg),
 		AdminUser:           NewAdminUserClient(cfg),
 		AdminUserRole:       NewAdminUserRoleClient(cfg),
+		BloodStatusRecord:   NewBloodStatusRecordClient(cfg),
+		Food:                NewFoodClient(cfg),
+		FoodIngredients:     NewFoodIngredientsClient(cfg),
+		FoodNutrients:       NewFoodNutrientsClient(cfg),
+		Ingredients:         NewIngredientsClient(cfg),
+		Nutrient:            NewNutrientClient(cfg),
+		UserMeal:            NewUserMealClient(cfg),
+		UserMealFood:        NewUserMealFoodClient(cfg),
 	}, nil
 }
 
@@ -225,6 +273,8 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.AdminJWTBlacklist, c.AdminLog, c.AdminMenu, c.AdminPermission,
 		c.AdminRolePermission, c.AdminRoles, c.AdminUser, c.AdminUserRole,
+		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrients, c.Ingredients,
+		c.Nutrient, c.UserMeal, c.UserMealFood,
 	} {
 		n.Use(hooks...)
 	}
@@ -236,6 +286,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.AdminJWTBlacklist, c.AdminLog, c.AdminMenu, c.AdminPermission,
 		c.AdminRolePermission, c.AdminRoles, c.AdminUser, c.AdminUserRole,
+		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrients, c.Ingredients,
+		c.Nutrient, c.UserMeal, c.UserMealFood,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -260,6 +312,22 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.AdminUser.mutate(ctx, m)
 	case *AdminUserRoleMutation:
 		return c.AdminUserRole.mutate(ctx, m)
+	case *BloodStatusRecordMutation:
+		return c.BloodStatusRecord.mutate(ctx, m)
+	case *FoodMutation:
+		return c.Food.mutate(ctx, m)
+	case *FoodIngredientsMutation:
+		return c.FoodIngredients.mutate(ctx, m)
+	case *FoodNutrientsMutation:
+		return c.FoodNutrients.mutate(ctx, m)
+	case *IngredientsMutation:
+		return c.Ingredients.mutate(ctx, m)
+	case *NutrientMutation:
+		return c.Nutrient.mutate(ctx, m)
+	case *UserMealMutation:
+		return c.UserMeal.mutate(ctx, m)
+	case *UserMealFoodMutation:
+		return c.UserMealFood.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
 	}
@@ -1489,14 +1557,1272 @@ func (c *AdminUserRoleClient) mutate(ctx context.Context, m *AdminUserRoleMutati
 	}
 }
 
+// BloodStatusRecordClient is a client for the BloodStatusRecord schema.
+type BloodStatusRecordClient struct {
+	config
+}
+
+// NewBloodStatusRecordClient returns a client for the BloodStatusRecord from the given config.
+func NewBloodStatusRecordClient(c config) *BloodStatusRecordClient {
+	return &BloodStatusRecordClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `bloodstatusrecord.Hooks(f(g(h())))`.
+func (c *BloodStatusRecordClient) Use(hooks ...Hook) {
+	c.hooks.BloodStatusRecord = append(c.hooks.BloodStatusRecord, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `bloodstatusrecord.Intercept(f(g(h())))`.
+func (c *BloodStatusRecordClient) Intercept(interceptors ...Interceptor) {
+	c.inters.BloodStatusRecord = append(c.inters.BloodStatusRecord, interceptors...)
+}
+
+// Create returns a builder for creating a BloodStatusRecord entity.
+func (c *BloodStatusRecordClient) Create() *BloodStatusRecordCreate {
+	mutation := newBloodStatusRecordMutation(c.config, OpCreate)
+	return &BloodStatusRecordCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of BloodStatusRecord entities.
+func (c *BloodStatusRecordClient) CreateBulk(builders ...*BloodStatusRecordCreate) *BloodStatusRecordCreateBulk {
+	return &BloodStatusRecordCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *BloodStatusRecordClient) MapCreateBulk(slice any, setFunc func(*BloodStatusRecordCreate, int)) *BloodStatusRecordCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &BloodStatusRecordCreateBulk{err: fmt.Errorf("calling to BloodStatusRecordClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*BloodStatusRecordCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &BloodStatusRecordCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for BloodStatusRecord.
+func (c *BloodStatusRecordClient) Update() *BloodStatusRecordUpdate {
+	mutation := newBloodStatusRecordMutation(c.config, OpUpdate)
+	return &BloodStatusRecordUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *BloodStatusRecordClient) UpdateOne(bsr *BloodStatusRecord) *BloodStatusRecordUpdateOne {
+	mutation := newBloodStatusRecordMutation(c.config, OpUpdateOne, withBloodStatusRecord(bsr))
+	return &BloodStatusRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *BloodStatusRecordClient) UpdateOneID(id uuid.UUID) *BloodStatusRecordUpdateOne {
+	mutation := newBloodStatusRecordMutation(c.config, OpUpdateOne, withBloodStatusRecordID(id))
+	return &BloodStatusRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for BloodStatusRecord.
+func (c *BloodStatusRecordClient) Delete() *BloodStatusRecordDelete {
+	mutation := newBloodStatusRecordMutation(c.config, OpDelete)
+	return &BloodStatusRecordDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *BloodStatusRecordClient) DeleteOne(bsr *BloodStatusRecord) *BloodStatusRecordDeleteOne {
+	return c.DeleteOneID(bsr.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *BloodStatusRecordClient) DeleteOneID(id uuid.UUID) *BloodStatusRecordDeleteOne {
+	builder := c.Delete().Where(bloodstatusrecord.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &BloodStatusRecordDeleteOne{builder}
+}
+
+// Query returns a query builder for BloodStatusRecord.
+func (c *BloodStatusRecordClient) Query() *BloodStatusRecordQuery {
+	return &BloodStatusRecordQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeBloodStatusRecord},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a BloodStatusRecord entity by its id.
+func (c *BloodStatusRecordClient) Get(ctx context.Context, id uuid.UUID) (*BloodStatusRecord, error) {
+	return c.Query().Where(bloodstatusrecord.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *BloodStatusRecordClient) GetX(ctx context.Context, id uuid.UUID) *BloodStatusRecord {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *BloodStatusRecordClient) Hooks() []Hook {
+	return c.hooks.BloodStatusRecord
+}
+
+// Interceptors returns the client interceptors.
+func (c *BloodStatusRecordClient) Interceptors() []Interceptor {
+	return c.inters.BloodStatusRecord
+}
+
+func (c *BloodStatusRecordClient) mutate(ctx context.Context, m *BloodStatusRecordMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&BloodStatusRecordCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&BloodStatusRecordUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&BloodStatusRecordUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&BloodStatusRecordDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown BloodStatusRecord mutation op: %q", m.Op())
+	}
+}
+
+// FoodClient is a client for the Food schema.
+type FoodClient struct {
+	config
+}
+
+// NewFoodClient returns a client for the Food from the given config.
+func NewFoodClient(c config) *FoodClient {
+	return &FoodClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `food.Hooks(f(g(h())))`.
+func (c *FoodClient) Use(hooks ...Hook) {
+	c.hooks.Food = append(c.hooks.Food, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `food.Intercept(f(g(h())))`.
+func (c *FoodClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Food = append(c.inters.Food, interceptors...)
+}
+
+// Create returns a builder for creating a Food entity.
+func (c *FoodClient) Create() *FoodCreate {
+	mutation := newFoodMutation(c.config, OpCreate)
+	return &FoodCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Food entities.
+func (c *FoodClient) CreateBulk(builders ...*FoodCreate) *FoodCreateBulk {
+	return &FoodCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FoodClient) MapCreateBulk(slice any, setFunc func(*FoodCreate, int)) *FoodCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FoodCreateBulk{err: fmt.Errorf("calling to FoodClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FoodCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FoodCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Food.
+func (c *FoodClient) Update() *FoodUpdate {
+	mutation := newFoodMutation(c.config, OpUpdate)
+	return &FoodUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FoodClient) UpdateOne(f *Food) *FoodUpdateOne {
+	mutation := newFoodMutation(c.config, OpUpdateOne, withFood(f))
+	return &FoodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FoodClient) UpdateOneID(id uuid.UUID) *FoodUpdateOne {
+	mutation := newFoodMutation(c.config, OpUpdateOne, withFoodID(id))
+	return &FoodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Food.
+func (c *FoodClient) Delete() *FoodDelete {
+	mutation := newFoodMutation(c.config, OpDelete)
+	return &FoodDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FoodClient) DeleteOne(f *Food) *FoodDeleteOne {
+	return c.DeleteOneID(f.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FoodClient) DeleteOneID(id uuid.UUID) *FoodDeleteOne {
+	builder := c.Delete().Where(food.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FoodDeleteOne{builder}
+}
+
+// Query returns a query builder for Food.
+func (c *FoodClient) Query() *FoodQuery {
+	return &FoodQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFood},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Food entity by its id.
+func (c *FoodClient) Get(ctx context.Context, id uuid.UUID) (*Food, error) {
+	return c.Query().Where(food.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FoodClient) GetX(ctx context.Context, id uuid.UUID) *Food {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryIngredients queries the ingredients edge of a Food.
+func (c *FoodClient) QueryIngredients(f *Food) *FoodIngredientsQuery {
+	query := (&FoodIngredientsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(food.Table, food.FieldID, id),
+			sqlgraph.To(foodingredients.Table, foodingredients.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, food.IngredientsTable, food.IngredientsColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNutrient queries the nutrient edge of a Food.
+func (c *FoodClient) QueryNutrient(f *Food) *FoodNutrientsQuery {
+	query := (&FoodNutrientsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(food.Table, food.FieldID, id),
+			sqlgraph.To(foodnutrients.Table, foodnutrients.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, food.NutrientTable, food.NutrientColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUserMeal queries the user_meal edge of a Food.
+func (c *FoodClient) QueryUserMeal(f *Food) *UserMealFoodQuery {
+	query := (&UserMealFoodClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := f.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(food.Table, food.FieldID, id),
+			sqlgraph.To(usermealfood.Table, usermealfood.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, food.UserMealTable, food.UserMealColumn),
+		)
+		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FoodClient) Hooks() []Hook {
+	return c.hooks.Food
+}
+
+// Interceptors returns the client interceptors.
+func (c *FoodClient) Interceptors() []Interceptor {
+	return c.inters.Food
+}
+
+func (c *FoodClient) mutate(ctx context.Context, m *FoodMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FoodCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FoodUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FoodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FoodDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Food mutation op: %q", m.Op())
+	}
+}
+
+// FoodIngredientsClient is a client for the FoodIngredients schema.
+type FoodIngredientsClient struct {
+	config
+}
+
+// NewFoodIngredientsClient returns a client for the FoodIngredients from the given config.
+func NewFoodIngredientsClient(c config) *FoodIngredientsClient {
+	return &FoodIngredientsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `foodingredients.Hooks(f(g(h())))`.
+func (c *FoodIngredientsClient) Use(hooks ...Hook) {
+	c.hooks.FoodIngredients = append(c.hooks.FoodIngredients, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `foodingredients.Intercept(f(g(h())))`.
+func (c *FoodIngredientsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FoodIngredients = append(c.inters.FoodIngredients, interceptors...)
+}
+
+// Create returns a builder for creating a FoodIngredients entity.
+func (c *FoodIngredientsClient) Create() *FoodIngredientsCreate {
+	mutation := newFoodIngredientsMutation(c.config, OpCreate)
+	return &FoodIngredientsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FoodIngredients entities.
+func (c *FoodIngredientsClient) CreateBulk(builders ...*FoodIngredientsCreate) *FoodIngredientsCreateBulk {
+	return &FoodIngredientsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FoodIngredientsClient) MapCreateBulk(slice any, setFunc func(*FoodIngredientsCreate, int)) *FoodIngredientsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FoodIngredientsCreateBulk{err: fmt.Errorf("calling to FoodIngredientsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FoodIngredientsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FoodIngredientsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FoodIngredients.
+func (c *FoodIngredientsClient) Update() *FoodIngredientsUpdate {
+	mutation := newFoodIngredientsMutation(c.config, OpUpdate)
+	return &FoodIngredientsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FoodIngredientsClient) UpdateOne(fi *FoodIngredients) *FoodIngredientsUpdateOne {
+	mutation := newFoodIngredientsMutation(c.config, OpUpdateOne, withFoodIngredients(fi))
+	return &FoodIngredientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FoodIngredientsClient) UpdateOneID(id int) *FoodIngredientsUpdateOne {
+	mutation := newFoodIngredientsMutation(c.config, OpUpdateOne, withFoodIngredientsID(id))
+	return &FoodIngredientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FoodIngredients.
+func (c *FoodIngredientsClient) Delete() *FoodIngredientsDelete {
+	mutation := newFoodIngredientsMutation(c.config, OpDelete)
+	return &FoodIngredientsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FoodIngredientsClient) DeleteOne(fi *FoodIngredients) *FoodIngredientsDeleteOne {
+	return c.DeleteOneID(fi.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FoodIngredientsClient) DeleteOneID(id int) *FoodIngredientsDeleteOne {
+	builder := c.Delete().Where(foodingredients.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FoodIngredientsDeleteOne{builder}
+}
+
+// Query returns a query builder for FoodIngredients.
+func (c *FoodIngredientsClient) Query() *FoodIngredientsQuery {
+	return &FoodIngredientsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFoodIngredients},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FoodIngredients entity by its id.
+func (c *FoodIngredientsClient) Get(ctx context.Context, id int) (*FoodIngredients, error) {
+	return c.Query().Where(foodingredients.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FoodIngredientsClient) GetX(ctx context.Context, id int) *FoodIngredients {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFood queries the food edge of a FoodIngredients.
+func (c *FoodIngredientsClient) QueryFood(fi *FoodIngredients) *FoodQuery {
+	query := (&FoodClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := fi.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(foodingredients.Table, foodingredients.FieldID, id),
+			sqlgraph.To(food.Table, food.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, foodingredients.FoodTable, foodingredients.FoodColumn),
+		)
+		fromV = sqlgraph.Neighbors(fi.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIngredient queries the ingredient edge of a FoodIngredients.
+func (c *FoodIngredientsClient) QueryIngredient(fi *FoodIngredients) *IngredientsQuery {
+	query := (&IngredientsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := fi.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(foodingredients.Table, foodingredients.FieldID, id),
+			sqlgraph.To(ingredients.Table, ingredients.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, foodingredients.IngredientTable, foodingredients.IngredientColumn),
+		)
+		fromV = sqlgraph.Neighbors(fi.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FoodIngredientsClient) Hooks() []Hook {
+	return c.hooks.FoodIngredients
+}
+
+// Interceptors returns the client interceptors.
+func (c *FoodIngredientsClient) Interceptors() []Interceptor {
+	return c.inters.FoodIngredients
+}
+
+func (c *FoodIngredientsClient) mutate(ctx context.Context, m *FoodIngredientsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FoodIngredientsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FoodIngredientsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FoodIngredientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FoodIngredientsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FoodIngredients mutation op: %q", m.Op())
+	}
+}
+
+// FoodNutrientsClient is a client for the FoodNutrients schema.
+type FoodNutrientsClient struct {
+	config
+}
+
+// NewFoodNutrientsClient returns a client for the FoodNutrients from the given config.
+func NewFoodNutrientsClient(c config) *FoodNutrientsClient {
+	return &FoodNutrientsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `foodnutrients.Hooks(f(g(h())))`.
+func (c *FoodNutrientsClient) Use(hooks ...Hook) {
+	c.hooks.FoodNutrients = append(c.hooks.FoodNutrients, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `foodnutrients.Intercept(f(g(h())))`.
+func (c *FoodNutrientsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FoodNutrients = append(c.inters.FoodNutrients, interceptors...)
+}
+
+// Create returns a builder for creating a FoodNutrients entity.
+func (c *FoodNutrientsClient) Create() *FoodNutrientsCreate {
+	mutation := newFoodNutrientsMutation(c.config, OpCreate)
+	return &FoodNutrientsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FoodNutrients entities.
+func (c *FoodNutrientsClient) CreateBulk(builders ...*FoodNutrientsCreate) *FoodNutrientsCreateBulk {
+	return &FoodNutrientsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FoodNutrientsClient) MapCreateBulk(slice any, setFunc func(*FoodNutrientsCreate, int)) *FoodNutrientsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FoodNutrientsCreateBulk{err: fmt.Errorf("calling to FoodNutrientsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FoodNutrientsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FoodNutrientsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FoodNutrients.
+func (c *FoodNutrientsClient) Update() *FoodNutrientsUpdate {
+	mutation := newFoodNutrientsMutation(c.config, OpUpdate)
+	return &FoodNutrientsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FoodNutrientsClient) UpdateOne(fn *FoodNutrients) *FoodNutrientsUpdateOne {
+	mutation := newFoodNutrientsMutation(c.config, OpUpdateOne, withFoodNutrients(fn))
+	return &FoodNutrientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FoodNutrientsClient) UpdateOneID(id int) *FoodNutrientsUpdateOne {
+	mutation := newFoodNutrientsMutation(c.config, OpUpdateOne, withFoodNutrientsID(id))
+	return &FoodNutrientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FoodNutrients.
+func (c *FoodNutrientsClient) Delete() *FoodNutrientsDelete {
+	mutation := newFoodNutrientsMutation(c.config, OpDelete)
+	return &FoodNutrientsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FoodNutrientsClient) DeleteOne(fn *FoodNutrients) *FoodNutrientsDeleteOne {
+	return c.DeleteOneID(fn.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FoodNutrientsClient) DeleteOneID(id int) *FoodNutrientsDeleteOne {
+	builder := c.Delete().Where(foodnutrients.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FoodNutrientsDeleteOne{builder}
+}
+
+// Query returns a query builder for FoodNutrients.
+func (c *FoodNutrientsClient) Query() *FoodNutrientsQuery {
+	return &FoodNutrientsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFoodNutrients},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FoodNutrients entity by its id.
+func (c *FoodNutrientsClient) Get(ctx context.Context, id int) (*FoodNutrients, error) {
+	return c.Query().Where(foodnutrients.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FoodNutrientsClient) GetX(ctx context.Context, id int) *FoodNutrients {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFood queries the food edge of a FoodNutrients.
+func (c *FoodNutrientsClient) QueryFood(fn *FoodNutrients) *FoodQuery {
+	query := (&FoodClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := fn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(foodnutrients.Table, foodnutrients.FieldID, id),
+			sqlgraph.To(food.Table, food.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, foodnutrients.FoodTable, foodnutrients.FoodColumn),
+		)
+		fromV = sqlgraph.Neighbors(fn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNutrient queries the nutrient edge of a FoodNutrients.
+func (c *FoodNutrientsClient) QueryNutrient(fn *FoodNutrients) *NutrientQuery {
+	query := (&NutrientClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := fn.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(foodnutrients.Table, foodnutrients.FieldID, id),
+			sqlgraph.To(nutrient.Table, nutrient.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, foodnutrients.NutrientTable, foodnutrients.NutrientColumn),
+		)
+		fromV = sqlgraph.Neighbors(fn.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FoodNutrientsClient) Hooks() []Hook {
+	return c.hooks.FoodNutrients
+}
+
+// Interceptors returns the client interceptors.
+func (c *FoodNutrientsClient) Interceptors() []Interceptor {
+	return c.inters.FoodNutrients
+}
+
+func (c *FoodNutrientsClient) mutate(ctx context.Context, m *FoodNutrientsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FoodNutrientsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FoodNutrientsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FoodNutrientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FoodNutrientsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown FoodNutrients mutation op: %q", m.Op())
+	}
+}
+
+// IngredientsClient is a client for the Ingredients schema.
+type IngredientsClient struct {
+	config
+}
+
+// NewIngredientsClient returns a client for the Ingredients from the given config.
+func NewIngredientsClient(c config) *IngredientsClient {
+	return &IngredientsClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `ingredients.Hooks(f(g(h())))`.
+func (c *IngredientsClient) Use(hooks ...Hook) {
+	c.hooks.Ingredients = append(c.hooks.Ingredients, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `ingredients.Intercept(f(g(h())))`.
+func (c *IngredientsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Ingredients = append(c.inters.Ingredients, interceptors...)
+}
+
+// Create returns a builder for creating a Ingredients entity.
+func (c *IngredientsClient) Create() *IngredientsCreate {
+	mutation := newIngredientsMutation(c.config, OpCreate)
+	return &IngredientsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Ingredients entities.
+func (c *IngredientsClient) CreateBulk(builders ...*IngredientsCreate) *IngredientsCreateBulk {
+	return &IngredientsCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *IngredientsClient) MapCreateBulk(slice any, setFunc func(*IngredientsCreate, int)) *IngredientsCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &IngredientsCreateBulk{err: fmt.Errorf("calling to IngredientsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*IngredientsCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &IngredientsCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Ingredients.
+func (c *IngredientsClient) Update() *IngredientsUpdate {
+	mutation := newIngredientsMutation(c.config, OpUpdate)
+	return &IngredientsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *IngredientsClient) UpdateOne(i *Ingredients) *IngredientsUpdateOne {
+	mutation := newIngredientsMutation(c.config, OpUpdateOne, withIngredients(i))
+	return &IngredientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *IngredientsClient) UpdateOneID(id uuid.UUID) *IngredientsUpdateOne {
+	mutation := newIngredientsMutation(c.config, OpUpdateOne, withIngredientsID(id))
+	return &IngredientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Ingredients.
+func (c *IngredientsClient) Delete() *IngredientsDelete {
+	mutation := newIngredientsMutation(c.config, OpDelete)
+	return &IngredientsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *IngredientsClient) DeleteOne(i *Ingredients) *IngredientsDeleteOne {
+	return c.DeleteOneID(i.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *IngredientsClient) DeleteOneID(id uuid.UUID) *IngredientsDeleteOne {
+	builder := c.Delete().Where(ingredients.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &IngredientsDeleteOne{builder}
+}
+
+// Query returns a query builder for Ingredients.
+func (c *IngredientsClient) Query() *IngredientsQuery {
+	return &IngredientsQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeIngredients},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Ingredients entity by its id.
+func (c *IngredientsClient) Get(ctx context.Context, id uuid.UUID) (*Ingredients, error) {
+	return c.Query().Where(ingredients.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *IngredientsClient) GetX(ctx context.Context, id uuid.UUID) *Ingredients {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFood queries the food edge of a Ingredients.
+func (c *IngredientsClient) QueryFood(i *Ingredients) *FoodIngredientsQuery {
+	query := (&FoodIngredientsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(ingredients.Table, ingredients.FieldID, id),
+			sqlgraph.To(foodingredients.Table, foodingredients.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ingredients.FoodTable, ingredients.FoodColumn),
+		)
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *IngredientsClient) Hooks() []Hook {
+	return c.hooks.Ingredients
+}
+
+// Interceptors returns the client interceptors.
+func (c *IngredientsClient) Interceptors() []Interceptor {
+	return c.inters.Ingredients
+}
+
+func (c *IngredientsClient) mutate(ctx context.Context, m *IngredientsMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&IngredientsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&IngredientsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&IngredientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&IngredientsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Ingredients mutation op: %q", m.Op())
+	}
+}
+
+// NutrientClient is a client for the Nutrient schema.
+type NutrientClient struct {
+	config
+}
+
+// NewNutrientClient returns a client for the Nutrient from the given config.
+func NewNutrientClient(c config) *NutrientClient {
+	return &NutrientClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `nutrient.Hooks(f(g(h())))`.
+func (c *NutrientClient) Use(hooks ...Hook) {
+	c.hooks.Nutrient = append(c.hooks.Nutrient, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `nutrient.Intercept(f(g(h())))`.
+func (c *NutrientClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Nutrient = append(c.inters.Nutrient, interceptors...)
+}
+
+// Create returns a builder for creating a Nutrient entity.
+func (c *NutrientClient) Create() *NutrientCreate {
+	mutation := newNutrientMutation(c.config, OpCreate)
+	return &NutrientCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Nutrient entities.
+func (c *NutrientClient) CreateBulk(builders ...*NutrientCreate) *NutrientCreateBulk {
+	return &NutrientCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *NutrientClient) MapCreateBulk(slice any, setFunc func(*NutrientCreate, int)) *NutrientCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &NutrientCreateBulk{err: fmt.Errorf("calling to NutrientClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*NutrientCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &NutrientCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Nutrient.
+func (c *NutrientClient) Update() *NutrientUpdate {
+	mutation := newNutrientMutation(c.config, OpUpdate)
+	return &NutrientUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NutrientClient) UpdateOne(n *Nutrient) *NutrientUpdateOne {
+	mutation := newNutrientMutation(c.config, OpUpdateOne, withNutrient(n))
+	return &NutrientUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NutrientClient) UpdateOneID(id uuid.UUID) *NutrientUpdateOne {
+	mutation := newNutrientMutation(c.config, OpUpdateOne, withNutrientID(id))
+	return &NutrientUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Nutrient.
+func (c *NutrientClient) Delete() *NutrientDelete {
+	mutation := newNutrientMutation(c.config, OpDelete)
+	return &NutrientDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NutrientClient) DeleteOne(n *Nutrient) *NutrientDeleteOne {
+	return c.DeleteOneID(n.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *NutrientClient) DeleteOneID(id uuid.UUID) *NutrientDeleteOne {
+	builder := c.Delete().Where(nutrient.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NutrientDeleteOne{builder}
+}
+
+// Query returns a query builder for Nutrient.
+func (c *NutrientClient) Query() *NutrientQuery {
+	return &NutrientQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeNutrient},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Nutrient entity by its id.
+func (c *NutrientClient) Get(ctx context.Context, id uuid.UUID) (*Nutrient, error) {
+	return c.Query().Where(nutrient.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NutrientClient) GetX(ctx context.Context, id uuid.UUID) *Nutrient {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFood queries the food edge of a Nutrient.
+func (c *NutrientClient) QueryFood(n *Nutrient) *FoodNutrientsQuery {
+	query := (&FoodNutrientsClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := n.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(nutrient.Table, nutrient.FieldID, id),
+			sqlgraph.To(foodnutrients.Table, foodnutrients.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, nutrient.FoodTable, nutrient.FoodColumn),
+		)
+		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *NutrientClient) Hooks() []Hook {
+	return c.hooks.Nutrient
+}
+
+// Interceptors returns the client interceptors.
+func (c *NutrientClient) Interceptors() []Interceptor {
+	return c.inters.Nutrient
+}
+
+func (c *NutrientClient) mutate(ctx context.Context, m *NutrientMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NutrientCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NutrientUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NutrientUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NutrientDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown Nutrient mutation op: %q", m.Op())
+	}
+}
+
+// UserMealClient is a client for the UserMeal schema.
+type UserMealClient struct {
+	config
+}
+
+// NewUserMealClient returns a client for the UserMeal from the given config.
+func NewUserMealClient(c config) *UserMealClient {
+	return &UserMealClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usermeal.Hooks(f(g(h())))`.
+func (c *UserMealClient) Use(hooks ...Hook) {
+	c.hooks.UserMeal = append(c.hooks.UserMeal, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `usermeal.Intercept(f(g(h())))`.
+func (c *UserMealClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UserMeal = append(c.inters.UserMeal, interceptors...)
+}
+
+// Create returns a builder for creating a UserMeal entity.
+func (c *UserMealClient) Create() *UserMealCreate {
+	mutation := newUserMealMutation(c.config, OpCreate)
+	return &UserMealCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserMeal entities.
+func (c *UserMealClient) CreateBulk(builders ...*UserMealCreate) *UserMealCreateBulk {
+	return &UserMealCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UserMealClient) MapCreateBulk(slice any, setFunc func(*UserMealCreate, int)) *UserMealCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UserMealCreateBulk{err: fmt.Errorf("calling to UserMealClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UserMealCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UserMealCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserMeal.
+func (c *UserMealClient) Update() *UserMealUpdate {
+	mutation := newUserMealMutation(c.config, OpUpdate)
+	return &UserMealUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserMealClient) UpdateOne(um *UserMeal) *UserMealUpdateOne {
+	mutation := newUserMealMutation(c.config, OpUpdateOne, withUserMeal(um))
+	return &UserMealUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserMealClient) UpdateOneID(id int) *UserMealUpdateOne {
+	mutation := newUserMealMutation(c.config, OpUpdateOne, withUserMealID(id))
+	return &UserMealUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserMeal.
+func (c *UserMealClient) Delete() *UserMealDelete {
+	mutation := newUserMealMutation(c.config, OpDelete)
+	return &UserMealDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserMealClient) DeleteOne(um *UserMeal) *UserMealDeleteOne {
+	return c.DeleteOneID(um.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UserMealClient) DeleteOneID(id int) *UserMealDeleteOne {
+	builder := c.Delete().Where(usermeal.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserMealDeleteOne{builder}
+}
+
+// Query returns a query builder for UserMeal.
+func (c *UserMealClient) Query() *UserMealQuery {
+	return &UserMealQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUserMeal},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UserMeal entity by its id.
+func (c *UserMealClient) Get(ctx context.Context, id int) (*UserMeal, error) {
+	return c.Query().Where(usermeal.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserMealClient) GetX(ctx context.Context, id int) *UserMeal {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFood queries the food edge of a UserMeal.
+func (c *UserMealClient) QueryFood(um *UserMeal) *UserMealFoodQuery {
+	query := (&UserMealFoodClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := um.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermeal.Table, usermeal.FieldID, id),
+			sqlgraph.To(usermealfood.Table, usermealfood.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, usermeal.FoodTable, usermeal.FoodColumn),
+		)
+		fromV = sqlgraph.Neighbors(um.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *UserMealClient) Hooks() []Hook {
+	return c.hooks.UserMeal
+}
+
+// Interceptors returns the client interceptors.
+func (c *UserMealClient) Interceptors() []Interceptor {
+	return c.inters.UserMeal
+}
+
+func (c *UserMealClient) mutate(ctx context.Context, m *UserMealMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserMealCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserMealUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserMealUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserMealDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown UserMeal mutation op: %q", m.Op())
+	}
+}
+
+// UserMealFoodClient is a client for the UserMealFood schema.
+type UserMealFoodClient struct {
+	config
+}
+
+// NewUserMealFoodClient returns a client for the UserMealFood from the given config.
+func NewUserMealFoodClient(c config) *UserMealFoodClient {
+	return &UserMealFoodClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usermealfood.Hooks(f(g(h())))`.
+func (c *UserMealFoodClient) Use(hooks ...Hook) {
+	c.hooks.UserMealFood = append(c.hooks.UserMealFood, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `usermealfood.Intercept(f(g(h())))`.
+func (c *UserMealFoodClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UserMealFood = append(c.inters.UserMealFood, interceptors...)
+}
+
+// Create returns a builder for creating a UserMealFood entity.
+func (c *UserMealFoodClient) Create() *UserMealFoodCreate {
+	mutation := newUserMealFoodMutation(c.config, OpCreate)
+	return &UserMealFoodCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserMealFood entities.
+func (c *UserMealFoodClient) CreateBulk(builders ...*UserMealFoodCreate) *UserMealFoodCreateBulk {
+	return &UserMealFoodCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UserMealFoodClient) MapCreateBulk(slice any, setFunc func(*UserMealFoodCreate, int)) *UserMealFoodCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UserMealFoodCreateBulk{err: fmt.Errorf("calling to UserMealFoodClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UserMealFoodCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UserMealFoodCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserMealFood.
+func (c *UserMealFoodClient) Update() *UserMealFoodUpdate {
+	mutation := newUserMealFoodMutation(c.config, OpUpdate)
+	return &UserMealFoodUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserMealFoodClient) UpdateOne(umf *UserMealFood) *UserMealFoodUpdateOne {
+	mutation := newUserMealFoodMutation(c.config, OpUpdateOne, withUserMealFood(umf))
+	return &UserMealFoodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserMealFoodClient) UpdateOneID(id int) *UserMealFoodUpdateOne {
+	mutation := newUserMealFoodMutation(c.config, OpUpdateOne, withUserMealFoodID(id))
+	return &UserMealFoodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserMealFood.
+func (c *UserMealFoodClient) Delete() *UserMealFoodDelete {
+	mutation := newUserMealFoodMutation(c.config, OpDelete)
+	return &UserMealFoodDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserMealFoodClient) DeleteOne(umf *UserMealFood) *UserMealFoodDeleteOne {
+	return c.DeleteOneID(umf.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UserMealFoodClient) DeleteOneID(id int) *UserMealFoodDeleteOne {
+	builder := c.Delete().Where(usermealfood.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserMealFoodDeleteOne{builder}
+}
+
+// Query returns a query builder for UserMealFood.
+func (c *UserMealFoodClient) Query() *UserMealFoodQuery {
+	return &UserMealFoodQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUserMealFood},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UserMealFood entity by its id.
+func (c *UserMealFoodClient) Get(ctx context.Context, id int) (*UserMealFood, error) {
+	return c.Query().Where(usermealfood.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserMealFoodClient) GetX(ctx context.Context, id int) *UserMealFood {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryUserMeal queries the user_meal edge of a UserMealFood.
+func (c *UserMealFoodClient) QueryUserMeal(umf *UserMealFood) *UserMealQuery {
+	query := (&UserMealClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := umf.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermealfood.Table, usermealfood.FieldID, id),
+			sqlgraph.To(usermeal.Table, usermeal.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, usermealfood.UserMealTable, usermealfood.UserMealColumn),
+		)
+		fromV = sqlgraph.Neighbors(umf.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFood queries the food edge of a UserMealFood.
+func (c *UserMealFoodClient) QueryFood(umf *UserMealFood) *FoodQuery {
+	query := (&FoodClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := umf.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usermealfood.Table, usermealfood.FieldID, id),
+			sqlgraph.To(food.Table, food.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, usermealfood.FoodTable, usermealfood.FoodColumn),
+		)
+		fromV = sqlgraph.Neighbors(umf.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *UserMealFoodClient) Hooks() []Hook {
+	return c.hooks.UserMealFood
+}
+
+// Interceptors returns the client interceptors.
+func (c *UserMealFoodClient) Interceptors() []Interceptor {
+	return c.inters.UserMealFood
+}
+
+func (c *UserMealFoodClient) mutate(ctx context.Context, m *UserMealFoodMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserMealFoodCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserMealFoodUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserMealFoodUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserMealFoodDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown UserMealFood mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
 		AdminJWTBlacklist, AdminLog, AdminMenu, AdminPermission, AdminRolePermission,
-		AdminRoles, AdminUser, AdminUserRole []ent.Hook
+		AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord, Food, FoodIngredients,
+		FoodNutrients, Ingredients, Nutrient, UserMeal, UserMealFood []ent.Hook
 	}
 	inters struct {
 		AdminJWTBlacklist, AdminLog, AdminMenu, AdminPermission, AdminRolePermission,
-		AdminRoles, AdminUser, AdminUserRole []ent.Interceptor
+		AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord, Food, FoodIngredients,
+		FoodNutrients, Ingredients, Nutrient, UserMeal, UserMealFood []ent.Interceptor
 	}
 )

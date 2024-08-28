@@ -11,6 +11,14 @@ import (
 	"HealthMonitor/ent/adminroles"
 	"HealthMonitor/ent/adminuser"
 	"HealthMonitor/ent/adminuserrole"
+	"HealthMonitor/ent/bloodstatusrecord"
+	"HealthMonitor/ent/food"
+	"HealthMonitor/ent/foodingredients"
+	"HealthMonitor/ent/foodnutrients"
+	"HealthMonitor/ent/ingredients"
+	"HealthMonitor/ent/nutrient"
+	"HealthMonitor/ent/usermeal"
+	"HealthMonitor/ent/usermealfood"
 	"context"
 	"errors"
 	"fmt"
@@ -88,6 +96,14 @@ func checkColumn(table, column string) error {
 			adminroles.Table:          adminroles.ValidColumn,
 			adminuser.Table:           adminuser.ValidColumn,
 			adminuserrole.Table:       adminuserrole.ValidColumn,
+			bloodstatusrecord.Table:   bloodstatusrecord.ValidColumn,
+			food.Table:                food.ValidColumn,
+			foodingredients.Table:     foodingredients.ValidColumn,
+			foodnutrients.Table:       foodnutrients.ValidColumn,
+			ingredients.Table:         ingredients.ValidColumn,
+			nutrient.Table:            nutrient.ValidColumn,
+			usermeal.Table:            usermeal.ValidColumn,
+			usermealfood.Table:        usermealfood.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

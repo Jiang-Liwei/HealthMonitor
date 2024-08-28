@@ -28,6 +28,22 @@ type Tx struct {
 	AdminUser *AdminUserClient
 	// AdminUserRole is the client for interacting with the AdminUserRole builders.
 	AdminUserRole *AdminUserRoleClient
+	// BloodStatusRecord is the client for interacting with the BloodStatusRecord builders.
+	BloodStatusRecord *BloodStatusRecordClient
+	// Food is the client for interacting with the Food builders.
+	Food *FoodClient
+	// FoodIngredients is the client for interacting with the FoodIngredients builders.
+	FoodIngredients *FoodIngredientsClient
+	// FoodNutrients is the client for interacting with the FoodNutrients builders.
+	FoodNutrients *FoodNutrientsClient
+	// Ingredients is the client for interacting with the Ingredients builders.
+	Ingredients *IngredientsClient
+	// Nutrient is the client for interacting with the Nutrient builders.
+	Nutrient *NutrientClient
+	// UserMeal is the client for interacting with the UserMeal builders.
+	UserMeal *UserMealClient
+	// UserMealFood is the client for interacting with the UserMealFood builders.
+	UserMealFood *UserMealFoodClient
 
 	// lazily loaded.
 	client     *Client
@@ -167,6 +183,14 @@ func (tx *Tx) init() {
 	tx.AdminRoles = NewAdminRolesClient(tx.config)
 	tx.AdminUser = NewAdminUserClient(tx.config)
 	tx.AdminUserRole = NewAdminUserRoleClient(tx.config)
+	tx.BloodStatusRecord = NewBloodStatusRecordClient(tx.config)
+	tx.Food = NewFoodClient(tx.config)
+	tx.FoodIngredients = NewFoodIngredientsClient(tx.config)
+	tx.FoodNutrients = NewFoodNutrientsClient(tx.config)
+	tx.Ingredients = NewIngredientsClient(tx.config)
+	tx.Nutrient = NewNutrientClient(tx.config)
+	tx.UserMeal = NewUserMealClient(tx.config)
+	tx.UserMealFood = NewUserMealFoodClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

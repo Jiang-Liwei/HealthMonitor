@@ -3,6 +3,7 @@
 package migrate
 
 import (
+	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/dialect/sql/schema"
 	"entgo.io/ent/schema/field"
 )
@@ -159,6 +160,150 @@ var (
 			},
 		},
 	}
+	// BloodStatusRecordsColumns holds the columns for the "blood_status_records" table.
+	BloodStatusRecordsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "record_date", Type: field.TypeTime},
+		{Name: "time_of_day", Type: field.TypeEnum, Enums: []string{"morning", "noon", "evening"}},
+		{Name: "before_after_meals", Type: field.TypeEnum, Enums: []string{"before", "after"}},
+		{Name: "systolic_pressure", Type: field.TypeFloat64},
+		{Name: "diastolic_pressure", Type: field.TypeFloat64},
+		{Name: "pulse", Type: field.TypeFloat64},
+	}
+	// BloodStatusRecordsTable holds the schema information for the "blood_status_records" table.
+	BloodStatusRecordsTable = &schema.Table{
+		Name:       "blood_status_records",
+		Columns:    BloodStatusRecordsColumns,
+		PrimaryKey: []*schema.Column{BloodStatusRecordsColumns[0]},
+	}
+	// FoodsColumns holds the columns for the "foods" table.
+	FoodsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString},
+		{Name: "effect", Type: field.TypeEnum, Enums: []string{"beneficial", "neutral", "harmful"}},
+	}
+	// FoodsTable holds the schema information for the "foods" table.
+	FoodsTable = &schema.Table{
+		Name:       "foods",
+		Columns:    FoodsColumns,
+		PrimaryKey: []*schema.Column{FoodsColumns[0]},
+	}
+	// FoodIngredientsColumns holds the columns for the "food_ingredients" table.
+	FoodIngredientsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "food_ingredients", Type: field.TypeUUID, Nullable: true},
+		{Name: "ingredients_food", Type: field.TypeUUID, Nullable: true},
+	}
+	// FoodIngredientsTable holds the schema information for the "food_ingredients" table.
+	FoodIngredientsTable = &schema.Table{
+		Name:       "food_ingredients",
+		Columns:    FoodIngredientsColumns,
+		PrimaryKey: []*schema.Column{FoodIngredientsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "food_ingredients_foods_ingredients",
+				Columns:    []*schema.Column{FoodIngredientsColumns[1]},
+				RefColumns: []*schema.Column{FoodsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "food_ingredients_ingredients_food",
+				Columns:    []*schema.Column{FoodIngredientsColumns[2]},
+				RefColumns: []*schema.Column{IngredientsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// FoodNutrientsColumns holds the columns for the "food_nutrients" table.
+	FoodNutrientsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "food_nutrient", Type: field.TypeUUID, Nullable: true},
+		{Name: "nutrient_food", Type: field.TypeUUID, Nullable: true},
+	}
+	// FoodNutrientsTable holds the schema information for the "food_nutrients" table.
+	FoodNutrientsTable = &schema.Table{
+		Name:       "food_nutrients",
+		Columns:    FoodNutrientsColumns,
+		PrimaryKey: []*schema.Column{FoodNutrientsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "food_nutrients_foods_nutrient",
+				Columns:    []*schema.Column{FoodNutrientsColumns[1]},
+				RefColumns: []*schema.Column{FoodsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "food_nutrients_nutrients_food",
+				Columns:    []*schema.Column{FoodNutrientsColumns[2]},
+				RefColumns: []*schema.Column{NutrientsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// IngredientsColumns holds the columns for the "ingredients" table.
+	IngredientsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString},
+		{Name: "effect", Type: field.TypeEnum, Enums: []string{"beneficial", "neutral", "harmful"}},
+	}
+	// IngredientsTable holds the schema information for the "ingredients" table.
+	IngredientsTable = &schema.Table{
+		Name:       "ingredients",
+		Columns:    IngredientsColumns,
+		PrimaryKey: []*schema.Column{IngredientsColumns[0]},
+	}
+	// NutrientsColumns holds the columns for the "nutrients" table.
+	NutrientsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString},
+		{Name: "effect", Type: field.TypeEnum, Enums: []string{"beneficial", "neutral", "harmful"}},
+	}
+	// NutrientsTable holds the schema information for the "nutrients" table.
+	NutrientsTable = &schema.Table{
+		Name:       "nutrients",
+		Columns:    NutrientsColumns,
+		PrimaryKey: []*schema.Column{NutrientsColumns[0]},
+	}
+	// UserMealsColumns holds the columns for the "user_meals" table.
+	UserMealsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "user_id", Type: field.TypeInt},
+		{Name: "record_date", Type: field.TypeTime},
+		{Name: "meal_type", Type: field.TypeEnum, Enums: []string{"breakfast", "lunch", "dinner"}},
+		{Name: "description", Type: field.TypeString},
+	}
+	// UserMealsTable holds the schema information for the "user_meals" table.
+	UserMealsTable = &schema.Table{
+		Name:       "user_meals",
+		Columns:    UserMealsColumns,
+		PrimaryKey: []*schema.Column{UserMealsColumns[0]},
+	}
+	// UserMealFoodsColumns holds the columns for the "user_meal_foods" table.
+	UserMealFoodsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "food_user_meal", Type: field.TypeUUID, Nullable: true},
+		{Name: "user_meal_food", Type: field.TypeInt, Nullable: true},
+	}
+	// UserMealFoodsTable holds the schema information for the "user_meal_foods" table.
+	UserMealFoodsTable = &schema.Table{
+		Name:       "user_meal_foods",
+		Columns:    UserMealFoodsColumns,
+		PrimaryKey: []*schema.Column{UserMealFoodsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_meal_foods_foods_user_meal",
+				Columns:    []*schema.Column{UserMealFoodsColumns[1]},
+				RefColumns: []*schema.Column{FoodsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "user_meal_foods_user_meals_food",
+				Columns:    []*schema.Column{UserMealFoodsColumns[2]},
+				RefColumns: []*schema.Column{UserMealsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		AdminJwtBlacklistsTable,
@@ -169,6 +314,14 @@ var (
 		AdminRolesTable,
 		AdminUsersTable,
 		AdminUserRolesTable,
+		BloodStatusRecordsTable,
+		FoodsTable,
+		FoodIngredientsTable,
+		FoodNutrientsTable,
+		IngredientsTable,
+		NutrientsTable,
+		UserMealsTable,
+		UserMealFoodsTable,
 	}
 )
 
@@ -178,4 +331,34 @@ func init() {
 	AdminRolePermissionsTable.ForeignKeys[1].RefTable = AdminRolesTable
 	AdminUserRolesTable.ForeignKeys[0].RefTable = AdminRolesTable
 	AdminUserRolesTable.ForeignKeys[1].RefTable = AdminUsersTable
+	BloodStatusRecordsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=血压状态记录表",
+	}
+	FoodsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=食物表",
+	}
+	FoodIngredientsTable.ForeignKeys[0].RefTable = FoodsTable
+	FoodIngredientsTable.ForeignKeys[1].RefTable = IngredientsTable
+	FoodIngredientsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=食物与食材的关联表",
+	}
+	FoodNutrientsTable.ForeignKeys[0].RefTable = FoodsTable
+	FoodNutrientsTable.ForeignKeys[1].RefTable = NutrientsTable
+	FoodNutrientsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=食物与营养的关联表",
+	}
+	IngredientsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=食材表",
+	}
+	NutrientsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=营养表",
+	}
+	UserMealsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=餐食记录表",
+	}
+	UserMealFoodsTable.ForeignKeys[0].RefTable = FoodsTable
+	UserMealFoodsTable.ForeignKeys[1].RefTable = UserMealsTable
+	UserMealFoodsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT=餐食与食物的关联表",
+	}
 }

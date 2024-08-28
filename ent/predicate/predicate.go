@@ -29,3 +29,27 @@ type AdminUser func(*sql.Selector)
 
 // AdminUserRole is the predicate function for adminuserrole builders.
 type AdminUserRole func(*sql.Selector)
+
+// BloodStatusRecord is the predicate function for bloodstatusrecord builders.
+type BloodStatusRecord func(*sql.Selector)
+
+// Food is the predicate function for food builders.
+type Food func(*sql.Selector)
+
+// FoodIngredients is the predicate function for foodingredients builders.
+type FoodIngredients func(*sql.Selector)
+
+// FoodNutrients is the predicate function for foodnutrients builders.
+type FoodNutrients func(*sql.Selector)
+
+// Ingredients is the predicate function for ingredients builders.
+type Ingredients func(*sql.Selector)
+
+// Nutrient is the predicate function for nutrient builders.
+type Nutrient func(*sql.Selector)
+
+// UserMeal is the predicate function for usermeal builders.
+type UserMeal func(*sql.Selector)
+
+// UserMealFood is the predicate function for usermealfood builders.
+type UserMealFood func(*sql.Selector)
