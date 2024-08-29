@@ -34,8 +34,8 @@ type Tx struct {
 	Food *FoodClient
 	// FoodIngredients is the client for interacting with the FoodIngredients builders.
 	FoodIngredients *FoodIngredientsClient
-	// FoodNutrients is the client for interacting with the FoodNutrients builders.
-	FoodNutrients *FoodNutrientsClient
+	// FoodNutrientsRelationships is the client for interacting with the FoodNutrientsRelationships builders.
+	FoodNutrientsRelationships *FoodNutrientsRelationshipsClient
 	// Ingredients is the client for interacting with the Ingredients builders.
 	Ingredients *IngredientsClient
 	// Nutrient is the client for interacting with the Nutrient builders.
@@ -186,7 +186,7 @@ func (tx *Tx) init() {
 	tx.BloodStatusRecord = NewBloodStatusRecordClient(tx.config)
 	tx.Food = NewFoodClient(tx.config)
 	tx.FoodIngredients = NewFoodIngredientsClient(tx.config)
-	tx.FoodNutrients = NewFoodNutrientsClient(tx.config)
+	tx.FoodNutrientsRelationships = NewFoodNutrientsRelationshipsClient(tx.config)
 	tx.Ingredients = NewIngredientsClient(tx.config)
 	tx.Nutrient = NewNutrientClient(tx.config)
 	tx.UserMeal = NewUserMealClient(tx.config)

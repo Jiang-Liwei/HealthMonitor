@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"HealthMonitor/ent/bloodstatusrecord"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"fmt"
+	"healthmonitor/ent/bloodstatusrecord"
+	"healthmonitor/ent/predicate"
 	"math"
 
 	"entgo.io/ent"
@@ -263,12 +263,12 @@ func (bsrq *BloodStatusRecordQuery) Clone() *BloodStatusRecordQuery {
 // Example:
 //
 //	var v []struct {
-//		RecordDate time.Time `json:"record_date,omitempty"`
+//		UserID uuid.UUID `json:"user_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.BloodStatusRecord.Query().
-//		GroupBy(bloodstatusrecord.FieldRecordDate).
+//		GroupBy(bloodstatusrecord.FieldUserID).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (bsrq *BloodStatusRecordQuery) GroupBy(field string, fields ...string) *BloodStatusRecordGroupBy {
@@ -286,11 +286,11 @@ func (bsrq *BloodStatusRecordQuery) GroupBy(field string, fields ...string) *Blo
 // Example:
 //
 //	var v []struct {
-//		RecordDate time.Time `json:"record_date,omitempty"`
+//		UserID uuid.UUID `json:"user_id,omitempty"`
 //	}
 //
 //	client.BloodStatusRecord.Query().
-//		Select(bloodstatusrecord.FieldRecordDate).
+//		Select(bloodstatusrecord.FieldUserID).
 //		Scan(ctx, &v)
 func (bsrq *BloodStatusRecordQuery) Select(fields ...string) *BloodStatusRecordSelect {
 	bsrq.ctx.Fields = append(bsrq.ctx.Fields, fields...)

@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminmenu"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/adminmenu"
+	"healthmonitor/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"

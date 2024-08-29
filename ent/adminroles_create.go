@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminrolepermission"
-	"HealthMonitor/ent/adminroles"
-	"HealthMonitor/ent/adminuserrole"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/adminrolepermission"
+	"healthmonitor/ent/adminroles"
+	"healthmonitor/ent/adminuserrole"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"

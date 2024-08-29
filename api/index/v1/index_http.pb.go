@@ -27,7 +27,7 @@ type IndexHTTPServer interface {
 
 func RegisterIndexHTTPServer(s *http.Server, srv IndexHTTPServer) {
 	r := s.Route("/")
-	r.GET("/v1/index", _Index_Index0_HTTP_Handler(srv))
+	r.GET("api/v1/index", _Index_Index0_HTTP_Handler(srv))
 }
 
 func _Index_Index0_HTTP_Handler(srv IndexHTTPServer) func(ctx http.Context) error {
@@ -63,7 +63,7 @@ func NewIndexHTTPClient(client *http.Client) IndexHTTPClient {
 
 func (c *IndexHTTPClientImpl) Index(ctx context.Context, in *IndexRequest, opts ...http.CallOption) (*IndexReply, error) {
 	var out IndexReply
-	pattern := "/v1/index"
+	pattern := "api/v1/index"
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationIndexIndex))
 	opts = append(opts, http.PathTemplate(pattern))

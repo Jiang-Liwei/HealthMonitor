@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/usermeal"
-	"HealthMonitor/ent/usermealfood"
 	"fmt"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/usermeal"
+	"healthmonitor/ent/usermealfood"
 	"strings"
 
 	"entgo.io/ent"

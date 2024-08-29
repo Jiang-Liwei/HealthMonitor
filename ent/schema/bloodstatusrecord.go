@@ -16,7 +16,7 @@ type BloodStatusRecord struct {
 // Annotations of the BloodStatusRecord.
 func (BloodStatusRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Options: "COMMENT=血压状态记录表"},
+		entsql.Annotation{Options: "COMMENT='血压状态记录表'"},
 	}
 }
 
@@ -25,6 +25,8 @@ func (BloodStatusRecord) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.New()).Default(uuid.New).
 			Comment("记录的唯一标识符"),
+		field.UUID("user_id", uuid.New()).
+			Comment("用户id"),
 		field.Time("record_date").
 			Comment("记录日期"),
 		field.Enum("time_of_day").

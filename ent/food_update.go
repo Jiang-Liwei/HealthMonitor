@@ -3,14 +3,14 @@
 package ent
 
 import (
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/foodingredients"
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/predicate"
-	"HealthMonitor/ent/usermealfood"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/foodingredients"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/predicate"
+	"healthmonitor/ent/usermealfood"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -73,14 +73,14 @@ func (fu *FoodUpdate) AddIngredients(f ...*FoodIngredients) *FoodUpdate {
 	return fu.AddIngredientIDs(ids...)
 }
 
-// AddNutrientIDs adds the "nutrient" edge to the FoodNutrients entity by IDs.
+// AddNutrientIDs adds the "nutrient" edge to the FoodNutrientsRelationships entity by IDs.
 func (fu *FoodUpdate) AddNutrientIDs(ids ...int) *FoodUpdate {
 	fu.mutation.AddNutrientIDs(ids...)
 	return fu
 }
 
-// AddNutrient adds the "nutrient" edges to the FoodNutrients entity.
-func (fu *FoodUpdate) AddNutrient(f ...*FoodNutrients) *FoodUpdate {
+// AddNutrient adds the "nutrient" edges to the FoodNutrientsRelationships entity.
+func (fu *FoodUpdate) AddNutrient(f ...*FoodNutrientsRelationships) *FoodUpdate {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -129,20 +129,20 @@ func (fu *FoodUpdate) RemoveIngredients(f ...*FoodIngredients) *FoodUpdate {
 	return fu.RemoveIngredientIDs(ids...)
 }
 
-// ClearNutrient clears all "nutrient" edges to the FoodNutrients entity.
+// ClearNutrient clears all "nutrient" edges to the FoodNutrientsRelationships entity.
 func (fu *FoodUpdate) ClearNutrient() *FoodUpdate {
 	fu.mutation.ClearNutrient()
 	return fu
 }
 
-// RemoveNutrientIDs removes the "nutrient" edge to FoodNutrients entities by IDs.
+// RemoveNutrientIDs removes the "nutrient" edge to FoodNutrientsRelationships entities by IDs.
 func (fu *FoodUpdate) RemoveNutrientIDs(ids ...int) *FoodUpdate {
 	fu.mutation.RemoveNutrientIDs(ids...)
 	return fu
 }
 
-// RemoveNutrient removes "nutrient" edges to FoodNutrients entities.
-func (fu *FoodUpdate) RemoveNutrient(f ...*FoodNutrients) *FoodUpdate {
+// RemoveNutrient removes "nutrient" edges to FoodNutrientsRelationships entities.
+func (fu *FoodUpdate) RemoveNutrient(f ...*FoodNutrientsRelationships) *FoodUpdate {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -279,7 +279,7 @@ func (fu *FoodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{food.NutrientColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -292,7 +292,7 @@ func (fu *FoodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{food.NutrientColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -308,7 +308,7 @@ func (fu *FoodUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{food.NutrientColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -424,14 +424,14 @@ func (fuo *FoodUpdateOne) AddIngredients(f ...*FoodIngredients) *FoodUpdateOne {
 	return fuo.AddIngredientIDs(ids...)
 }
 
-// AddNutrientIDs adds the "nutrient" edge to the FoodNutrients entity by IDs.
+// AddNutrientIDs adds the "nutrient" edge to the FoodNutrientsRelationships entity by IDs.
 func (fuo *FoodUpdateOne) AddNutrientIDs(ids ...int) *FoodUpdateOne {
 	fuo.mutation.AddNutrientIDs(ids...)
 	return fuo
 }
 
-// AddNutrient adds the "nutrient" edges to the FoodNutrients entity.
-func (fuo *FoodUpdateOne) AddNutrient(f ...*FoodNutrients) *FoodUpdateOne {
+// AddNutrient adds the "nutrient" edges to the FoodNutrientsRelationships entity.
+func (fuo *FoodUpdateOne) AddNutrient(f ...*FoodNutrientsRelationships) *FoodUpdateOne {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -480,20 +480,20 @@ func (fuo *FoodUpdateOne) RemoveIngredients(f ...*FoodIngredients) *FoodUpdateOn
 	return fuo.RemoveIngredientIDs(ids...)
 }
 
-// ClearNutrient clears all "nutrient" edges to the FoodNutrients entity.
+// ClearNutrient clears all "nutrient" edges to the FoodNutrientsRelationships entity.
 func (fuo *FoodUpdateOne) ClearNutrient() *FoodUpdateOne {
 	fuo.mutation.ClearNutrient()
 	return fuo
 }
 
-// RemoveNutrientIDs removes the "nutrient" edge to FoodNutrients entities by IDs.
+// RemoveNutrientIDs removes the "nutrient" edge to FoodNutrientsRelationships entities by IDs.
 func (fuo *FoodUpdateOne) RemoveNutrientIDs(ids ...int) *FoodUpdateOne {
 	fuo.mutation.RemoveNutrientIDs(ids...)
 	return fuo
 }
 
-// RemoveNutrient removes "nutrient" edges to FoodNutrients entities.
-func (fuo *FoodUpdateOne) RemoveNutrient(f ...*FoodNutrients) *FoodUpdateOne {
+// RemoveNutrient removes "nutrient" edges to FoodNutrientsRelationships entities.
+func (fuo *FoodUpdateOne) RemoveNutrient(f ...*FoodNutrientsRelationships) *FoodUpdateOne {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -660,7 +660,7 @@ func (fuo *FoodUpdateOne) sqlSave(ctx context.Context) (_node *Food, err error) 
 			Columns: []string{food.NutrientColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -673,7 +673,7 @@ func (fuo *FoodUpdateOne) sqlSave(ctx context.Context) (_node *Food, err error) 
 			Columns: []string{food.NutrientColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -689,7 +689,7 @@ func (fuo *FoodUpdateOne) sqlSave(ctx context.Context) (_node *Food, err error) 
 			Columns: []string{food.NutrientColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

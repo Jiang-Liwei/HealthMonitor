@@ -3,9 +3,9 @@
 package hook
 
 import (
-	"HealthMonitor/ent"
 	"context"
 	"fmt"
+	"healthmonitor/ent"
 )
 
 // The AdminJWTBlacklistFunc type is an adapter to allow the use of ordinary
@@ -140,16 +140,16 @@ func (f FoodIngredientsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Va
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FoodIngredientsMutation", m)
 }
 
-// The FoodNutrientsFunc type is an adapter to allow the use of ordinary
-// function as FoodNutrients mutator.
-type FoodNutrientsFunc func(context.Context, *ent.FoodNutrientsMutation) (ent.Value, error)
+// The FoodNutrientsRelationshipsFunc type is an adapter to allow the use of ordinary
+// function as FoodNutrientsRelationships mutator.
+type FoodNutrientsRelationshipsFunc func(context.Context, *ent.FoodNutrientsRelationshipsMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f FoodNutrientsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.FoodNutrientsMutation); ok {
+func (f FoodNutrientsRelationshipsFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.FoodNutrientsRelationshipsMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FoodNutrientsMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.FoodNutrientsRelationshipsMutation", m)
 }
 
 // The IngredientsFunc type is an adapter to allow the use of ordinary

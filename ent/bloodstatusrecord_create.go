@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"HealthMonitor/ent/bloodstatusrecord"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/bloodstatusrecord"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -19,6 +19,12 @@ type BloodStatusRecordCreate struct {
 	config
 	mutation *BloodStatusRecordMutation
 	hooks    []Hook
+}
+
+// SetUserID sets the "user_id" field.
+func (bsrc *BloodStatusRecordCreate) SetUserID(u uuid.UUID) *BloodStatusRecordCreate {
+	bsrc.mutation.SetUserID(u)
+	return bsrc
 }
 
 // SetRecordDate sets the "record_date" field.
@@ -114,6 +120,9 @@ func (bsrc *BloodStatusRecordCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (bsrc *BloodStatusRecordCreate) check() error {
+	if _, ok := bsrc.mutation.UserID(); !ok {
+		return &ValidationError{Name: "user_id", err: errors.New(`ent: missing required field "BloodStatusRecord.user_id"`)}
+	}
 	if _, ok := bsrc.mutation.RecordDate(); !ok {
 		return &ValidationError{Name: "record_date", err: errors.New(`ent: missing required field "BloodStatusRecord.record_date"`)}
 	}
@@ -176,6 +185,10 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 	if id, ok := bsrc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := bsrc.mutation.UserID(); ok {
+		_spec.SetField(bloodstatusrecord.FieldUserID, field.TypeUUID, value)
+		_node.UserID = value
 	}
 	if value, ok := bsrc.mutation.RecordDate(); ok {
 		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeTime, value)

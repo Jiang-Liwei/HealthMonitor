@@ -1,0 +1,86 @@
+syntax = "proto3";
+
+package api.bloodstatus.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "healthmonitor/api/bloodstatus/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.bloodstatus.v1";
+
+service BloodStatus {
+	rpc CreateBloodStatus (CreateBloodStatusRequest) returns (CreateBloodStatusReply) {
+		option (google.api.http) = {
+			post: "api/v1/blood_status"
+			body: "*"
+		};
+	};
+	rpc UpdateBloodStatus (UpdateBloodStatusRequest) returns (UpdateBloodStatusReply) {
+		option (google.api.http) = {
+			put: "api/v1/blood_status"
+			body: "*"
+		};
+	};
+	rpc DeleteBloodStatus (DeleteBloodStatusRequest) returns (DeleteBloodStatusReply) {
+		option (google.api.http) = {
+			delete: "api/v1/blood_status/{id}"
+		};
+	};
+	rpc GetBloodStatus (GetBloodStatusRequest) returns (GetBloodStatusReply) {
+		option (google.api.http) = {
+			get: "api/v1/blood_status/{id}"
+		};
+	};
+	rpc ListBloodStatus (ListBloodStatusRequest) returns (ListBloodStatusReply) {
+		option (google.api.http) = {
+			get: "api/v1/blood_status_list"
+		};
+	};
+}
+
+message CreateBloodStatusRequest {
+	BloodStatusRecord blood_status = 1;
+}
+
+message CreateBloodStatusReply {
+	BloodStatusRecord blood_status = 1;
+}
+
+message UpdateBloodStatusRequest {
+	BloodStatusRecord blood_status = 1;
+}
+
+message UpdateBloodStatusReply {
+	BloodStatusRecord blood_status = 1;
+}
+
+message DeleteBloodStatusRequest {
+	string id = 1;
+}
+
+message DeleteBloodStatusReply {}
+
+message GetBloodStatusRequest {
+	string id = 1;
+}
+
+message GetBloodStatusReply {
+	BloodStatusRecord blood_status = 1;
+}
+
+message ListBloodStatusRequest {
+	// Pagination and filtering options can be added here
+}
+
+message ListBloodStatusReply {
+	repeated BloodStatusRecord blood_statuses = 1;
+}
+
+message BloodStatusRecord {
+	string record_date = 1;
+	string time_of_day = 2;
+	string before_after_meals = 3;
+	uint32 systolic_pressure = 4;
+	uint32 diastolic_pressure = 5;
+	uint32 pulse = 6;
+}

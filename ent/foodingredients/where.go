@@ -3,7 +3,7 @@
 package foodingredients
 
 import (
-	"HealthMonitor/ent/predicate"
+	"healthmonitor/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

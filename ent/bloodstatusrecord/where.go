@@ -3,7 +3,7 @@
 package bloodstatusrecord
 
 import (
-	"HealthMonitor/ent/predicate"
+	"healthmonitor/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
@@ -55,6 +55,11 @@ func IDLTE(id uuid.UUID) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldID, id))
 }
 
+// UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
+func UserID(v uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldEQ(FieldUserID, v))
+}
+
 // RecordDate applies equality check predicate on the "record_date" field. It's identical to RecordDateEQ.
 func RecordDate(v time.Time) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldRecordDate, v))
@@ -73,6 +78,46 @@ func DiastolicPressure(v float64) predicate.BloodStatusRecord {
 // Pulse applies equality check predicate on the "pulse" field. It's identical to PulseEQ.
 func Pulse(v float64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldPulse, v))
+}
+
+// UserIDEQ applies the EQ predicate on the "user_id" field.
+func UserIDEQ(v uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldEQ(FieldUserID, v))
+}
+
+// UserIDNEQ applies the NEQ predicate on the "user_id" field.
+func UserIDNEQ(v uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldUserID, v))
+}
+
+// UserIDIn applies the In predicate on the "user_id" field.
+func UserIDIn(vs ...uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldIn(FieldUserID, vs...))
+}
+
+// UserIDNotIn applies the NotIn predicate on the "user_id" field.
+func UserIDNotIn(vs ...uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldUserID, vs...))
+}
+
+// UserIDGT applies the GT predicate on the "user_id" field.
+func UserIDGT(v uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldGT(FieldUserID, v))
+}
+
+// UserIDGTE applies the GTE predicate on the "user_id" field.
+func UserIDGTE(v uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldGTE(FieldUserID, v))
+}
+
+// UserIDLT applies the LT predicate on the "user_id" field.
+func UserIDLT(v uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldLT(FieldUserID, v))
+}
+
+// UserIDLTE applies the LTE predicate on the "user_id" field.
+func UserIDLTE(v uuid.UUID) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldLTE(FieldUserID, v))
 }
 
 // RecordDateEQ applies the EQ predicate on the "record_date" field.

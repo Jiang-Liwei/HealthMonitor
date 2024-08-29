@@ -4,14 +4,14 @@ package api.index.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "HealthMonitor/api/index/v1;v1";
+option go_package = "healthmonitor/api/index/v1;v1";
 option java_multiple_files = true;
 option java_package = "api.index.v1";
 
 service Index {
 	rpc Index (IndexRequest) returns (IndexReply){
 		option (google.api.http) = {
-			get: "/v1/index"
+			get: "api/v1/index"
 		};
 	};
 }

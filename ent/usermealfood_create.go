@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/usermeal"
-	"HealthMonitor/ent/usermealfood"
 	"context"
 	"fmt"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/usermeal"
+	"healthmonitor/ent/usermealfood"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"

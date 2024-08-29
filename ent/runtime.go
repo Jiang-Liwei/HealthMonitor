@@ -3,16 +3,16 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminlog"
-	"HealthMonitor/ent/adminmenu"
-	"HealthMonitor/ent/adminpermission"
-	"HealthMonitor/ent/adminroles"
-	"HealthMonitor/ent/adminuser"
-	"HealthMonitor/ent/bloodstatusrecord"
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/ingredients"
-	"HealthMonitor/ent/nutrient"
-	"HealthMonitor/ent/schema"
+	"healthmonitor/ent/adminlog"
+	"healthmonitor/ent/adminmenu"
+	"healthmonitor/ent/adminpermission"
+	"healthmonitor/ent/adminroles"
+	"healthmonitor/ent/adminuser"
+	"healthmonitor/ent/bloodstatusrecord"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/ingredients"
+	"healthmonitor/ent/nutrient"
+	"healthmonitor/ent/schema"
 	"time"
 
 	"github.com/google/uuid"

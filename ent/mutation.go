@@ -3,26 +3,26 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminjwtblacklist"
-	"HealthMonitor/ent/adminlog"
-	"HealthMonitor/ent/adminmenu"
-	"HealthMonitor/ent/adminpermission"
-	"HealthMonitor/ent/adminrolepermission"
-	"HealthMonitor/ent/adminroles"
-	"HealthMonitor/ent/adminuser"
-	"HealthMonitor/ent/adminuserrole"
-	"HealthMonitor/ent/bloodstatusrecord"
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/foodingredients"
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/ingredients"
-	"HealthMonitor/ent/nutrient"
-	"HealthMonitor/ent/predicate"
-	"HealthMonitor/ent/usermeal"
-	"HealthMonitor/ent/usermealfood"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/adminlog"
+	"healthmonitor/ent/adminmenu"
+	"healthmonitor/ent/adminpermission"
+	"healthmonitor/ent/adminrolepermission"
+	"healthmonitor/ent/adminroles"
+	"healthmonitor/ent/adminuser"
+	"healthmonitor/ent/adminuserrole"
+	"healthmonitor/ent/bloodstatusrecord"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/foodingredients"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/ingredients"
+	"healthmonitor/ent/nutrient"
+	"healthmonitor/ent/predicate"
+	"healthmonitor/ent/usermeal"
+	"healthmonitor/ent/usermealfood"
 	"sync"
 	"time"
 
@@ -40,22 +40,22 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAdminJWTBlacklist   = "AdminJWTBlacklist"
-	TypeAdminLog            = "AdminLog"
-	TypeAdminMenu           = "AdminMenu"
-	TypeAdminPermission     = "AdminPermission"
-	TypeAdminRolePermission = "AdminRolePermission"
-	TypeAdminRoles          = "AdminRoles"
-	TypeAdminUser           = "AdminUser"
-	TypeAdminUserRole       = "AdminUserRole"
-	TypeBloodStatusRecord   = "BloodStatusRecord"
-	TypeFood                = "Food"
-	TypeFoodIngredients     = "FoodIngredients"
-	TypeFoodNutrients       = "FoodNutrients"
-	TypeIngredients         = "Ingredients"
-	TypeNutrient            = "Nutrient"
-	TypeUserMeal            = "UserMeal"
-	TypeUserMealFood        = "UserMealFood"
+	TypeAdminJWTBlacklist          = "AdminJWTBlacklist"
+	TypeAdminLog                   = "AdminLog"
+	TypeAdminMenu                  = "AdminMenu"
+	TypeAdminPermission            = "AdminPermission"
+	TypeAdminRolePermission        = "AdminRolePermission"
+	TypeAdminRoles                 = "AdminRoles"
+	TypeAdminUser                  = "AdminUser"
+	TypeAdminUserRole              = "AdminUserRole"
+	TypeBloodStatusRecord          = "BloodStatusRecord"
+	TypeFood                       = "Food"
+	TypeFoodIngredients            = "FoodIngredients"
+	TypeFoodNutrientsRelationships = "FoodNutrientsRelationships"
+	TypeIngredients                = "Ingredients"
+	TypeNutrient                   = "Nutrient"
+	TypeUserMeal                   = "UserMeal"
+	TypeUserMealFood               = "UserMealFood"
 )
 
 // AdminJWTBlacklistMutation represents an operation that mutates the AdminJWTBlacklist nodes in the graph.
@@ -4803,6 +4803,7 @@ type BloodStatusRecordMutation struct {
 	op                    Op
 	typ                   string
 	id                    *uuid.UUID
+	user_id               *uuid.UUID
 	record_date           *time.Time
 	time_of_day           *bloodstatusrecord.TimeOfDay
 	before_after_meals    *bloodstatusrecord.BeforeAfterMeals
@@ -4920,6 +4921,42 @@ func (m *BloodStatusRecordMutation) IDs(ctx context.Context) ([]uuid.UUID, error
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
+}
+
+// SetUserID sets the "user_id" field.
+func (m *BloodStatusRecordMutation) SetUserID(u uuid.UUID) {
+	m.user_id = &u
+}
+
+// UserID returns the value of the "user_id" field in the mutation.
+func (m *BloodStatusRecordMutation) UserID() (r uuid.UUID, exists bool) {
+	v := m.user_id
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUserID returns the old "user_id" field's value of the BloodStatusRecord entity.
+// If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BloodStatusRecordMutation) OldUserID(ctx context.Context) (v uuid.UUID, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUserID is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUserID requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUserID: %w", err)
+	}
+	return oldValue.UserID, nil
+}
+
+// ResetUserID resets all changes to the "user_id" field.
+func (m *BloodStatusRecordMutation) ResetUserID() {
+	m.user_id = nil
 }
 
 // SetRecordDate sets the "record_date" field.
@@ -5232,7 +5269,10 @@ func (m *BloodStatusRecordMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BloodStatusRecordMutation) Fields() []string {
-	fields := make([]string, 0, 6)
+	fields := make([]string, 0, 7)
+	if m.user_id != nil {
+		fields = append(fields, bloodstatusrecord.FieldUserID)
+	}
 	if m.record_date != nil {
 		fields = append(fields, bloodstatusrecord.FieldRecordDate)
 	}
@@ -5259,6 +5299,8 @@ func (m *BloodStatusRecordMutation) Fields() []string {
 // schema.
 func (m *BloodStatusRecordMutation) Field(name string) (ent.Value, bool) {
 	switch name {
+	case bloodstatusrecord.FieldUserID:
+		return m.UserID()
 	case bloodstatusrecord.FieldRecordDate:
 		return m.RecordDate()
 	case bloodstatusrecord.FieldTimeOfDay:
@@ -5280,6 +5322,8 @@ func (m *BloodStatusRecordMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *BloodStatusRecordMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
+	case bloodstatusrecord.FieldUserID:
+		return m.OldUserID(ctx)
 	case bloodstatusrecord.FieldRecordDate:
 		return m.OldRecordDate(ctx)
 	case bloodstatusrecord.FieldTimeOfDay:
@@ -5301,6 +5345,13 @@ func (m *BloodStatusRecordMutation) OldField(ctx context.Context, name string) (
 // type.
 func (m *BloodStatusRecordMutation) SetField(name string, value ent.Value) error {
 	switch name {
+	case bloodstatusrecord.FieldUserID:
+		v, ok := value.(uuid.UUID)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUserID(v)
+		return nil
 	case bloodstatusrecord.FieldRecordDate:
 		v, ok := value.(time.Time)
 		if !ok {
@@ -5431,6 +5482,9 @@ func (m *BloodStatusRecordMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *BloodStatusRecordMutation) ResetField(name string) error {
 	switch name {
+	case bloodstatusrecord.FieldUserID:
+		m.ResetUserID()
+		return nil
 	case bloodstatusrecord.FieldRecordDate:
 		m.ResetRecordDate()
 		return nil
@@ -5754,7 +5808,7 @@ func (m *FoodMutation) ResetIngredients() {
 	m.removedingredients = nil
 }
 
-// AddNutrientIDs adds the "nutrient" edge to the FoodNutrients entity by ids.
+// AddNutrientIDs adds the "nutrient" edge to the FoodNutrientsRelationships entity by ids.
 func (m *FoodMutation) AddNutrientIDs(ids ...int) {
 	if m.nutrient == nil {
 		m.nutrient = make(map[int]struct{})
@@ -5764,17 +5818,17 @@ func (m *FoodMutation) AddNutrientIDs(ids ...int) {
 	}
 }
 
-// ClearNutrient clears the "nutrient" edge to the FoodNutrients entity.
+// ClearNutrient clears the "nutrient" edge to the FoodNutrientsRelationships entity.
 func (m *FoodMutation) ClearNutrient() {
 	m.clearednutrient = true
 }
 
-// NutrientCleared reports if the "nutrient" edge to the FoodNutrients entity was cleared.
+// NutrientCleared reports if the "nutrient" edge to the FoodNutrientsRelationships entity was cleared.
 func (m *FoodMutation) NutrientCleared() bool {
 	return m.clearednutrient
 }
 
-// RemoveNutrientIDs removes the "nutrient" edge to the FoodNutrients entity by IDs.
+// RemoveNutrientIDs removes the "nutrient" edge to the FoodNutrientsRelationships entity by IDs.
 func (m *FoodMutation) RemoveNutrientIDs(ids ...int) {
 	if m.removednutrient == nil {
 		m.removednutrient = make(map[int]struct{})
@@ -5785,7 +5839,7 @@ func (m *FoodMutation) RemoveNutrientIDs(ids ...int) {
 	}
 }
 
-// RemovedNutrient returns the removed IDs of the "nutrient" edge to the FoodNutrients entity.
+// RemovedNutrient returns the removed IDs of the "nutrient" edge to the FoodNutrientsRelationships entity.
 func (m *FoodMutation) RemovedNutrientIDs() (ids []int) {
 	for id := range m.removednutrient {
 		ids = append(ids, id)
@@ -6536,8 +6590,8 @@ func (m *FoodIngredientsMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown FoodIngredients edge %s", name)
 }
 
-// FoodNutrientsMutation represents an operation that mutates the FoodNutrients nodes in the graph.
-type FoodNutrientsMutation struct {
+// FoodNutrientsRelationshipsMutation represents an operation that mutates the FoodNutrientsRelationships nodes in the graph.
+type FoodNutrientsRelationshipsMutation struct {
 	config
 	op              Op
 	typ             string
@@ -6548,21 +6602,21 @@ type FoodNutrientsMutation struct {
 	nutrient        *uuid.UUID
 	clearednutrient bool
 	done            bool
-	oldValue        func(context.Context) (*FoodNutrients, error)
-	predicates      []predicate.FoodNutrients
+	oldValue        func(context.Context) (*FoodNutrientsRelationships, error)
+	predicates      []predicate.FoodNutrientsRelationships
 }
 
-var _ ent.Mutation = (*FoodNutrientsMutation)(nil)
+var _ ent.Mutation = (*FoodNutrientsRelationshipsMutation)(nil)
 
-// foodnutrientsOption allows management of the mutation configuration using functional options.
-type foodnutrientsOption func(*FoodNutrientsMutation)
+// foodnutrientsrelationshipsOption allows management of the mutation configuration using functional options.
+type foodnutrientsrelationshipsOption func(*FoodNutrientsRelationshipsMutation)
 
-// newFoodNutrientsMutation creates new mutation for the FoodNutrients entity.
-func newFoodNutrientsMutation(c config, op Op, opts ...foodnutrientsOption) *FoodNutrientsMutation {
-	m := &FoodNutrientsMutation{
+// newFoodNutrientsRelationshipsMutation creates new mutation for the FoodNutrientsRelationships entity.
+func newFoodNutrientsRelationshipsMutation(c config, op Op, opts ...foodnutrientsrelationshipsOption) *FoodNutrientsRelationshipsMutation {
+	m := &FoodNutrientsRelationshipsMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeFoodNutrients,
+		typ:           TypeFoodNutrientsRelationships,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -6571,20 +6625,20 @@ func newFoodNutrientsMutation(c config, op Op, opts ...foodnutrientsOption) *Foo
 	return m
 }
 
-// withFoodNutrientsID sets the ID field of the mutation.
-func withFoodNutrientsID(id int) foodnutrientsOption {
-	return func(m *FoodNutrientsMutation) {
+// withFoodNutrientsRelationshipsID sets the ID field of the mutation.
+func withFoodNutrientsRelationshipsID(id int) foodnutrientsrelationshipsOption {
+	return func(m *FoodNutrientsRelationshipsMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *FoodNutrients
+			value *FoodNutrientsRelationships
 		)
-		m.oldValue = func(ctx context.Context) (*FoodNutrients, error) {
+		m.oldValue = func(ctx context.Context) (*FoodNutrientsRelationships, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().FoodNutrients.Get(ctx, id)
+					value, err = m.Client().FoodNutrientsRelationships.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -6593,10 +6647,10 @@ func withFoodNutrientsID(id int) foodnutrientsOption {
 	}
 }
 
-// withFoodNutrients sets the old FoodNutrients of the mutation.
-func withFoodNutrients(node *FoodNutrients) foodnutrientsOption {
-	return func(m *FoodNutrientsMutation) {
-		m.oldValue = func(context.Context) (*FoodNutrients, error) {
+// withFoodNutrientsRelationships sets the old FoodNutrientsRelationships of the mutation.
+func withFoodNutrientsRelationships(node *FoodNutrientsRelationships) foodnutrientsrelationshipsOption {
+	return func(m *FoodNutrientsRelationshipsMutation) {
+		m.oldValue = func(context.Context) (*FoodNutrientsRelationships, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -6605,7 +6659,7 @@ func withFoodNutrients(node *FoodNutrients) foodnutrientsOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m FoodNutrientsMutation) Client() *Client {
+func (m FoodNutrientsRelationshipsMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -6613,7 +6667,7 @@ func (m FoodNutrientsMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m FoodNutrientsMutation) Tx() (*Tx, error) {
+func (m FoodNutrientsRelationshipsMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -6624,7 +6678,7 @@ func (m FoodNutrientsMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *FoodNutrientsMutation) ID() (id int, exists bool) {
+func (m *FoodNutrientsRelationshipsMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -6635,7 +6689,7 @@ func (m *FoodNutrientsMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *FoodNutrientsMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *FoodNutrientsRelationshipsMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -6644,29 +6698,29 @@ func (m *FoodNutrientsMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().FoodNutrients.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().FoodNutrientsRelationships.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetFoodID sets the "food" edge to the Food entity by id.
-func (m *FoodNutrientsMutation) SetFoodID(id uuid.UUID) {
+func (m *FoodNutrientsRelationshipsMutation) SetFoodID(id uuid.UUID) {
 	m.food = &id
 }
 
 // ClearFood clears the "food" edge to the Food entity.
-func (m *FoodNutrientsMutation) ClearFood() {
+func (m *FoodNutrientsRelationshipsMutation) ClearFood() {
 	m.clearedfood = true
 }
 
 // FoodCleared reports if the "food" edge to the Food entity was cleared.
-func (m *FoodNutrientsMutation) FoodCleared() bool {
+func (m *FoodNutrientsRelationshipsMutation) FoodCleared() bool {
 	return m.clearedfood
 }
 
 // FoodID returns the "food" edge ID in the mutation.
-func (m *FoodNutrientsMutation) FoodID() (id uuid.UUID, exists bool) {
+func (m *FoodNutrientsRelationshipsMutation) FoodID() (id uuid.UUID, exists bool) {
 	if m.food != nil {
 		return *m.food, true
 	}
@@ -6676,7 +6730,7 @@ func (m *FoodNutrientsMutation) FoodID() (id uuid.UUID, exists bool) {
 // FoodIDs returns the "food" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // FoodID instead. It exists only for internal usage by the builders.
-func (m *FoodNutrientsMutation) FoodIDs() (ids []uuid.UUID) {
+func (m *FoodNutrientsRelationshipsMutation) FoodIDs() (ids []uuid.UUID) {
 	if id := m.food; id != nil {
 		ids = append(ids, *id)
 	}
@@ -6684,28 +6738,28 @@ func (m *FoodNutrientsMutation) FoodIDs() (ids []uuid.UUID) {
 }
 
 // ResetFood resets all changes to the "food" edge.
-func (m *FoodNutrientsMutation) ResetFood() {
+func (m *FoodNutrientsRelationshipsMutation) ResetFood() {
 	m.food = nil
 	m.clearedfood = false
 }
 
 // SetNutrientID sets the "nutrient" edge to the Nutrient entity by id.
-func (m *FoodNutrientsMutation) SetNutrientID(id uuid.UUID) {
+func (m *FoodNutrientsRelationshipsMutation) SetNutrientID(id uuid.UUID) {
 	m.nutrient = &id
 }
 
 // ClearNutrient clears the "nutrient" edge to the Nutrient entity.
-func (m *FoodNutrientsMutation) ClearNutrient() {
+func (m *FoodNutrientsRelationshipsMutation) ClearNutrient() {
 	m.clearednutrient = true
 }
 
 // NutrientCleared reports if the "nutrient" edge to the Nutrient entity was cleared.
-func (m *FoodNutrientsMutation) NutrientCleared() bool {
+func (m *FoodNutrientsRelationshipsMutation) NutrientCleared() bool {
 	return m.clearednutrient
 }
 
 // NutrientID returns the "nutrient" edge ID in the mutation.
-func (m *FoodNutrientsMutation) NutrientID() (id uuid.UUID, exists bool) {
+func (m *FoodNutrientsRelationshipsMutation) NutrientID() (id uuid.UUID, exists bool) {
 	if m.nutrient != nil {
 		return *m.nutrient, true
 	}
@@ -6715,7 +6769,7 @@ func (m *FoodNutrientsMutation) NutrientID() (id uuid.UUID, exists bool) {
 // NutrientIDs returns the "nutrient" edge IDs in the mutation.
 // Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
 // NutrientID instead. It exists only for internal usage by the builders.
-func (m *FoodNutrientsMutation) NutrientIDs() (ids []uuid.UUID) {
+func (m *FoodNutrientsRelationshipsMutation) NutrientIDs() (ids []uuid.UUID) {
 	if id := m.nutrient; id != nil {
 		ids = append(ids, *id)
 	}
@@ -6723,20 +6777,20 @@ func (m *FoodNutrientsMutation) NutrientIDs() (ids []uuid.UUID) {
 }
 
 // ResetNutrient resets all changes to the "nutrient" edge.
-func (m *FoodNutrientsMutation) ResetNutrient() {
+func (m *FoodNutrientsRelationshipsMutation) ResetNutrient() {
 	m.nutrient = nil
 	m.clearednutrient = false
 }
 
-// Where appends a list predicates to the FoodNutrientsMutation builder.
-func (m *FoodNutrientsMutation) Where(ps ...predicate.FoodNutrients) {
+// Where appends a list predicates to the FoodNutrientsRelationshipsMutation builder.
+func (m *FoodNutrientsRelationshipsMutation) Where(ps ...predicate.FoodNutrientsRelationships) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the FoodNutrientsMutation builder. Using this method,
+// WhereP appends storage-level predicates to the FoodNutrientsRelationshipsMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *FoodNutrientsMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.FoodNutrients, len(ps))
+func (m *FoodNutrientsRelationshipsMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.FoodNutrientsRelationships, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -6744,24 +6798,24 @@ func (m *FoodNutrientsMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *FoodNutrientsMutation) Op() Op {
+func (m *FoodNutrientsRelationshipsMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *FoodNutrientsMutation) SetOp(op Op) {
+func (m *FoodNutrientsRelationshipsMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (FoodNutrients).
-func (m *FoodNutrientsMutation) Type() string {
+// Type returns the node type of this mutation (FoodNutrientsRelationships).
+func (m *FoodNutrientsRelationshipsMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *FoodNutrientsMutation) Fields() []string {
+func (m *FoodNutrientsRelationshipsMutation) Fields() []string {
 	fields := make([]string, 0, 0)
 	return fields
 }
@@ -6769,92 +6823,92 @@ func (m *FoodNutrientsMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *FoodNutrientsMutation) Field(name string) (ent.Value, bool) {
+func (m *FoodNutrientsRelationshipsMutation) Field(name string) (ent.Value, bool) {
 	return nil, false
 }
 
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *FoodNutrientsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
-	return nil, fmt.Errorf("unknown FoodNutrients field %s", name)
+func (m *FoodNutrientsRelationshipsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	return nil, fmt.Errorf("unknown FoodNutrientsRelationships field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *FoodNutrientsMutation) SetField(name string, value ent.Value) error {
+func (m *FoodNutrientsRelationshipsMutation) SetField(name string, value ent.Value) error {
 	switch name {
 	}
-	return fmt.Errorf("unknown FoodNutrients field %s", name)
+	return fmt.Errorf("unknown FoodNutrientsRelationships field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *FoodNutrientsMutation) AddedFields() []string {
+func (m *FoodNutrientsRelationshipsMutation) AddedFields() []string {
 	return nil
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *FoodNutrientsMutation) AddedField(name string) (ent.Value, bool) {
+func (m *FoodNutrientsRelationshipsMutation) AddedField(name string) (ent.Value, bool) {
 	return nil, false
 }
 
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *FoodNutrientsMutation) AddField(name string, value ent.Value) error {
-	return fmt.Errorf("unknown FoodNutrients numeric field %s", name)
+func (m *FoodNutrientsRelationshipsMutation) AddField(name string, value ent.Value) error {
+	return fmt.Errorf("unknown FoodNutrientsRelationships numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *FoodNutrientsMutation) ClearedFields() []string {
+func (m *FoodNutrientsRelationshipsMutation) ClearedFields() []string {
 	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *FoodNutrientsMutation) FieldCleared(name string) bool {
+func (m *FoodNutrientsRelationshipsMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *FoodNutrientsMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown FoodNutrients nullable field %s", name)
+func (m *FoodNutrientsRelationshipsMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown FoodNutrientsRelationships nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *FoodNutrientsMutation) ResetField(name string) error {
-	return fmt.Errorf("unknown FoodNutrients field %s", name)
+func (m *FoodNutrientsRelationshipsMutation) ResetField(name string) error {
+	return fmt.Errorf("unknown FoodNutrientsRelationships field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *FoodNutrientsMutation) AddedEdges() []string {
+func (m *FoodNutrientsRelationshipsMutation) AddedEdges() []string {
 	edges := make([]string, 0, 2)
 	if m.food != nil {
-		edges = append(edges, foodnutrients.EdgeFood)
+		edges = append(edges, foodnutrientsrelationships.EdgeFood)
 	}
 	if m.nutrient != nil {
-		edges = append(edges, foodnutrients.EdgeNutrient)
+		edges = append(edges, foodnutrientsrelationships.EdgeNutrient)
 	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *FoodNutrientsMutation) AddedIDs(name string) []ent.Value {
+func (m *FoodNutrientsRelationshipsMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case foodnutrients.EdgeFood:
+	case foodnutrientsrelationships.EdgeFood:
 		if id := m.food; id != nil {
 			return []ent.Value{*id}
 		}
-	case foodnutrients.EdgeNutrient:
+	case foodnutrientsrelationships.EdgeNutrient:
 		if id := m.nutrient; id != nil {
 			return []ent.Value{*id}
 		}
@@ -6863,36 +6917,36 @@ func (m *FoodNutrientsMutation) AddedIDs(name string) []ent.Value {
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *FoodNutrientsMutation) RemovedEdges() []string {
+func (m *FoodNutrientsRelationshipsMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 2)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *FoodNutrientsMutation) RemovedIDs(name string) []ent.Value {
+func (m *FoodNutrientsRelationshipsMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *FoodNutrientsMutation) ClearedEdges() []string {
+func (m *FoodNutrientsRelationshipsMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 2)
 	if m.clearedfood {
-		edges = append(edges, foodnutrients.EdgeFood)
+		edges = append(edges, foodnutrientsrelationships.EdgeFood)
 	}
 	if m.clearednutrient {
-		edges = append(edges, foodnutrients.EdgeNutrient)
+		edges = append(edges, foodnutrientsrelationships.EdgeNutrient)
 	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *FoodNutrientsMutation) EdgeCleared(name string) bool {
+func (m *FoodNutrientsRelationshipsMutation) EdgeCleared(name string) bool {
 	switch name {
-	case foodnutrients.EdgeFood:
+	case foodnutrientsrelationships.EdgeFood:
 		return m.clearedfood
-	case foodnutrients.EdgeNutrient:
+	case foodnutrientsrelationships.EdgeNutrient:
 		return m.clearednutrient
 	}
 	return false
@@ -6900,30 +6954,30 @@ func (m *FoodNutrientsMutation) EdgeCleared(name string) bool {
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *FoodNutrientsMutation) ClearEdge(name string) error {
+func (m *FoodNutrientsRelationshipsMutation) ClearEdge(name string) error {
 	switch name {
-	case foodnutrients.EdgeFood:
+	case foodnutrientsrelationships.EdgeFood:
 		m.ClearFood()
 		return nil
-	case foodnutrients.EdgeNutrient:
+	case foodnutrientsrelationships.EdgeNutrient:
 		m.ClearNutrient()
 		return nil
 	}
-	return fmt.Errorf("unknown FoodNutrients unique edge %s", name)
+	return fmt.Errorf("unknown FoodNutrientsRelationships unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *FoodNutrientsMutation) ResetEdge(name string) error {
+func (m *FoodNutrientsRelationshipsMutation) ResetEdge(name string) error {
 	switch name {
-	case foodnutrients.EdgeFood:
+	case foodnutrientsrelationships.EdgeFood:
 		m.ResetFood()
 		return nil
-	case foodnutrients.EdgeNutrient:
+	case foodnutrientsrelationships.EdgeNutrient:
 		m.ResetNutrient()
 		return nil
 	}
-	return fmt.Errorf("unknown FoodNutrients edge %s", name)
+	return fmt.Errorf("unknown FoodNutrientsRelationships edge %s", name)
 }
 
 // IngredientsMutation represents an operation that mutates the Ingredients nodes in the graph.
@@ -7598,7 +7652,7 @@ func (m *NutrientMutation) ResetEffect() {
 	m.effect = nil
 }
 
-// AddFoodIDs adds the "food" edge to the FoodNutrients entity by ids.
+// AddFoodIDs adds the "food" edge to the FoodNutrientsRelationships entity by ids.
 func (m *NutrientMutation) AddFoodIDs(ids ...int) {
 	if m.food == nil {
 		m.food = make(map[int]struct{})
@@ -7608,17 +7662,17 @@ func (m *NutrientMutation) AddFoodIDs(ids ...int) {
 	}
 }
 
-// ClearFood clears the "food" edge to the FoodNutrients entity.
+// ClearFood clears the "food" edge to the FoodNutrientsRelationships entity.
 func (m *NutrientMutation) ClearFood() {
 	m.clearedfood = true
 }
 
-// FoodCleared reports if the "food" edge to the FoodNutrients entity was cleared.
+// FoodCleared reports if the "food" edge to the FoodNutrientsRelationships entity was cleared.
 func (m *NutrientMutation) FoodCleared() bool {
 	return m.clearedfood
 }
 
-// RemoveFoodIDs removes the "food" edge to the FoodNutrients entity by IDs.
+// RemoveFoodIDs removes the "food" edge to the FoodNutrientsRelationships entity by IDs.
 func (m *NutrientMutation) RemoveFoodIDs(ids ...int) {
 	if m.removedfood == nil {
 		m.removedfood = make(map[int]struct{})
@@ -7629,7 +7683,7 @@ func (m *NutrientMutation) RemoveFoodIDs(ids ...int) {
 	}
 }
 
-// RemovedFood returns the removed IDs of the "food" edge to the FoodNutrients entity.
+// RemovedFood returns the removed IDs of the "food" edge to the FoodNutrientsRelationships entity.
 func (m *NutrientMutation) RemovedFoodIDs() (ids []int) {
 	for id := range m.removedfood {
 		ids = append(ids, id)

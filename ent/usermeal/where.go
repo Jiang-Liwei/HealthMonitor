@@ -3,7 +3,7 @@
 package usermeal
 
 import (
-	"HealthMonitor/ent/predicate"
+	"healthmonitor/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"

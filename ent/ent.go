@@ -3,25 +3,25 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminjwtblacklist"
-	"HealthMonitor/ent/adminlog"
-	"HealthMonitor/ent/adminmenu"
-	"HealthMonitor/ent/adminpermission"
-	"HealthMonitor/ent/adminrolepermission"
-	"HealthMonitor/ent/adminroles"
-	"HealthMonitor/ent/adminuser"
-	"HealthMonitor/ent/adminuserrole"
-	"HealthMonitor/ent/bloodstatusrecord"
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/foodingredients"
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/ingredients"
-	"HealthMonitor/ent/nutrient"
-	"HealthMonitor/ent/usermeal"
-	"HealthMonitor/ent/usermealfood"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/adminlog"
+	"healthmonitor/ent/adminmenu"
+	"healthmonitor/ent/adminpermission"
+	"healthmonitor/ent/adminrolepermission"
+	"healthmonitor/ent/adminroles"
+	"healthmonitor/ent/adminuser"
+	"healthmonitor/ent/adminuserrole"
+	"healthmonitor/ent/bloodstatusrecord"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/foodingredients"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/ingredients"
+	"healthmonitor/ent/nutrient"
+	"healthmonitor/ent/usermeal"
+	"healthmonitor/ent/usermealfood"
 	"reflect"
 	"sync"
 
@@ -88,22 +88,22 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			adminjwtblacklist.Table:   adminjwtblacklist.ValidColumn,
-			adminlog.Table:            adminlog.ValidColumn,
-			adminmenu.Table:           adminmenu.ValidColumn,
-			adminpermission.Table:     adminpermission.ValidColumn,
-			adminrolepermission.Table: adminrolepermission.ValidColumn,
-			adminroles.Table:          adminroles.ValidColumn,
-			adminuser.Table:           adminuser.ValidColumn,
-			adminuserrole.Table:       adminuserrole.ValidColumn,
-			bloodstatusrecord.Table:   bloodstatusrecord.ValidColumn,
-			food.Table:                food.ValidColumn,
-			foodingredients.Table:     foodingredients.ValidColumn,
-			foodnutrients.Table:       foodnutrients.ValidColumn,
-			ingredients.Table:         ingredients.ValidColumn,
-			nutrient.Table:            nutrient.ValidColumn,
-			usermeal.Table:            usermeal.ValidColumn,
-			usermealfood.Table:        usermealfood.ValidColumn,
+			adminjwtblacklist.Table:          adminjwtblacklist.ValidColumn,
+			adminlog.Table:                   adminlog.ValidColumn,
+			adminmenu.Table:                  adminmenu.ValidColumn,
+			adminpermission.Table:            adminpermission.ValidColumn,
+			adminrolepermission.Table:        adminrolepermission.ValidColumn,
+			adminroles.Table:                 adminroles.ValidColumn,
+			adminuser.Table:                  adminuser.ValidColumn,
+			adminuserrole.Table:              adminuserrole.ValidColumn,
+			bloodstatusrecord.Table:          bloodstatusrecord.ValidColumn,
+			food.Table:                       food.ValidColumn,
+			foodingredients.Table:            foodingredients.ValidColumn,
+			foodnutrientsrelationships.Table: foodnutrientsrelationships.ValidColumn,
+			ingredients.Table:                ingredients.ValidColumn,
+			nutrient.Table:                   nutrient.ValidColumn,
+			usermeal.Table:                   usermeal.ValidColumn,
+			usermealfood.Table:               usermealfood.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

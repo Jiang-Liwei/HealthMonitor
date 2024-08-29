@@ -3,11 +3,11 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminlog"
-	"HealthMonitor/ent/adminuser"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"fmt"
+	"healthmonitor/ent/adminlog"
+	"healthmonitor/ent/adminuser"
+	"healthmonitor/ent/predicate"
 	"math"
 
 	"entgo.io/ent"

@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminmenu"
 	"fmt"
+	"healthmonitor/ent/adminmenu"
 	"strings"
 	"time"
 

@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminmenu"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/adminmenu"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"

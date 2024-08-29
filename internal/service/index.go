@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 
-	pb "HealthMonitor/api/index/v1"
+	pb "healthmonitor/api/index/v1"
 )
 
 type IndexService struct {

@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminroles"
 	"fmt"
+	"healthmonitor/ent/adminroles"
 	"strings"
 	"time"
 

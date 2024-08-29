@@ -3,16 +3,17 @@
 package ent
 
 import (
-	"HealthMonitor/ent/bloodstatusrecord"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/bloodstatusrecord"
+	"healthmonitor/ent/predicate"
 	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // BloodStatusRecordUpdate is the builder for updating BloodStatusRecord entities.
@@ -25,6 +26,20 @@ type BloodStatusRecordUpdate struct {
 // Where appends a list predicates to the BloodStatusRecordUpdate builder.
 func (bsru *BloodStatusRecordUpdate) Where(ps ...predicate.BloodStatusRecord) *BloodStatusRecordUpdate {
 	bsru.mutation.Where(ps...)
+	return bsru
+}
+
+// SetUserID sets the "user_id" field.
+func (bsru *BloodStatusRecordUpdate) SetUserID(u uuid.UUID) *BloodStatusRecordUpdate {
+	bsru.mutation.SetUserID(u)
+	return bsru
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (bsru *BloodStatusRecordUpdate) SetNillableUserID(u *uuid.UUID) *BloodStatusRecordUpdate {
+	if u != nil {
+		bsru.SetUserID(*u)
+	}
 	return bsru
 }
 
@@ -192,6 +207,9 @@ func (bsru *BloodStatusRecordUpdate) sqlSave(ctx context.Context) (n int, err er
 			}
 		}
 	}
+	if value, ok := bsru.mutation.UserID(); ok {
+		_spec.SetField(bloodstatusrecord.FieldUserID, field.TypeUUID, value)
+	}
 	if value, ok := bsru.mutation.RecordDate(); ok {
 		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeTime, value)
 	}
@@ -237,6 +255,20 @@ type BloodStatusRecordUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *BloodStatusRecordMutation
+}
+
+// SetUserID sets the "user_id" field.
+func (bsruo *BloodStatusRecordUpdateOne) SetUserID(u uuid.UUID) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.SetUserID(u)
+	return bsruo
+}
+
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableUserID(u *uuid.UUID) *BloodStatusRecordUpdateOne {
+	if u != nil {
+		bsruo.SetUserID(*u)
+	}
+	return bsruo
 }
 
 // SetRecordDate sets the "record_date" field.
@@ -432,6 +464,9 @@ func (bsruo *BloodStatusRecordUpdateOne) sqlSave(ctx context.Context) (_node *Bl
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := bsruo.mutation.UserID(); ok {
+		_spec.SetField(bloodstatusrecord.FieldUserID, field.TypeUUID, value)
 	}
 	if value, ok := bsruo.mutation.RecordDate(); ok {
 		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeTime, value)

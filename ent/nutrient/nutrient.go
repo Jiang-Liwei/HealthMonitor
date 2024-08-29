@@ -24,10 +24,10 @@ const (
 	// Table holds the table name of the nutrient in the database.
 	Table = "nutrients"
 	// FoodTable is the table that holds the food relation/edge.
-	FoodTable = "food_nutrients"
-	// FoodInverseTable is the table name for the FoodNutrients entity.
-	// It exists in this package in order to avoid circular dependency with the "foodnutrients" package.
-	FoodInverseTable = "food_nutrients"
+	FoodTable = "food_nutrients_relationships"
+	// FoodInverseTable is the table name for the FoodNutrientsRelationships entity.
+	// It exists in this package in order to avoid circular dependency with the "foodnutrientsrelationships" package.
+	FoodInverseTable = "food_nutrients_relationships"
 	// FoodColumn is the table column denoting the food relation/edge.
 	FoodColumn = "nutrient_food"
 )

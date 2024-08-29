@@ -163,6 +163,7 @@ var (
 	// BloodStatusRecordsColumns holds the columns for the "blood_status_records" table.
 	BloodStatusRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "user_id", Type: field.TypeUUID},
 		{Name: "record_date", Type: field.TypeTime},
 		{Name: "time_of_day", Type: field.TypeEnum, Enums: []string{"morning", "noon", "evening"}},
 		{Name: "before_after_meals", Type: field.TypeEnum, Enums: []string{"before", "after"}},
@@ -214,27 +215,27 @@ var (
 			},
 		},
 	}
-	// FoodNutrientsColumns holds the columns for the "food_nutrients" table.
-	FoodNutrientsColumns = []*schema.Column{
+	// FoodNutrientsRelationshipsColumns holds the columns for the "food_nutrients_relationships" table.
+	FoodNutrientsRelationshipsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "food_nutrient", Type: field.TypeUUID, Nullable: true},
 		{Name: "nutrient_food", Type: field.TypeUUID, Nullable: true},
 	}
-	// FoodNutrientsTable holds the schema information for the "food_nutrients" table.
-	FoodNutrientsTable = &schema.Table{
-		Name:       "food_nutrients",
-		Columns:    FoodNutrientsColumns,
-		PrimaryKey: []*schema.Column{FoodNutrientsColumns[0]},
+	// FoodNutrientsRelationshipsTable holds the schema information for the "food_nutrients_relationships" table.
+	FoodNutrientsRelationshipsTable = &schema.Table{
+		Name:       "food_nutrients_relationships",
+		Columns:    FoodNutrientsRelationshipsColumns,
+		PrimaryKey: []*schema.Column{FoodNutrientsRelationshipsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "food_nutrients_foods_nutrient",
-				Columns:    []*schema.Column{FoodNutrientsColumns[1]},
+				Symbol:     "food_nutrients_relationships_foods_nutrient",
+				Columns:    []*schema.Column{FoodNutrientsRelationshipsColumns[1]},
 				RefColumns: []*schema.Column{FoodsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "food_nutrients_nutrients_food",
-				Columns:    []*schema.Column{FoodNutrientsColumns[2]},
+				Symbol:     "food_nutrients_relationships_nutrients_food",
+				Columns:    []*schema.Column{FoodNutrientsRelationshipsColumns[2]},
 				RefColumns: []*schema.Column{NutrientsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -317,7 +318,7 @@ var (
 		BloodStatusRecordsTable,
 		FoodsTable,
 		FoodIngredientsTable,
-		FoodNutrientsTable,
+		FoodNutrientsRelationshipsTable,
 		IngredientsTable,
 		NutrientsTable,
 		UserMealsTable,
@@ -332,33 +333,33 @@ func init() {
 	AdminUserRolesTable.ForeignKeys[0].RefTable = AdminRolesTable
 	AdminUserRolesTable.ForeignKeys[1].RefTable = AdminUsersTable
 	BloodStatusRecordsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=血压状态记录表",
+		Options: "COMMENT='血压状态记录表'",
 	}
 	FoodsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=食物表",
+		Options: "COMMENT='食物表'",
 	}
 	FoodIngredientsTable.ForeignKeys[0].RefTable = FoodsTable
 	FoodIngredientsTable.ForeignKeys[1].RefTable = IngredientsTable
 	FoodIngredientsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=食物与食材的关联表",
+		Options: "COMMENT='食物与食材的关联表'",
 	}
-	FoodNutrientsTable.ForeignKeys[0].RefTable = FoodsTable
-	FoodNutrientsTable.ForeignKeys[1].RefTable = NutrientsTable
-	FoodNutrientsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=食物与营养的关联表",
+	FoodNutrientsRelationshipsTable.ForeignKeys[0].RefTable = FoodsTable
+	FoodNutrientsRelationshipsTable.ForeignKeys[1].RefTable = NutrientsTable
+	FoodNutrientsRelationshipsTable.Annotation = &entsql.Annotation{
+		Options: "COMMENT='食物与营养的关联表'",
 	}
 	IngredientsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=食材表",
+		Options: "COMMENT='食材表'",
 	}
 	NutrientsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=营养表",
+		Options: "COMMENT='营养表'",
 	}
 	UserMealsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=餐食记录表",
+		Options: "COMMENT='餐食记录表'",
 	}
 	UserMealFoodsTable.ForeignKeys[0].RefTable = FoodsTable
 	UserMealFoodsTable.ForeignKeys[1].RefTable = UserMealsTable
 	UserMealFoodsTable.Annotation = &entsql.Annotation{
-		Options: "COMMENT=餐食与食物的关联表",
+		Options: "COMMENT='餐食与食物的关联表'",
 	}
 }

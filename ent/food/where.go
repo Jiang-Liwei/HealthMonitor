@@ -3,7 +3,7 @@
 package food
 
 import (
-	"HealthMonitor/ent/predicate"
+	"healthmonitor/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -180,7 +180,7 @@ func HasNutrient() predicate.Food {
 }
 
 // HasNutrientWith applies the HasEdge predicate on the "nutrient" edge with a given conditions (other predicates).
-func HasNutrientWith(preds ...predicate.FoodNutrients) predicate.Food {
+func HasNutrientWith(preds ...predicate.FoodNutrientsRelationships) predicate.Food {
 	return predicate.Food(func(s *sql.Selector) {
 		step := newNutrientStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {

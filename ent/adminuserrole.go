@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminroles"
-	"HealthMonitor/ent/adminuser"
-	"HealthMonitor/ent/adminuserrole"
 	"fmt"
+	"healthmonitor/ent/adminroles"
+	"healthmonitor/ent/adminuser"
+	"healthmonitor/ent/adminuserrole"
 	"strings"
 
 	"entgo.io/ent"

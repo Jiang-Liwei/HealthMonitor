@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"HealthMonitor/ent/foodingredients"
-	"HealthMonitor/ent/ingredients"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"database/sql/driver"
 	"fmt"
+	"healthmonitor/ent/foodingredients"
+	"healthmonitor/ent/ingredients"
+	"healthmonitor/ent/predicate"
 	"math"
 
 	"entgo.io/ent"

@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"HealthMonitor/ent/ingredients"
 	"fmt"
+	"healthmonitor/ent/ingredients"
 	"strings"
 
 	"entgo.io/ent"

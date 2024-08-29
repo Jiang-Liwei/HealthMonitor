@@ -3,14 +3,14 @@
 package ent
 
 import (
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/foodingredients"
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/predicate"
-	"HealthMonitor/ent/usermealfood"
 	"context"
 	"database/sql/driver"
 	"fmt"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/foodingredients"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/predicate"
+	"healthmonitor/ent/usermealfood"
 	"math"
 
 	"entgo.io/ent"
@@ -28,7 +28,7 @@ type FoodQuery struct {
 	inters          []Interceptor
 	predicates      []predicate.Food
 	withIngredients *FoodIngredientsQuery
-	withNutrient    *FoodNutrientsQuery
+	withNutrient    *FoodNutrientsRelationshipsQuery
 	withUserMeal    *UserMealFoodQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -89,8 +89,8 @@ func (fq *FoodQuery) QueryIngredients() *FoodIngredientsQuery {
 }
 
 // QueryNutrient chains the current query on the "nutrient" edge.
-func (fq *FoodQuery) QueryNutrient() *FoodNutrientsQuery {
-	query := (&FoodNutrientsClient{config: fq.config}).Query()
+func (fq *FoodQuery) QueryNutrient() *FoodNutrientsRelationshipsQuery {
+	query := (&FoodNutrientsRelationshipsClient{config: fq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := fq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -101,7 +101,7 @@ func (fq *FoodQuery) QueryNutrient() *FoodNutrientsQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(food.Table, food.FieldID, selector),
-			sqlgraph.To(foodnutrients.Table, foodnutrients.FieldID),
+			sqlgraph.To(foodnutrientsrelationships.Table, foodnutrientsrelationships.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, food.NutrientTable, food.NutrientColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(fq.driver.Dialect(), step)
@@ -346,8 +346,8 @@ func (fq *FoodQuery) WithIngredients(opts ...func(*FoodIngredientsQuery)) *FoodQ
 
 // WithNutrient tells the query-builder to eager-load the nodes that are connected to
 // the "nutrient" edge. The optional arguments are used to configure the query builder of the edge.
-func (fq *FoodQuery) WithNutrient(opts ...func(*FoodNutrientsQuery)) *FoodQuery {
-	query := (&FoodNutrientsClient{config: fq.config}).Query()
+func (fq *FoodQuery) WithNutrient(opts ...func(*FoodNutrientsRelationshipsQuery)) *FoodQuery {
+	query := (&FoodNutrientsRelationshipsClient{config: fq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -477,8 +477,8 @@ func (fq *FoodQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Food, e
 	}
 	if query := fq.withNutrient; query != nil {
 		if err := fq.loadNutrient(ctx, query, nodes,
-			func(n *Food) { n.Edges.Nutrient = []*FoodNutrients{} },
-			func(n *Food, e *FoodNutrients) { n.Edges.Nutrient = append(n.Edges.Nutrient, e) }); err != nil {
+			func(n *Food) { n.Edges.Nutrient = []*FoodNutrientsRelationships{} },
+			func(n *Food, e *FoodNutrientsRelationships) { n.Edges.Nutrient = append(n.Edges.Nutrient, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -523,7 +523,7 @@ func (fq *FoodQuery) loadIngredients(ctx context.Context, query *FoodIngredients
 	}
 	return nil
 }
-func (fq *FoodQuery) loadNutrient(ctx context.Context, query *FoodNutrientsQuery, nodes []*Food, init func(*Food), assign func(*Food, *FoodNutrients)) error {
+func (fq *FoodQuery) loadNutrient(ctx context.Context, query *FoodNutrientsRelationshipsQuery, nodes []*Food, init func(*Food), assign func(*Food, *FoodNutrientsRelationships)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[uuid.UUID]*Food)
 	for i := range nodes {
@@ -534,7 +534,7 @@ func (fq *FoodQuery) loadNutrient(ctx context.Context, query *FoodNutrientsQuery
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.FoodNutrients(func(s *sql.Selector) {
+	query.Where(predicate.FoodNutrientsRelationships(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(food.NutrientColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)

@@ -5,11 +5,11 @@ package enttest
 import (
 	"context"
 
-	"HealthMonitor/ent"
+	"healthmonitor/ent"
 	// required by schema hooks.
-	_ "HealthMonitor/ent/runtime"
+	_ "healthmonitor/ent/runtime"
 
-	"HealthMonitor/ent/migrate"
+	"healthmonitor/ent/migrate"
 
 	"entgo.io/ent/dialect/sql/schema"
 )

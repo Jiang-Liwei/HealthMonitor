@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"HealthMonitor/ent/nutrient"
 	"fmt"
+	"healthmonitor/ent/nutrient"
 	"strings"
 
 	"entgo.io/ent"
@@ -31,7 +31,7 @@ type Nutrient struct {
 // NutrientEdges holds the relations/edges for other nodes in the graph.
 type NutrientEdges struct {
 	// Food holds the value of the food edge.
-	Food []*FoodNutrients `json:"food,omitempty"`
+	Food []*FoodNutrientsRelationships `json:"food,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
@@ -39,7 +39,7 @@ type NutrientEdges struct {
 
 // FoodOrErr returns the Food value or an error if the edge
 // was not loaded in eager-loading.
-func (e NutrientEdges) FoodOrErr() ([]*FoodNutrients, error) {
+func (e NutrientEdges) FoodOrErr() ([]*FoodNutrientsRelationships, error) {
 	if e.loadedTypes[0] {
 		return e.Food, nil
 	}
@@ -102,7 +102,7 @@ func (n *Nutrient) Value(name string) (ent.Value, error) {
 }
 
 // QueryFood queries the "food" edge of the Nutrient entity.
-func (n *Nutrient) QueryFood() *FoodNutrientsQuery {
+func (n *Nutrient) QueryFood() *FoodNutrientsRelationshipsQuery {
 	return NewNutrientClient(n.config).QueryFood(n)
 }
 

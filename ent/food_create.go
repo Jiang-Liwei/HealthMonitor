@@ -3,13 +3,13 @@
 package ent
 
 import (
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/foodingredients"
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/usermealfood"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/foodingredients"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/usermealfood"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -64,14 +64,14 @@ func (fc *FoodCreate) AddIngredients(f ...*FoodIngredients) *FoodCreate {
 	return fc.AddIngredientIDs(ids...)
 }
 
-// AddNutrientIDs adds the "nutrient" edge to the FoodNutrients entity by IDs.
+// AddNutrientIDs adds the "nutrient" edge to the FoodNutrientsRelationships entity by IDs.
 func (fc *FoodCreate) AddNutrientIDs(ids ...int) *FoodCreate {
 	fc.mutation.AddNutrientIDs(ids...)
 	return fc
 }
 
-// AddNutrient adds the "nutrient" edges to the FoodNutrients entity.
-func (fc *FoodCreate) AddNutrient(f ...*FoodNutrients) *FoodCreate {
+// AddNutrient adds the "nutrient" edges to the FoodNutrientsRelationships entity.
+func (fc *FoodCreate) AddNutrient(f ...*FoodNutrientsRelationships) *FoodCreate {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -215,7 +215,7 @@ func (fc *FoodCreate) createSpec() (*Food, *sqlgraph.CreateSpec) {
 			Columns: []string{food.NutrientColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

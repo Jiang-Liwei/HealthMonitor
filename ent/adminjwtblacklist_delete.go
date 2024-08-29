@@ -3,9 +3,9 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminjwtblacklist"
-	"HealthMonitor/ent/predicate"
 	"context"
+	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

@@ -7,25 +7,25 @@ import (
 	"entgo.io/ent/schema/edge"
 )
 
-// FoodNutrients holds the schema definition for the FoodNutrients entity.
-type FoodNutrients struct {
+// FoodNutrientsRelationships holds the schema definition for the FoodNutrientsRelationships entity.
+type FoodNutrientsRelationships struct {
 	ent.Schema
 }
 
 // Annotations of the FoodNutrients.
-func (FoodNutrients) Annotations() []schema.Annotation {
+func (FoodNutrientsRelationships) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Options: "COMMENT=食物与营养的关联表"},
+		entsql.Annotation{Options: "COMMENT='食物与营养的关联表'"},
 	}
 }
 
 // Fields of the FoodNutrients.
-func (FoodNutrients) Fields() []ent.Field {
+func (FoodNutrientsRelationships) Fields() []ent.Field {
 	return nil
 }
 
 // Edges of the FoodNutrients.
-func (FoodNutrients) Edges() []ent.Edge {
+func (FoodNutrientsRelationships) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("food", Food.Type).
 			Ref("nutrient").

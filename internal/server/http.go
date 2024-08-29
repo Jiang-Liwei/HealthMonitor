@@ -3,9 +3,10 @@
 package server
 
 import (
-	indexV1 "HealthMonitor/api/index/v1"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	bloodStatusV1 "healthmonitor/api/bloodstatus/v1"
+	indexV1 "healthmonitor/api/index/v1"
 )
 
 // NewHTTPServer creates a new HTTP server with the provided configuration.
@@ -26,5 +27,6 @@ func NewHTTPServer(cfg HTTPServerConfig) *http.Server {
 	}
 	srv := http.NewServer(opts...)
 	indexV1.RegisterIndexHTTPServer(srv, cfg.Index)
+	bloodStatusV1.RegisterBloodStatusHTTPServer(srv, cfg.BloodStatus)
 	return srv
 }

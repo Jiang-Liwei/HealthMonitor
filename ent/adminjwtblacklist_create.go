@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminjwtblacklist"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/adminjwtblacklist"
 	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"

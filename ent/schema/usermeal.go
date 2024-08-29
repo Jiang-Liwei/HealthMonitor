@@ -16,7 +16,7 @@ type UserMeal struct {
 // Annotations of the BloodStatusRecord.
 func (UserMeal) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Options: "COMMENT=餐食记录表"},
+		entsql.Annotation{Options: "COMMENT='餐食记录表'"},
 	}
 }
 

@@ -35,10 +35,10 @@ const (
 	// IngredientsColumn is the table column denoting the ingredients relation/edge.
 	IngredientsColumn = "food_ingredients"
 	// NutrientTable is the table that holds the nutrient relation/edge.
-	NutrientTable = "food_nutrients"
-	// NutrientInverseTable is the table name for the FoodNutrients entity.
-	// It exists in this package in order to avoid circular dependency with the "foodnutrients" package.
-	NutrientInverseTable = "food_nutrients"
+	NutrientTable = "food_nutrients_relationships"
+	// NutrientInverseTable is the table name for the FoodNutrientsRelationships entity.
+	// It exists in this package in order to avoid circular dependency with the "foodnutrientsrelationships" package.
+	NutrientInverseTable = "food_nutrients_relationships"
 	// NutrientColumn is the table column denoting the nutrient relation/edge.
 	NutrientColumn = "food_nutrient"
 	// UserMealTable is the table that holds the user_meal relation/edge.

@@ -3,21 +3,115 @@
 
 openapi: 3.0.3
 info:
-    title: Index API
+    title: BloodStatus API
     version: 0.0.1
 paths:
-    /v1/index:
-        get:
+    api/v1/blood_status:
+        put:
             tags:
-                - Index
-            operationId: Index_Index
+                - BloodStatus
+            operationId: BloodStatus_UpdateBloodStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateBloodStatusRequest'
+                required: true
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/IndexReply'
+                                $ref: '#/components/schemas/UpdateBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_CreateBloodStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateBloodStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    api/v1/blood_status/{id}:
+        get:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_GetBloodStatus
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_DeleteBloodStatus
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    api/v1/blood_status_list:
+        get:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_ListBloodStatus
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ListBloodStatusReply'
                 default:
                     description: Default error response
                     content:
@@ -26,6 +120,42 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
+        BloodStatusRecord:
+            type: object
+            properties:
+                recordDate:
+                    type: string
+                timeOfDay:
+                    type: string
+                beforeAfterMeals:
+                    type: string
+                systolicPressure:
+                    type: integer
+                    format: uint32
+                diastolicPressure:
+                    type: integer
+                    format: uint32
+                pulse:
+                    type: integer
+                    format: uint32
+        CreateBloodStatusReply:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
+        CreateBloodStatusRequest:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
+        DeleteBloodStatusReply:
+            type: object
+            properties: {}
+        GetBloodStatusReply:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
         GoogleProtobufAny:
             type: object
             properties:
@@ -34,11 +164,13 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        IndexReply:
+        ListBloodStatusReply:
             type: object
             properties:
-                message:
-                    type: string
+                bloodStatuses:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BloodStatusRecord'
         Status:
             type: object
             properties:
@@ -55,5 +187,15 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
+        UpdateBloodStatusReply:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
+        UpdateBloodStatusRequest:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
 tags:
-    - name: Index
+    - name: BloodStatus

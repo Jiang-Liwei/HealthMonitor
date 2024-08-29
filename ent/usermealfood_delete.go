@@ -3,9 +3,9 @@
 package ent
 
 import (
-	"HealthMonitor/ent/predicate"
-	"HealthMonitor/ent/usermealfood"
 	"context"
+	"healthmonitor/ent/predicate"
+	"healthmonitor/ent/usermealfood"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"

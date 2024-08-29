@@ -17,7 +17,7 @@ type Nutrient struct {
 // Annotations of the BloodStatusRecord.
 func (Nutrient) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Options: "COMMENT=营养表"},
+		entsql.Annotation{Options: "COMMENT='营养表'"},
 	}
 }
 
@@ -37,6 +37,6 @@ func (Nutrient) Fields() []ent.Field {
 // Edges of the Nutrient.
 func (Nutrient) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("food", FoodNutrients.Type),
+		edge.To("food", FoodNutrientsRelationships.Type),
 	}
 }

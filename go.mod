@@ -1,4 +1,4 @@
-module HealthMonitor
+module healthmonitor
 
 go 1.21
 

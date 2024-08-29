@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminpermission"
-	"HealthMonitor/ent/adminrolepermission"
-	"HealthMonitor/ent/adminroles"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"fmt"
+	"healthmonitor/ent/adminpermission"
+	"healthmonitor/ent/adminrolepermission"
+	"healthmonitor/ent/adminroles"
+	"healthmonitor/ent/predicate"
 	"math"
 
 	"entgo.io/ent"

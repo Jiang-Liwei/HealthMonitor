@@ -9,24 +9,24 @@ import (
 	"log"
 	"reflect"
 
-	"HealthMonitor/ent/migrate"
+	"healthmonitor/ent/migrate"
 
-	"HealthMonitor/ent/adminjwtblacklist"
-	"HealthMonitor/ent/adminlog"
-	"HealthMonitor/ent/adminmenu"
-	"HealthMonitor/ent/adminpermission"
-	"HealthMonitor/ent/adminrolepermission"
-	"HealthMonitor/ent/adminroles"
-	"HealthMonitor/ent/adminuser"
-	"HealthMonitor/ent/adminuserrole"
-	"HealthMonitor/ent/bloodstatusrecord"
-	"HealthMonitor/ent/food"
-	"HealthMonitor/ent/foodingredients"
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/ingredients"
-	"HealthMonitor/ent/nutrient"
-	"HealthMonitor/ent/usermeal"
-	"HealthMonitor/ent/usermealfood"
+	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/adminlog"
+	"healthmonitor/ent/adminmenu"
+	"healthmonitor/ent/adminpermission"
+	"healthmonitor/ent/adminrolepermission"
+	"healthmonitor/ent/adminroles"
+	"healthmonitor/ent/adminuser"
+	"healthmonitor/ent/adminuserrole"
+	"healthmonitor/ent/bloodstatusrecord"
+	"healthmonitor/ent/food"
+	"healthmonitor/ent/foodingredients"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/ingredients"
+	"healthmonitor/ent/nutrient"
+	"healthmonitor/ent/usermeal"
+	"healthmonitor/ent/usermealfood"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -62,8 +62,8 @@ type Client struct {
 	Food *FoodClient
 	// FoodIngredients is the client for interacting with the FoodIngredients builders.
 	FoodIngredients *FoodIngredientsClient
-	// FoodNutrients is the client for interacting with the FoodNutrients builders.
-	FoodNutrients *FoodNutrientsClient
+	// FoodNutrientsRelationships is the client for interacting with the FoodNutrientsRelationships builders.
+	FoodNutrientsRelationships *FoodNutrientsRelationshipsClient
 	// Ingredients is the client for interacting with the Ingredients builders.
 	Ingredients *IngredientsClient
 	// Nutrient is the client for interacting with the Nutrient builders.
@@ -94,7 +94,7 @@ func (c *Client) init() {
 	c.BloodStatusRecord = NewBloodStatusRecordClient(c.config)
 	c.Food = NewFoodClient(c.config)
 	c.FoodIngredients = NewFoodIngredientsClient(c.config)
-	c.FoodNutrients = NewFoodNutrientsClient(c.config)
+	c.FoodNutrientsRelationships = NewFoodNutrientsRelationshipsClient(c.config)
 	c.Ingredients = NewIngredientsClient(c.config)
 	c.Nutrient = NewNutrientClient(c.config)
 	c.UserMeal = NewUserMealClient(c.config)
@@ -189,24 +189,24 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:                 ctx,
-		config:              cfg,
-		AdminJWTBlacklist:   NewAdminJWTBlacklistClient(cfg),
-		AdminLog:            NewAdminLogClient(cfg),
-		AdminMenu:           NewAdminMenuClient(cfg),
-		AdminPermission:     NewAdminPermissionClient(cfg),
-		AdminRolePermission: NewAdminRolePermissionClient(cfg),
-		AdminRoles:          NewAdminRolesClient(cfg),
-		AdminUser:           NewAdminUserClient(cfg),
-		AdminUserRole:       NewAdminUserRoleClient(cfg),
-		BloodStatusRecord:   NewBloodStatusRecordClient(cfg),
-		Food:                NewFoodClient(cfg),
-		FoodIngredients:     NewFoodIngredientsClient(cfg),
-		FoodNutrients:       NewFoodNutrientsClient(cfg),
-		Ingredients:         NewIngredientsClient(cfg),
-		Nutrient:            NewNutrientClient(cfg),
-		UserMeal:            NewUserMealClient(cfg),
-		UserMealFood:        NewUserMealFoodClient(cfg),
+		ctx:                        ctx,
+		config:                     cfg,
+		AdminJWTBlacklist:          NewAdminJWTBlacklistClient(cfg),
+		AdminLog:                   NewAdminLogClient(cfg),
+		AdminMenu:                  NewAdminMenuClient(cfg),
+		AdminPermission:            NewAdminPermissionClient(cfg),
+		AdminRolePermission:        NewAdminRolePermissionClient(cfg),
+		AdminRoles:                 NewAdminRolesClient(cfg),
+		AdminUser:                  NewAdminUserClient(cfg),
+		AdminUserRole:              NewAdminUserRoleClient(cfg),
+		BloodStatusRecord:          NewBloodStatusRecordClient(cfg),
+		Food:                       NewFoodClient(cfg),
+		FoodIngredients:            NewFoodIngredientsClient(cfg),
+		FoodNutrientsRelationships: NewFoodNutrientsRelationshipsClient(cfg),
+		Ingredients:                NewIngredientsClient(cfg),
+		Nutrient:                   NewNutrientClient(cfg),
+		UserMeal:                   NewUserMealClient(cfg),
+		UserMealFood:               NewUserMealFoodClient(cfg),
 	}, nil
 }
 
@@ -224,24 +224,24 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:                 ctx,
-		config:              cfg,
-		AdminJWTBlacklist:   NewAdminJWTBlacklistClient(cfg),
-		AdminLog:            NewAdminLogClient(cfg),
-		AdminMenu:           NewAdminMenuClient(cfg),
-		AdminPermission:     NewAdminPermissionClient(cfg),
-		AdminRolePermission: NewAdminRolePermissionClient(cfg),
-		AdminRoles:          NewAdminRolesClient(cfg),
-		AdminUser:           NewAdminUserClient(cfg),
-		AdminUserRole:       NewAdminUserRoleClient(cfg),
-		BloodStatusRecord:   NewBloodStatusRecordClient(cfg),
-		Food:                NewFoodClient(cfg),
-		FoodIngredients:     NewFoodIngredientsClient(cfg),
-		FoodNutrients:       NewFoodNutrientsClient(cfg),
-		Ingredients:         NewIngredientsClient(cfg),
-		Nutrient:            NewNutrientClient(cfg),
-		UserMeal:            NewUserMealClient(cfg),
-		UserMealFood:        NewUserMealFoodClient(cfg),
+		ctx:                        ctx,
+		config:                     cfg,
+		AdminJWTBlacklist:          NewAdminJWTBlacklistClient(cfg),
+		AdminLog:                   NewAdminLogClient(cfg),
+		AdminMenu:                  NewAdminMenuClient(cfg),
+		AdminPermission:            NewAdminPermissionClient(cfg),
+		AdminRolePermission:        NewAdminRolePermissionClient(cfg),
+		AdminRoles:                 NewAdminRolesClient(cfg),
+		AdminUser:                  NewAdminUserClient(cfg),
+		AdminUserRole:              NewAdminUserRoleClient(cfg),
+		BloodStatusRecord:          NewBloodStatusRecordClient(cfg),
+		Food:                       NewFoodClient(cfg),
+		FoodIngredients:            NewFoodIngredientsClient(cfg),
+		FoodNutrientsRelationships: NewFoodNutrientsRelationshipsClient(cfg),
+		Ingredients:                NewIngredientsClient(cfg),
+		Nutrient:                   NewNutrientClient(cfg),
+		UserMeal:                   NewUserMealClient(cfg),
+		UserMealFood:               NewUserMealFoodClient(cfg),
 	}, nil
 }
 
@@ -273,8 +273,8 @@ func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
 		c.AdminJWTBlacklist, c.AdminLog, c.AdminMenu, c.AdminPermission,
 		c.AdminRolePermission, c.AdminRoles, c.AdminUser, c.AdminUserRole,
-		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrients, c.Ingredients,
-		c.Nutrient, c.UserMeal, c.UserMealFood,
+		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrientsRelationships,
+		c.Ingredients, c.Nutrient, c.UserMeal, c.UserMealFood,
 	} {
 		n.Use(hooks...)
 	}
@@ -286,8 +286,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
 		c.AdminJWTBlacklist, c.AdminLog, c.AdminMenu, c.AdminPermission,
 		c.AdminRolePermission, c.AdminRoles, c.AdminUser, c.AdminUserRole,
-		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrients, c.Ingredients,
-		c.Nutrient, c.UserMeal, c.UserMealFood,
+		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrientsRelationships,
+		c.Ingredients, c.Nutrient, c.UserMeal, c.UserMealFood,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -318,8 +318,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Food.mutate(ctx, m)
 	case *FoodIngredientsMutation:
 		return c.FoodIngredients.mutate(ctx, m)
-	case *FoodNutrientsMutation:
-		return c.FoodNutrients.mutate(ctx, m)
+	case *FoodNutrientsRelationshipsMutation:
+		return c.FoodNutrientsRelationships.mutate(ctx, m)
 	case *IngredientsMutation:
 		return c.Ingredients.mutate(ctx, m)
 	case *NutrientMutation:
@@ -1815,13 +1815,13 @@ func (c *FoodClient) QueryIngredients(f *Food) *FoodIngredientsQuery {
 }
 
 // QueryNutrient queries the nutrient edge of a Food.
-func (c *FoodClient) QueryNutrient(f *Food) *FoodNutrientsQuery {
-	query := (&FoodNutrientsClient{config: c.config}).Query()
+func (c *FoodClient) QueryNutrient(f *Food) *FoodNutrientsRelationshipsQuery {
+	query := (&FoodNutrientsRelationshipsClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := f.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(food.Table, food.FieldID, id),
-			sqlgraph.To(foodnutrients.Table, foodnutrients.FieldID),
+			sqlgraph.To(foodnutrientsrelationships.Table, foodnutrientsrelationships.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, food.NutrientTable, food.NutrientColumn),
 		)
 		fromV = sqlgraph.Neighbors(f.driver.Dialect(), step)
@@ -2036,107 +2036,107 @@ func (c *FoodIngredientsClient) mutate(ctx context.Context, m *FoodIngredientsMu
 	}
 }
 
-// FoodNutrientsClient is a client for the FoodNutrients schema.
-type FoodNutrientsClient struct {
+// FoodNutrientsRelationshipsClient is a client for the FoodNutrientsRelationships schema.
+type FoodNutrientsRelationshipsClient struct {
 	config
 }
 
-// NewFoodNutrientsClient returns a client for the FoodNutrients from the given config.
-func NewFoodNutrientsClient(c config) *FoodNutrientsClient {
-	return &FoodNutrientsClient{config: c}
+// NewFoodNutrientsRelationshipsClient returns a client for the FoodNutrientsRelationships from the given config.
+func NewFoodNutrientsRelationshipsClient(c config) *FoodNutrientsRelationshipsClient {
+	return &FoodNutrientsRelationshipsClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `foodnutrients.Hooks(f(g(h())))`.
-func (c *FoodNutrientsClient) Use(hooks ...Hook) {
-	c.hooks.FoodNutrients = append(c.hooks.FoodNutrients, hooks...)
+// A call to `Use(f, g, h)` equals to `foodnutrientsrelationships.Hooks(f(g(h())))`.
+func (c *FoodNutrientsRelationshipsClient) Use(hooks ...Hook) {
+	c.hooks.FoodNutrientsRelationships = append(c.hooks.FoodNutrientsRelationships, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `foodnutrients.Intercept(f(g(h())))`.
-func (c *FoodNutrientsClient) Intercept(interceptors ...Interceptor) {
-	c.inters.FoodNutrients = append(c.inters.FoodNutrients, interceptors...)
+// A call to `Intercept(f, g, h)` equals to `foodnutrientsrelationships.Intercept(f(g(h())))`.
+func (c *FoodNutrientsRelationshipsClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FoodNutrientsRelationships = append(c.inters.FoodNutrientsRelationships, interceptors...)
 }
 
-// Create returns a builder for creating a FoodNutrients entity.
-func (c *FoodNutrientsClient) Create() *FoodNutrientsCreate {
-	mutation := newFoodNutrientsMutation(c.config, OpCreate)
-	return &FoodNutrientsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a FoodNutrientsRelationships entity.
+func (c *FoodNutrientsRelationshipsClient) Create() *FoodNutrientsRelationshipsCreate {
+	mutation := newFoodNutrientsRelationshipsMutation(c.config, OpCreate)
+	return &FoodNutrientsRelationshipsCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of FoodNutrients entities.
-func (c *FoodNutrientsClient) CreateBulk(builders ...*FoodNutrientsCreate) *FoodNutrientsCreateBulk {
-	return &FoodNutrientsCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of FoodNutrientsRelationships entities.
+func (c *FoodNutrientsRelationshipsClient) CreateBulk(builders ...*FoodNutrientsRelationshipsCreate) *FoodNutrientsRelationshipsCreateBulk {
+	return &FoodNutrientsRelationshipsCreateBulk{config: c.config, builders: builders}
 }
 
 // MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
 // a builder and applies setFunc on it.
-func (c *FoodNutrientsClient) MapCreateBulk(slice any, setFunc func(*FoodNutrientsCreate, int)) *FoodNutrientsCreateBulk {
+func (c *FoodNutrientsRelationshipsClient) MapCreateBulk(slice any, setFunc func(*FoodNutrientsRelationshipsCreate, int)) *FoodNutrientsRelationshipsCreateBulk {
 	rv := reflect.ValueOf(slice)
 	if rv.Kind() != reflect.Slice {
-		return &FoodNutrientsCreateBulk{err: fmt.Errorf("calling to FoodNutrientsClient.MapCreateBulk with wrong type %T, need slice", slice)}
+		return &FoodNutrientsRelationshipsCreateBulk{err: fmt.Errorf("calling to FoodNutrientsRelationshipsClient.MapCreateBulk with wrong type %T, need slice", slice)}
 	}
-	builders := make([]*FoodNutrientsCreate, rv.Len())
+	builders := make([]*FoodNutrientsRelationshipsCreate, rv.Len())
 	for i := 0; i < rv.Len(); i++ {
 		builders[i] = c.Create()
 		setFunc(builders[i], i)
 	}
-	return &FoodNutrientsCreateBulk{config: c.config, builders: builders}
+	return &FoodNutrientsRelationshipsCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for FoodNutrients.
-func (c *FoodNutrientsClient) Update() *FoodNutrientsUpdate {
-	mutation := newFoodNutrientsMutation(c.config, OpUpdate)
-	return &FoodNutrientsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for FoodNutrientsRelationships.
+func (c *FoodNutrientsRelationshipsClient) Update() *FoodNutrientsRelationshipsUpdate {
+	mutation := newFoodNutrientsRelationshipsMutation(c.config, OpUpdate)
+	return &FoodNutrientsRelationshipsUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *FoodNutrientsClient) UpdateOne(fn *FoodNutrients) *FoodNutrientsUpdateOne {
-	mutation := newFoodNutrientsMutation(c.config, OpUpdateOne, withFoodNutrients(fn))
-	return &FoodNutrientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *FoodNutrientsRelationshipsClient) UpdateOne(fnr *FoodNutrientsRelationships) *FoodNutrientsRelationshipsUpdateOne {
+	mutation := newFoodNutrientsRelationshipsMutation(c.config, OpUpdateOne, withFoodNutrientsRelationships(fnr))
+	return &FoodNutrientsRelationshipsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *FoodNutrientsClient) UpdateOneID(id int) *FoodNutrientsUpdateOne {
-	mutation := newFoodNutrientsMutation(c.config, OpUpdateOne, withFoodNutrientsID(id))
-	return &FoodNutrientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *FoodNutrientsRelationshipsClient) UpdateOneID(id int) *FoodNutrientsRelationshipsUpdateOne {
+	mutation := newFoodNutrientsRelationshipsMutation(c.config, OpUpdateOne, withFoodNutrientsRelationshipsID(id))
+	return &FoodNutrientsRelationshipsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for FoodNutrients.
-func (c *FoodNutrientsClient) Delete() *FoodNutrientsDelete {
-	mutation := newFoodNutrientsMutation(c.config, OpDelete)
-	return &FoodNutrientsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for FoodNutrientsRelationships.
+func (c *FoodNutrientsRelationshipsClient) Delete() *FoodNutrientsRelationshipsDelete {
+	mutation := newFoodNutrientsRelationshipsMutation(c.config, OpDelete)
+	return &FoodNutrientsRelationshipsDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *FoodNutrientsClient) DeleteOne(fn *FoodNutrients) *FoodNutrientsDeleteOne {
-	return c.DeleteOneID(fn.ID)
+func (c *FoodNutrientsRelationshipsClient) DeleteOne(fnr *FoodNutrientsRelationships) *FoodNutrientsRelationshipsDeleteOne {
+	return c.DeleteOneID(fnr.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *FoodNutrientsClient) DeleteOneID(id int) *FoodNutrientsDeleteOne {
-	builder := c.Delete().Where(foodnutrients.ID(id))
+func (c *FoodNutrientsRelationshipsClient) DeleteOneID(id int) *FoodNutrientsRelationshipsDeleteOne {
+	builder := c.Delete().Where(foodnutrientsrelationships.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &FoodNutrientsDeleteOne{builder}
+	return &FoodNutrientsRelationshipsDeleteOne{builder}
 }
 
-// Query returns a query builder for FoodNutrients.
-func (c *FoodNutrientsClient) Query() *FoodNutrientsQuery {
-	return &FoodNutrientsQuery{
+// Query returns a query builder for FoodNutrientsRelationships.
+func (c *FoodNutrientsRelationshipsClient) Query() *FoodNutrientsRelationshipsQuery {
+	return &FoodNutrientsRelationshipsQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: TypeFoodNutrients},
+		ctx:    &QueryContext{Type: TypeFoodNutrientsRelationships},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a FoodNutrients entity by its id.
-func (c *FoodNutrientsClient) Get(ctx context.Context, id int) (*FoodNutrients, error) {
-	return c.Query().Where(foodnutrients.ID(id)).Only(ctx)
+// Get returns a FoodNutrientsRelationships entity by its id.
+func (c *FoodNutrientsRelationshipsClient) Get(ctx context.Context, id int) (*FoodNutrientsRelationships, error) {
+	return c.Query().Where(foodnutrientsrelationships.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *FoodNutrientsClient) GetX(ctx context.Context, id int) *FoodNutrients {
+func (c *FoodNutrientsRelationshipsClient) GetX(ctx context.Context, id int) *FoodNutrientsRelationships {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -2144,60 +2144,60 @@ func (c *FoodNutrientsClient) GetX(ctx context.Context, id int) *FoodNutrients {
 	return obj
 }
 
-// QueryFood queries the food edge of a FoodNutrients.
-func (c *FoodNutrientsClient) QueryFood(fn *FoodNutrients) *FoodQuery {
+// QueryFood queries the food edge of a FoodNutrientsRelationships.
+func (c *FoodNutrientsRelationshipsClient) QueryFood(fnr *FoodNutrientsRelationships) *FoodQuery {
 	query := (&FoodClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := fn.ID
+		id := fnr.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(foodnutrients.Table, foodnutrients.FieldID, id),
+			sqlgraph.From(foodnutrientsrelationships.Table, foodnutrientsrelationships.FieldID, id),
 			sqlgraph.To(food.Table, food.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, foodnutrients.FoodTable, foodnutrients.FoodColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, foodnutrientsrelationships.FoodTable, foodnutrientsrelationships.FoodColumn),
 		)
-		fromV = sqlgraph.Neighbors(fn.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(fnr.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
-// QueryNutrient queries the nutrient edge of a FoodNutrients.
-func (c *FoodNutrientsClient) QueryNutrient(fn *FoodNutrients) *NutrientQuery {
+// QueryNutrient queries the nutrient edge of a FoodNutrientsRelationships.
+func (c *FoodNutrientsRelationshipsClient) QueryNutrient(fnr *FoodNutrientsRelationships) *NutrientQuery {
 	query := (&NutrientClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := fn.ID
+		id := fnr.ID
 		step := sqlgraph.NewStep(
-			sqlgraph.From(foodnutrients.Table, foodnutrients.FieldID, id),
+			sqlgraph.From(foodnutrientsrelationships.Table, foodnutrientsrelationships.FieldID, id),
 			sqlgraph.To(nutrient.Table, nutrient.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, true, foodnutrients.NutrientTable, foodnutrients.NutrientColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, foodnutrientsrelationships.NutrientTable, foodnutrientsrelationships.NutrientColumn),
 		)
-		fromV = sqlgraph.Neighbors(fn.driver.Dialect(), step)
+		fromV = sqlgraph.Neighbors(fnr.driver.Dialect(), step)
 		return fromV, nil
 	}
 	return query
 }
 
 // Hooks returns the client hooks.
-func (c *FoodNutrientsClient) Hooks() []Hook {
-	return c.hooks.FoodNutrients
+func (c *FoodNutrientsRelationshipsClient) Hooks() []Hook {
+	return c.hooks.FoodNutrientsRelationships
 }
 
 // Interceptors returns the client interceptors.
-func (c *FoodNutrientsClient) Interceptors() []Interceptor {
-	return c.inters.FoodNutrients
+func (c *FoodNutrientsRelationshipsClient) Interceptors() []Interceptor {
+	return c.inters.FoodNutrientsRelationships
 }
 
-func (c *FoodNutrientsClient) mutate(ctx context.Context, m *FoodNutrientsMutation) (Value, error) {
+func (c *FoodNutrientsRelationshipsClient) mutate(ctx context.Context, m *FoodNutrientsRelationshipsMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&FoodNutrientsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&FoodNutrientsRelationshipsCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&FoodNutrientsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&FoodNutrientsRelationshipsUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&FoodNutrientsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&FoodNutrientsRelationshipsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&FoodNutrientsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&FoodNutrientsRelationshipsDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown FoodNutrients mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown FoodNutrientsRelationships mutation op: %q", m.Op())
 	}
 }
 
@@ -2459,13 +2459,13 @@ func (c *NutrientClient) GetX(ctx context.Context, id uuid.UUID) *Nutrient {
 }
 
 // QueryFood queries the food edge of a Nutrient.
-func (c *NutrientClient) QueryFood(n *Nutrient) *FoodNutrientsQuery {
-	query := (&FoodNutrientsClient{config: c.config}).Query()
+func (c *NutrientClient) QueryFood(n *Nutrient) *FoodNutrientsRelationshipsQuery {
+	query := (&FoodNutrientsRelationshipsClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := n.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(nutrient.Table, nutrient.FieldID, id),
-			sqlgraph.To(foodnutrients.Table, foodnutrients.FieldID),
+			sqlgraph.To(foodnutrientsrelationships.Table, foodnutrientsrelationships.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, nutrient.FoodTable, nutrient.FoodColumn),
 		)
 		fromV = sqlgraph.Neighbors(n.driver.Dialect(), step)
@@ -2818,11 +2818,13 @@ type (
 	hooks struct {
 		AdminJWTBlacklist, AdminLog, AdminMenu, AdminPermission, AdminRolePermission,
 		AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord, Food, FoodIngredients,
-		FoodNutrients, Ingredients, Nutrient, UserMeal, UserMealFood []ent.Hook
+		FoodNutrientsRelationships, Ingredients, Nutrient, UserMeal,
+		UserMealFood []ent.Hook
 	}
 	inters struct {
 		AdminJWTBlacklist, AdminLog, AdminMenu, AdminPermission, AdminRolePermission,
 		AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord, Food, FoodIngredients,
-		FoodNutrients, Ingredients, Nutrient, UserMeal, UserMealFood []ent.Interceptor
+		FoodNutrientsRelationships, Ingredients, Nutrient, UserMeal,
+		UserMealFood []ent.Interceptor
 	}
 )

@@ -17,7 +17,7 @@ type Food struct {
 // Annotations of the Food.
 func (Food) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Options: "COMMENT=食物表"},
+		entsql.Annotation{Options: "COMMENT='食物表'"},
 	}
 }
 
@@ -39,7 +39,7 @@ func (Food) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("ingredients", FoodIngredients.Type).
 			Comment("食物与食材的关联"),
-		edge.To("nutrient", FoodNutrients.Type).
+		edge.To("nutrient", FoodNutrientsRelationships.Type).
 			Comment("食物与营养的关联"),
 		edge.To("user_meal", UserMealFood.Type).
 			Comment("餐食与食物的关联"),

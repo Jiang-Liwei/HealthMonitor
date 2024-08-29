@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"HealthMonitor/ent/bloodstatusrecord"
 	"fmt"
+	"healthmonitor/ent/bloodstatusrecord"
 	"strings"
 	"time"
 
@@ -19,6 +19,8 @@ type BloodStatusRecord struct {
 	// ID of the ent.
 	// 记录的唯一标识符
 	ID uuid.UUID `json:"id,omitempty"`
+	// 用户id
+	UserID uuid.UUID `json:"user_id,omitempty"`
 	// 记录日期
 	RecordDate time.Time `json:"record_date,omitempty"`
 	// 记录时间段，早晨、中午、晚上
@@ -45,7 +47,7 @@ func (*BloodStatusRecord) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case bloodstatusrecord.FieldRecordDate:
 			values[i] = new(sql.NullTime)
-		case bloodstatusrecord.FieldID:
+		case bloodstatusrecord.FieldID, bloodstatusrecord.FieldUserID:
 			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -67,6 +69,12 @@ func (bsr *BloodStatusRecord) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				bsr.ID = *value
+			}
+		case bloodstatusrecord.FieldUserID:
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field user_id", values[i])
+			} else if value != nil {
+				bsr.UserID = *value
 			}
 		case bloodstatusrecord.FieldRecordDate:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -140,6 +148,9 @@ func (bsr *BloodStatusRecord) String() string {
 	var builder strings.Builder
 	builder.WriteString("BloodStatusRecord(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", bsr.ID))
+	builder.WriteString("user_id=")
+	builder.WriteString(fmt.Sprintf("%v", bsr.UserID))
+	builder.WriteString(", ")
 	builder.WriteString("record_date=")
 	builder.WriteString(bsr.RecordDate.Format(time.ANSIC))
 	builder.WriteString(", ")

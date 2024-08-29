@@ -39,8 +39,8 @@ type Food func(*sql.Selector)
 // FoodIngredients is the predicate function for foodingredients builders.
 type FoodIngredients func(*sql.Selector)
 
-// FoodNutrients is the predicate function for foodnutrients builders.
-type FoodNutrients func(*sql.Selector)
+// FoodNutrientsRelationships is the predicate function for foodnutrientsrelationships builders.
+type FoodNutrientsRelationships func(*sql.Selector)
 
 // Ingredients is the predicate function for ingredients builders.
 type Ingredients func(*sql.Selector)

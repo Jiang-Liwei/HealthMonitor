@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"HealthMonitor/ent/adminjwtblacklist"
 	"fmt"
+	"healthmonitor/ent/adminjwtblacklist"
 	"strings"
 	"time"
 

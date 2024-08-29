@@ -7,11 +7,13 @@
 package main
 
 import (
-	"HealthMonitor/internal/conf"
-	"HealthMonitor/internal/server"
-	"HealthMonitor/internal/service"
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"healthmonitor/internal/biz"
+	"healthmonitor/internal/conf"
+	"healthmonitor/internal/data"
+	"healthmonitor/internal/server"
+	"healthmonitor/internal/service"
 )
 
 import (
@@ -21,13 +23,21 @@ import (
 // Injectors from wire.go:
 
 // wireApp init kratos application.
-func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
+func wireApp(c *conf.Server, d *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	indexService := service.NewIndexService()
-	httpServerConfig := ProvideHTTPServerConfig(confServer, indexService, logger)
+	dataData, cleanup, err := data.NewData(d, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	bloodStatusRepo := data.NewBloodStatusRepo(dataData, logger)
+	bloodStatusUsecase := biz.NewBloodStatusUsecase(bloodStatusRepo, logger)
+	bloodStatusService := service.NewBloodStatusService(bloodStatusUsecase)
+	httpServerConfig := ProvideHTTPServerConfig(c, indexService, bloodStatusService, logger)
 	grpcServer := server.NewGRPCServer(httpServerConfig)
 	httpServer := server.NewHTTPServer(httpServerConfig)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
+		cleanup()
 	}, nil
 }
 
@@ -37,11 +47,13 @@ func wireApp(confServer *conf.Server, data *conf.Data, logger log.Logger) (*krat
 func ProvideHTTPServerConfig(
 	c *conf.Server,
 	index *service.IndexService,
+	bloodStatus *service.BloodStatusService,
 	logger log.Logger,
 ) server.HTTPServerConfig {
 	return server.HTTPServerConfig{
-		Conf:   c,
-		Index:  index,
-		Logger: logger,
+		Conf:        c,
+		Index:       index,
+		BloodStatus: bloodStatus,
+		Logger:      logger,
 	}
 }

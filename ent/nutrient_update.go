@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/nutrient"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"errors"
 	"fmt"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/nutrient"
+	"healthmonitor/ent/predicate"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -56,14 +56,14 @@ func (nu *NutrientUpdate) SetNillableEffect(n *nutrient.Effect) *NutrientUpdate 
 	return nu
 }
 
-// AddFoodIDs adds the "food" edge to the FoodNutrients entity by IDs.
+// AddFoodIDs adds the "food" edge to the FoodNutrientsRelationships entity by IDs.
 func (nu *NutrientUpdate) AddFoodIDs(ids ...int) *NutrientUpdate {
 	nu.mutation.AddFoodIDs(ids...)
 	return nu
 }
 
-// AddFood adds the "food" edges to the FoodNutrients entity.
-func (nu *NutrientUpdate) AddFood(f ...*FoodNutrients) *NutrientUpdate {
+// AddFood adds the "food" edges to the FoodNutrientsRelationships entity.
+func (nu *NutrientUpdate) AddFood(f ...*FoodNutrientsRelationships) *NutrientUpdate {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -76,20 +76,20 @@ func (nu *NutrientUpdate) Mutation() *NutrientMutation {
 	return nu.mutation
 }
 
-// ClearFood clears all "food" edges to the FoodNutrients entity.
+// ClearFood clears all "food" edges to the FoodNutrientsRelationships entity.
 func (nu *NutrientUpdate) ClearFood() *NutrientUpdate {
 	nu.mutation.ClearFood()
 	return nu
 }
 
-// RemoveFoodIDs removes the "food" edge to FoodNutrients entities by IDs.
+// RemoveFoodIDs removes the "food" edge to FoodNutrientsRelationships entities by IDs.
 func (nu *NutrientUpdate) RemoveFoodIDs(ids ...int) *NutrientUpdate {
 	nu.mutation.RemoveFoodIDs(ids...)
 	return nu
 }
 
-// RemoveFood removes "food" edges to FoodNutrients entities.
-func (nu *NutrientUpdate) RemoveFood(f ...*FoodNutrients) *NutrientUpdate {
+// RemoveFood removes "food" edges to FoodNutrientsRelationships entities.
+func (nu *NutrientUpdate) RemoveFood(f ...*FoodNutrientsRelationships) *NutrientUpdate {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -160,7 +160,7 @@ func (nu *NutrientUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{nutrient.FoodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -173,7 +173,7 @@ func (nu *NutrientUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{nutrient.FoodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -189,7 +189,7 @@ func (nu *NutrientUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Columns: []string{nutrient.FoodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -245,14 +245,14 @@ func (nuo *NutrientUpdateOne) SetNillableEffect(n *nutrient.Effect) *NutrientUpd
 	return nuo
 }
 
-// AddFoodIDs adds the "food" edge to the FoodNutrients entity by IDs.
+// AddFoodIDs adds the "food" edge to the FoodNutrientsRelationships entity by IDs.
 func (nuo *NutrientUpdateOne) AddFoodIDs(ids ...int) *NutrientUpdateOne {
 	nuo.mutation.AddFoodIDs(ids...)
 	return nuo
 }
 
-// AddFood adds the "food" edges to the FoodNutrients entity.
-func (nuo *NutrientUpdateOne) AddFood(f ...*FoodNutrients) *NutrientUpdateOne {
+// AddFood adds the "food" edges to the FoodNutrientsRelationships entity.
+func (nuo *NutrientUpdateOne) AddFood(f ...*FoodNutrientsRelationships) *NutrientUpdateOne {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -265,20 +265,20 @@ func (nuo *NutrientUpdateOne) Mutation() *NutrientMutation {
 	return nuo.mutation
 }
 
-// ClearFood clears all "food" edges to the FoodNutrients entity.
+// ClearFood clears all "food" edges to the FoodNutrientsRelationships entity.
 func (nuo *NutrientUpdateOne) ClearFood() *NutrientUpdateOne {
 	nuo.mutation.ClearFood()
 	return nuo
 }
 
-// RemoveFoodIDs removes the "food" edge to FoodNutrients entities by IDs.
+// RemoveFoodIDs removes the "food" edge to FoodNutrientsRelationships entities by IDs.
 func (nuo *NutrientUpdateOne) RemoveFoodIDs(ids ...int) *NutrientUpdateOne {
 	nuo.mutation.RemoveFoodIDs(ids...)
 	return nuo
 }
 
-// RemoveFood removes "food" edges to FoodNutrients entities.
-func (nuo *NutrientUpdateOne) RemoveFood(f ...*FoodNutrients) *NutrientUpdateOne {
+// RemoveFood removes "food" edges to FoodNutrientsRelationships entities.
+func (nuo *NutrientUpdateOne) RemoveFood(f ...*FoodNutrientsRelationships) *NutrientUpdateOne {
 	ids := make([]int, len(f))
 	for i := range f {
 		ids[i] = f[i].ID
@@ -379,7 +379,7 @@ func (nuo *NutrientUpdateOne) sqlSave(ctx context.Context) (_node *Nutrient, err
 			Columns: []string{nutrient.FoodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
@@ -392,7 +392,7 @@ func (nuo *NutrientUpdateOne) sqlSave(ctx context.Context) (_node *Nutrient, err
 			Columns: []string{nutrient.FoodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -408,7 +408,7 @@ func (nuo *NutrientUpdateOne) sqlSave(ctx context.Context) (_node *Nutrient, err
 			Columns: []string{nutrient.FoodColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(foodnutrients.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(foodnutrientsrelationships.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

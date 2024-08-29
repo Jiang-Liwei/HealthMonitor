@@ -15,7 +15,7 @@ type UserMealFood struct {
 // Annotations of the UserMealFood.
 func (UserMealFood) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entsql.Annotation{Options: "COMMENT=餐食与食物的关联表"},
+		entsql.Annotation{Options: "COMMENT='餐食与食物的关联表'"},
 	}
 }
 

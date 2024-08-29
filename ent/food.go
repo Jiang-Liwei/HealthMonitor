@@ -3,8 +3,8 @@
 package ent
 
 import (
-	"HealthMonitor/ent/food"
 	"fmt"
+	"healthmonitor/ent/food"
 	"strings"
 
 	"entgo.io/ent"
@@ -33,7 +33,7 @@ type FoodEdges struct {
 	// 食物与食材的关联
 	Ingredients []*FoodIngredients `json:"ingredients,omitempty"`
 	// 食物与营养的关联
-	Nutrient []*FoodNutrients `json:"nutrient,omitempty"`
+	Nutrient []*FoodNutrientsRelationships `json:"nutrient,omitempty"`
 	// 餐食与食物的关联
 	UserMeal []*UserMealFood `json:"user_meal,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -52,7 +52,7 @@ func (e FoodEdges) IngredientsOrErr() ([]*FoodIngredients, error) {
 
 // NutrientOrErr returns the Nutrient value or an error if the edge
 // was not loaded in eager-loading.
-func (e FoodEdges) NutrientOrErr() ([]*FoodNutrients, error) {
+func (e FoodEdges) NutrientOrErr() ([]*FoodNutrientsRelationships, error) {
 	if e.loadedTypes[1] {
 		return e.Nutrient, nil
 	}
@@ -129,7 +129,7 @@ func (f *Food) QueryIngredients() *FoodIngredientsQuery {
 }
 
 // QueryNutrient queries the "nutrient" edge of the Food entity.
-func (f *Food) QueryNutrient() *FoodNutrientsQuery {
+func (f *Food) QueryNutrient() *FoodNutrientsRelationshipsQuery {
 	return NewFoodClient(f.config).QueryNutrient(f)
 }
 

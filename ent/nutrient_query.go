@@ -3,12 +3,12 @@
 package ent
 
 import (
-	"HealthMonitor/ent/foodnutrients"
-	"HealthMonitor/ent/nutrient"
-	"HealthMonitor/ent/predicate"
 	"context"
 	"database/sql/driver"
 	"fmt"
+	"healthmonitor/ent/foodnutrientsrelationships"
+	"healthmonitor/ent/nutrient"
+	"healthmonitor/ent/predicate"
 	"math"
 
 	"entgo.io/ent"
@@ -25,7 +25,7 @@ type NutrientQuery struct {
 	order      []nutrient.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Nutrient
-	withFood   *FoodNutrientsQuery
+	withFood   *FoodNutrientsRelationshipsQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -63,8 +63,8 @@ func (nq *NutrientQuery) Order(o ...nutrient.OrderOption) *NutrientQuery {
 }
 
 // QueryFood chains the current query on the "food" edge.
-func (nq *NutrientQuery) QueryFood() *FoodNutrientsQuery {
-	query := (&FoodNutrientsClient{config: nq.config}).Query()
+func (nq *NutrientQuery) QueryFood() *FoodNutrientsRelationshipsQuery {
+	query := (&FoodNutrientsRelationshipsClient{config: nq.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := nq.prepareQuery(ctx); err != nil {
 			return nil, err
@@ -75,7 +75,7 @@ func (nq *NutrientQuery) QueryFood() *FoodNutrientsQuery {
 		}
 		step := sqlgraph.NewStep(
 			sqlgraph.From(nutrient.Table, nutrient.FieldID, selector),
-			sqlgraph.To(foodnutrients.Table, foodnutrients.FieldID),
+			sqlgraph.To(foodnutrientsrelationships.Table, foodnutrientsrelationships.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, nutrient.FoodTable, nutrient.FoodColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(nq.driver.Dialect(), step)
@@ -285,8 +285,8 @@ func (nq *NutrientQuery) Clone() *NutrientQuery {
 
 // WithFood tells the query-builder to eager-load the nodes that are connected to
 // the "food" edge. The optional arguments are used to configure the query builder of the edge.
-func (nq *NutrientQuery) WithFood(opts ...func(*FoodNutrientsQuery)) *NutrientQuery {
-	query := (&FoodNutrientsClient{config: nq.config}).Query()
+func (nq *NutrientQuery) WithFood(opts ...func(*FoodNutrientsRelationshipsQuery)) *NutrientQuery {
+	query := (&FoodNutrientsRelationshipsClient{config: nq.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
@@ -396,15 +396,15 @@ func (nq *NutrientQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Nut
 	}
 	if query := nq.withFood; query != nil {
 		if err := nq.loadFood(ctx, query, nodes,
-			func(n *Nutrient) { n.Edges.Food = []*FoodNutrients{} },
-			func(n *Nutrient, e *FoodNutrients) { n.Edges.Food = append(n.Edges.Food, e) }); err != nil {
+			func(n *Nutrient) { n.Edges.Food = []*FoodNutrientsRelationships{} },
+			func(n *Nutrient, e *FoodNutrientsRelationships) { n.Edges.Food = append(n.Edges.Food, e) }); err != nil {
 			return nil, err
 		}
 	}
 	return nodes, nil
 }
 
-func (nq *NutrientQuery) loadFood(ctx context.Context, query *FoodNutrientsQuery, nodes []*Nutrient, init func(*Nutrient), assign func(*Nutrient, *FoodNutrients)) error {
+func (nq *NutrientQuery) loadFood(ctx context.Context, query *FoodNutrientsRelationshipsQuery, nodes []*Nutrient, init func(*Nutrient), assign func(*Nutrient, *FoodNutrientsRelationships)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[uuid.UUID]*Nutrient)
 	for i := range nodes {
@@ -415,7 +415,7 @@ func (nq *NutrientQuery) loadFood(ctx context.Context, query *FoodNutrientsQuery
 		}
 	}
 	query.withFKs = true
-	query.Where(predicate.FoodNutrients(func(s *sql.Selector) {
+	query.Where(predicate.FoodNutrientsRelationships(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(nutrient.FoodColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
