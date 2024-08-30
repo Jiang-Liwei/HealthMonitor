@@ -4,7 +4,6 @@ package adminlog
 
 import (
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -67,7 +66,7 @@ func IPAddress(v string) predicate.AdminLog {
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v time.Time) predicate.AdminLog {
+func CreatedAt(v int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldEQ(FieldCreatedAt, v))
 }
 
@@ -202,42 +201,42 @@ func IPAddressContainsFold(v string) predicate.AdminLog {
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v time.Time) predicate.AdminLog {
+func CreatedAtEQ(v int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v time.Time) predicate.AdminLog {
+func CreatedAtNEQ(v int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldNEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...time.Time) predicate.AdminLog {
+func CreatedAtIn(vs ...int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...time.Time) predicate.AdminLog {
+func CreatedAtNotIn(vs ...int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldNotIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v time.Time) predicate.AdminLog {
+func CreatedAtGT(v int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldGT(FieldCreatedAt, v))
 }
 
 // CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v time.Time) predicate.AdminLog {
+func CreatedAtGTE(v int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldGTE(FieldCreatedAt, v))
 }
 
 // CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v time.Time) predicate.AdminLog {
+func CreatedAtLT(v int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldLT(FieldCreatedAt, v))
 }
 
 // CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v time.Time) predicate.AdminLog {
+func CreatedAtLTE(v int) predicate.AdminLog {
 	return predicate.AdminLog(sql.FieldLTE(FieldCreatedAt, v))
 }
 

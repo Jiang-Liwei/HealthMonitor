@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminmenu"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -25,11 +24,13 @@ type AdminMenu struct {
 	// Path holds the value of the "path" field.
 	Path string `json:"path,omitempty"`
 	// Order holds the value of the "order" field.
-	Order int `json:"order,omitempty"`
+	Order uint16 `json:"order,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	CreatedAt int `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt    time.Time `json:"updated_at,omitempty"`
+	UpdatedAt int `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt    int `json:"deleted_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -38,12 +39,10 @@ func (*AdminMenu) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case adminmenu.FieldOrder:
+		case adminmenu.FieldOrder, adminmenu.FieldCreatedAt, adminmenu.FieldUpdatedAt, adminmenu.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
 		case adminmenu.FieldName, adminmenu.FieldIcon, adminmenu.FieldPath:
 			values[i] = new(sql.NullString)
-		case adminmenu.FieldCreatedAt, adminmenu.FieldUpdatedAt:
-			values[i] = new(sql.NullTime)
 		case adminmenu.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -89,19 +88,25 @@ func (am *AdminMenu) assignValues(columns []string, values []any) error {
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field order", values[i])
 			} else if value.Valid {
-				am.Order = int(value.Int64)
+				am.Order = uint16(value.Int64)
 			}
 		case adminmenu.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				am.CreatedAt = value.Time
+				am.CreatedAt = int(value.Int64)
 			}
 		case adminmenu.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				am.UpdatedAt = value.Time
+				am.UpdatedAt = int(value.Int64)
+			}
+		case adminmenu.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				am.DeletedAt = int(value.Int64)
 			}
 		default:
 			am.selectValues.Set(columns[i], values[i])
@@ -152,10 +157,13 @@ func (am *AdminMenu) String() string {
 	builder.WriteString(fmt.Sprintf("%v", am.Order))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(am.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", am.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(am.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", am.UpdatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", am.DeletedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

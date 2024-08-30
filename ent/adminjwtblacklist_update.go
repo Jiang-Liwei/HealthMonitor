@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminjwtblacklist"
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -43,36 +42,44 @@ func (ajbu *AdminJWTBlacklistUpdate) SetNillableJti(s *string) *AdminJWTBlacklis
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (ajbu *AdminJWTBlacklistUpdate) SetExpiresAt(t time.Time) *AdminJWTBlacklistUpdate {
-	ajbu.mutation.SetExpiresAt(t)
+func (ajbu *AdminJWTBlacklistUpdate) SetExpiresAt(i int) *AdminJWTBlacklistUpdate {
+	ajbu.mutation.ResetExpiresAt()
+	ajbu.mutation.SetExpiresAt(i)
 	return ajbu
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (ajbu *AdminJWTBlacklistUpdate) SetNillableExpiresAt(t *time.Time) *AdminJWTBlacklistUpdate {
-	if t != nil {
-		ajbu.SetExpiresAt(*t)
+func (ajbu *AdminJWTBlacklistUpdate) SetNillableExpiresAt(i *int) *AdminJWTBlacklistUpdate {
+	if i != nil {
+		ajbu.SetExpiresAt(*i)
 	}
+	return ajbu
+}
+
+// AddExpiresAt adds i to the "expires_at" field.
+func (ajbu *AdminJWTBlacklistUpdate) AddExpiresAt(i int) *AdminJWTBlacklistUpdate {
+	ajbu.mutation.AddExpiresAt(i)
 	return ajbu
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (ajbu *AdminJWTBlacklistUpdate) SetRevokedAt(t time.Time) *AdminJWTBlacklistUpdate {
-	ajbu.mutation.SetRevokedAt(t)
+func (ajbu *AdminJWTBlacklistUpdate) SetRevokedAt(i int) *AdminJWTBlacklistUpdate {
+	ajbu.mutation.ResetRevokedAt()
+	ajbu.mutation.SetRevokedAt(i)
 	return ajbu
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (ajbu *AdminJWTBlacklistUpdate) SetNillableRevokedAt(t *time.Time) *AdminJWTBlacklistUpdate {
-	if t != nil {
-		ajbu.SetRevokedAt(*t)
+func (ajbu *AdminJWTBlacklistUpdate) SetNillableRevokedAt(i *int) *AdminJWTBlacklistUpdate {
+	if i != nil {
+		ajbu.SetRevokedAt(*i)
 	}
 	return ajbu
 }
 
-// ClearRevokedAt clears the value of the "revoked_at" field.
-func (ajbu *AdminJWTBlacklistUpdate) ClearRevokedAt() *AdminJWTBlacklistUpdate {
-	ajbu.mutation.ClearRevokedAt()
+// AddRevokedAt adds i to the "revoked_at" field.
+func (ajbu *AdminJWTBlacklistUpdate) AddRevokedAt(i int) *AdminJWTBlacklistUpdate {
+	ajbu.mutation.AddRevokedAt(i)
 	return ajbu
 }
 
@@ -121,13 +128,16 @@ func (ajbu *AdminJWTBlacklistUpdate) sqlSave(ctx context.Context) (n int, err er
 		_spec.SetField(adminjwtblacklist.FieldJti, field.TypeString, value)
 	}
 	if value, ok := ajbu.mutation.ExpiresAt(); ok {
-		_spec.SetField(adminjwtblacklist.FieldExpiresAt, field.TypeTime, value)
+		_spec.SetField(adminjwtblacklist.FieldExpiresAt, field.TypeInt, value)
+	}
+	if value, ok := ajbu.mutation.AddedExpiresAt(); ok {
+		_spec.AddField(adminjwtblacklist.FieldExpiresAt, field.TypeInt, value)
 	}
 	if value, ok := ajbu.mutation.RevokedAt(); ok {
-		_spec.SetField(adminjwtblacklist.FieldRevokedAt, field.TypeTime, value)
+		_spec.SetField(adminjwtblacklist.FieldRevokedAt, field.TypeInt, value)
 	}
-	if ajbu.mutation.RevokedAtCleared() {
-		_spec.ClearField(adminjwtblacklist.FieldRevokedAt, field.TypeTime)
+	if value, ok := ajbu.mutation.AddedRevokedAt(); ok {
+		_spec.AddField(adminjwtblacklist.FieldRevokedAt, field.TypeInt, value)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ajbu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -164,36 +174,44 @@ func (ajbuo *AdminJWTBlacklistUpdateOne) SetNillableJti(s *string) *AdminJWTBlac
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (ajbuo *AdminJWTBlacklistUpdateOne) SetExpiresAt(t time.Time) *AdminJWTBlacklistUpdateOne {
-	ajbuo.mutation.SetExpiresAt(t)
+func (ajbuo *AdminJWTBlacklistUpdateOne) SetExpiresAt(i int) *AdminJWTBlacklistUpdateOne {
+	ajbuo.mutation.ResetExpiresAt()
+	ajbuo.mutation.SetExpiresAt(i)
 	return ajbuo
 }
 
 // SetNillableExpiresAt sets the "expires_at" field if the given value is not nil.
-func (ajbuo *AdminJWTBlacklistUpdateOne) SetNillableExpiresAt(t *time.Time) *AdminJWTBlacklistUpdateOne {
-	if t != nil {
-		ajbuo.SetExpiresAt(*t)
+func (ajbuo *AdminJWTBlacklistUpdateOne) SetNillableExpiresAt(i *int) *AdminJWTBlacklistUpdateOne {
+	if i != nil {
+		ajbuo.SetExpiresAt(*i)
 	}
+	return ajbuo
+}
+
+// AddExpiresAt adds i to the "expires_at" field.
+func (ajbuo *AdminJWTBlacklistUpdateOne) AddExpiresAt(i int) *AdminJWTBlacklistUpdateOne {
+	ajbuo.mutation.AddExpiresAt(i)
 	return ajbuo
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (ajbuo *AdminJWTBlacklistUpdateOne) SetRevokedAt(t time.Time) *AdminJWTBlacklistUpdateOne {
-	ajbuo.mutation.SetRevokedAt(t)
+func (ajbuo *AdminJWTBlacklistUpdateOne) SetRevokedAt(i int) *AdminJWTBlacklistUpdateOne {
+	ajbuo.mutation.ResetRevokedAt()
+	ajbuo.mutation.SetRevokedAt(i)
 	return ajbuo
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (ajbuo *AdminJWTBlacklistUpdateOne) SetNillableRevokedAt(t *time.Time) *AdminJWTBlacklistUpdateOne {
-	if t != nil {
-		ajbuo.SetRevokedAt(*t)
+func (ajbuo *AdminJWTBlacklistUpdateOne) SetNillableRevokedAt(i *int) *AdminJWTBlacklistUpdateOne {
+	if i != nil {
+		ajbuo.SetRevokedAt(*i)
 	}
 	return ajbuo
 }
 
-// ClearRevokedAt clears the value of the "revoked_at" field.
-func (ajbuo *AdminJWTBlacklistUpdateOne) ClearRevokedAt() *AdminJWTBlacklistUpdateOne {
-	ajbuo.mutation.ClearRevokedAt()
+// AddRevokedAt adds i to the "revoked_at" field.
+func (ajbuo *AdminJWTBlacklistUpdateOne) AddRevokedAt(i int) *AdminJWTBlacklistUpdateOne {
+	ajbuo.mutation.AddRevokedAt(i)
 	return ajbuo
 }
 
@@ -272,13 +290,16 @@ func (ajbuo *AdminJWTBlacklistUpdateOne) sqlSave(ctx context.Context) (_node *Ad
 		_spec.SetField(adminjwtblacklist.FieldJti, field.TypeString, value)
 	}
 	if value, ok := ajbuo.mutation.ExpiresAt(); ok {
-		_spec.SetField(adminjwtblacklist.FieldExpiresAt, field.TypeTime, value)
+		_spec.SetField(adminjwtblacklist.FieldExpiresAt, field.TypeInt, value)
+	}
+	if value, ok := ajbuo.mutation.AddedExpiresAt(); ok {
+		_spec.AddField(adminjwtblacklist.FieldExpiresAt, field.TypeInt, value)
 	}
 	if value, ok := ajbuo.mutation.RevokedAt(); ok {
-		_spec.SetField(adminjwtblacklist.FieldRevokedAt, field.TypeTime, value)
+		_spec.SetField(adminjwtblacklist.FieldRevokedAt, field.TypeInt, value)
 	}
-	if ajbuo.mutation.RevokedAtCleared() {
-		_spec.ClearField(adminjwtblacklist.FieldRevokedAt, field.TypeTime)
+	if value, ok := ajbuo.mutation.AddedRevokedAt(); ok {
+		_spec.AddField(adminjwtblacklist.FieldRevokedAt, field.TypeInt, value)
 	}
 	_node = &AdminJWTBlacklist{config: ajbuo.config}
 	_spec.Assign = _node.assignValues

@@ -21,12 +21,12 @@ func (AdminPermission) Fields() []ent.Field {
 		field.String("description").Optional(),
 		field.String("path"),   // 例如 API 路径
 		field.String("method"), // GET, POST 等
-		field.Time("created_at").Default(time.Now).SchemaType(map[string]string{
-			"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP",
-		}),
-		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now).SchemaType(map[string]string{
-			"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-		}),
+		field.Int("created_at").
+			Default(int(time.Now().Unix())),
+		field.Int("updated_at").
+			Default(int(time.Now().Unix())).
+			UpdateDefault(func() int { return int(time.Now().Unix()) }),
+		field.Int("deleted_at").Optional(),
 	}
 }
 

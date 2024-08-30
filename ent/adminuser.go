@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminuser"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -27,13 +26,15 @@ type AdminUser struct {
 	// IsActive holds the value of the "is_active" field.
 	IsActive bool `json:"is_active,omitempty"`
 	// LastLoginAt holds the value of the "last_login_at" field.
-	LastLoginAt time.Time `json:"last_login_at,omitempty"`
+	LastLoginAt int `json:"last_login_at,omitempty"`
 	// JwtIssuedAt holds the value of the "jwt_issued_at" field.
-	JwtIssuedAt time.Time `json:"jwt_issued_at,omitempty"`
+	JwtIssuedAt int `json:"jwt_issued_at,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	CreatedAt int `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	UpdatedAt int `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt int `json:"deleted_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AdminUserQuery when eager-loading is set.
 	Edges        AdminUserEdges `json:"edges"`
@@ -76,10 +77,10 @@ func (*AdminUser) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case adminuser.FieldIsActive:
 			values[i] = new(sql.NullBool)
+		case adminuser.FieldLastLoginAt, adminuser.FieldJwtIssuedAt, adminuser.FieldCreatedAt, adminuser.FieldUpdatedAt, adminuser.FieldDeletedAt:
+			values[i] = new(sql.NullInt64)
 		case adminuser.FieldUsername, adminuser.FieldEmail, adminuser.FieldPasswordHash:
 			values[i] = new(sql.NullString)
-		case adminuser.FieldLastLoginAt, adminuser.FieldJwtIssuedAt, adminuser.FieldCreatedAt, adminuser.FieldUpdatedAt:
-			values[i] = new(sql.NullTime)
 		case adminuser.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -128,28 +129,34 @@ func (au *AdminUser) assignValues(columns []string, values []any) error {
 				au.IsActive = value.Bool
 			}
 		case adminuser.FieldLastLoginAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field last_login_at", values[i])
 			} else if value.Valid {
-				au.LastLoginAt = value.Time
+				au.LastLoginAt = int(value.Int64)
 			}
 		case adminuser.FieldJwtIssuedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field jwt_issued_at", values[i])
 			} else if value.Valid {
-				au.JwtIssuedAt = value.Time
+				au.JwtIssuedAt = int(value.Int64)
 			}
 		case adminuser.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				au.CreatedAt = value.Time
+				au.CreatedAt = int(value.Int64)
 			}
 		case adminuser.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				au.UpdatedAt = value.Time
+				au.UpdatedAt = int(value.Int64)
+			}
+		case adminuser.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				au.DeletedAt = int(value.Int64)
 			}
 		default:
 			au.selectValues.Set(columns[i], values[i])
@@ -210,16 +217,19 @@ func (au *AdminUser) String() string {
 	builder.WriteString(fmt.Sprintf("%v", au.IsActive))
 	builder.WriteString(", ")
 	builder.WriteString("last_login_at=")
-	builder.WriteString(au.LastLoginAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", au.LastLoginAt))
 	builder.WriteString(", ")
 	builder.WriteString("jwt_issued_at=")
-	builder.WriteString(au.JwtIssuedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", au.JwtIssuedAt))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(au.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", au.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(au.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", au.UpdatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", au.DeletedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

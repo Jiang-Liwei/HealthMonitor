@@ -13,8 +13,8 @@ var (
 	AdminJwtBlacklistsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "jti", Type: field.TypeString, Unique: true},
-		{Name: "expires_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0)"}},
-		{Name: "revoked_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP"}},
+		{Name: "expires_at", Type: field.TypeInt},
+		{Name: "revoked_at", Type: field.TypeInt, Default: 1725026015},
 	}
 	// AdminJwtBlacklistsTable holds the schema information for the "admin_jwt_blacklists" table.
 	AdminJwtBlacklistsTable = &schema.Table{
@@ -27,7 +27,7 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "action", Type: field.TypeString},
 		{Name: "ip_address", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP"}},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
 		{Name: "admin_user_logs", Type: field.TypeUUID, Nullable: true},
 	}
 	// AdminLogsTable holds the schema information for the "admin_logs" table.
@@ -50,9 +50,10 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
-		{Name: "order", Type: field.TypeInt, Default: 0},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"}},
+		{Name: "order", Type: field.TypeUint16, Default: 0},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminMenusTable holds the schema information for the "admin_menus" table.
 	AdminMenusTable = &schema.Table{
@@ -67,8 +68,9 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "method", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"}},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminPermissionsTable holds the schema information for the "admin_permissions" table.
 	AdminPermissionsTable = &schema.Table{
@@ -107,8 +109,9 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"}},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminRolesTable holds the schema information for the "admin_roles" table.
 	AdminRolesTable = &schema.Table{
@@ -123,10 +126,11 @@ var (
 		{Name: "email", Type: field.TypeString, Unique: true},
 		{Name: "password_hash", Type: field.TypeString},
 		{Name: "is_active", Type: field.TypeBool, Default: true},
-		{Name: "last_login_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"mysql": "TIMESTAMP"}},
-		{Name: "jwt_issued_at", Type: field.TypeTime, Nullable: true, SchemaType: map[string]string{"mysql": "TIMESTAMP"}},
-		{Name: "created_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP"}},
-		{Name: "updated_at", Type: field.TypeTime, SchemaType: map[string]string{"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"}},
+		{Name: "last_login_at", Type: field.TypeInt, Nullable: true},
+		{Name: "jwt_issued_at", Type: field.TypeInt, Nullable: true},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminUsersTable holds the schema information for the "admin_users" table.
 	AdminUsersTable = &schema.Table{
@@ -164,12 +168,15 @@ var (
 	BloodStatusRecordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "user_id", Type: field.TypeUUID},
-		{Name: "record_date", Type: field.TypeTime},
+		{Name: "record_date", Type: field.TypeInt},
 		{Name: "time_of_day", Type: field.TypeEnum, Enums: []string{"morning", "noon", "evening"}},
 		{Name: "before_after_meals", Type: field.TypeEnum, Enums: []string{"before", "after"}},
 		{Name: "systolic_pressure", Type: field.TypeFloat64},
 		{Name: "diastolic_pressure", Type: field.TypeFloat64},
 		{Name: "pulse", Type: field.TypeFloat64},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// BloodStatusRecordsTable holds the schema information for the "blood_status_records" table.
 	BloodStatusRecordsTable = &schema.Table{
@@ -268,8 +275,8 @@ var (
 	// UserMealsColumns holds the columns for the "user_meals" table.
 	UserMealsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeInt},
-		{Name: "record_date", Type: field.TypeTime},
+		{Name: "user_id", Type: field.TypeUUID},
+		{Name: "record_date", Type: field.TypeInt},
 		{Name: "meal_type", Type: field.TypeEnum, Enums: []string{"breakfast", "lunch", "dinner"}},
 		{Name: "description", Type: field.TypeString},
 	}

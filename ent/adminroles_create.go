@@ -9,7 +9,6 @@ import (
 	"healthmonitor/ent/adminrolepermission"
 	"healthmonitor/ent/adminroles"
 	"healthmonitor/ent/adminuserrole"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -44,29 +43,43 @@ func (arc *AdminRolesCreate) SetNillableDescription(s *string) *AdminRolesCreate
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (arc *AdminRolesCreate) SetCreatedAt(t time.Time) *AdminRolesCreate {
-	arc.mutation.SetCreatedAt(t)
+func (arc *AdminRolesCreate) SetCreatedAt(i int) *AdminRolesCreate {
+	arc.mutation.SetCreatedAt(i)
 	return arc
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (arc *AdminRolesCreate) SetNillableCreatedAt(t *time.Time) *AdminRolesCreate {
-	if t != nil {
-		arc.SetCreatedAt(*t)
+func (arc *AdminRolesCreate) SetNillableCreatedAt(i *int) *AdminRolesCreate {
+	if i != nil {
+		arc.SetCreatedAt(*i)
 	}
 	return arc
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (arc *AdminRolesCreate) SetUpdatedAt(t time.Time) *AdminRolesCreate {
-	arc.mutation.SetUpdatedAt(t)
+func (arc *AdminRolesCreate) SetUpdatedAt(i int) *AdminRolesCreate {
+	arc.mutation.SetUpdatedAt(i)
 	return arc
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (arc *AdminRolesCreate) SetNillableUpdatedAt(t *time.Time) *AdminRolesCreate {
-	if t != nil {
-		arc.SetUpdatedAt(*t)
+func (arc *AdminRolesCreate) SetNillableUpdatedAt(i *int) *AdminRolesCreate {
+	if i != nil {
+		arc.SetUpdatedAt(*i)
+	}
+	return arc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (arc *AdminRolesCreate) SetDeletedAt(i int) *AdminRolesCreate {
+	arc.mutation.SetDeletedAt(i)
+	return arc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (arc *AdminRolesCreate) SetNillableDeletedAt(i *int) *AdminRolesCreate {
+	if i != nil {
+		arc.SetDeletedAt(*i)
 	}
 	return arc
 }
@@ -151,11 +164,11 @@ func (arc *AdminRolesCreate) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (arc *AdminRolesCreate) defaults() {
 	if _, ok := arc.mutation.CreatedAt(); !ok {
-		v := adminroles.DefaultCreatedAt()
+		v := adminroles.DefaultCreatedAt
 		arc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := arc.mutation.UpdatedAt(); !ok {
-		v := adminroles.DefaultUpdatedAt()
+		v := adminroles.DefaultUpdatedAt
 		arc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := arc.mutation.ID(); !ok {
@@ -219,12 +232,16 @@ func (arc *AdminRolesCreate) createSpec() (*AdminRoles, *sqlgraph.CreateSpec) {
 		_node.Description = value
 	}
 	if value, ok := arc.mutation.CreatedAt(); ok {
-		_spec.SetField(adminroles.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminroles.FieldCreatedAt, field.TypeInt, value)
 		_node.CreatedAt = value
 	}
 	if value, ok := arc.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminroles.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminroles.FieldUpdatedAt, field.TypeInt, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := arc.mutation.DeletedAt(); ok {
+		_spec.SetField(adminroles.FieldDeletedAt, field.TypeInt, value)
+		_node.DeletedAt = value
 	}
 	if nodes := arc.mutation.PermissionsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

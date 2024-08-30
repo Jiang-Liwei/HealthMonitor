@@ -10,7 +10,6 @@ import (
 	"healthmonitor/ent/adminuser"
 	"healthmonitor/ent/adminuserrole"
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -88,16 +87,23 @@ func (auu *AdminUserUpdate) SetNillableIsActive(b *bool) *AdminUserUpdate {
 }
 
 // SetLastLoginAt sets the "last_login_at" field.
-func (auu *AdminUserUpdate) SetLastLoginAt(t time.Time) *AdminUserUpdate {
-	auu.mutation.SetLastLoginAt(t)
+func (auu *AdminUserUpdate) SetLastLoginAt(i int) *AdminUserUpdate {
+	auu.mutation.ResetLastLoginAt()
+	auu.mutation.SetLastLoginAt(i)
 	return auu
 }
 
 // SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (auu *AdminUserUpdate) SetNillableLastLoginAt(t *time.Time) *AdminUserUpdate {
-	if t != nil {
-		auu.SetLastLoginAt(*t)
+func (auu *AdminUserUpdate) SetNillableLastLoginAt(i *int) *AdminUserUpdate {
+	if i != nil {
+		auu.SetLastLoginAt(*i)
 	}
+	return auu
+}
+
+// AddLastLoginAt adds i to the "last_login_at" field.
+func (auu *AdminUserUpdate) AddLastLoginAt(i int) *AdminUserUpdate {
+	auu.mutation.AddLastLoginAt(i)
 	return auu
 }
 
@@ -108,16 +114,23 @@ func (auu *AdminUserUpdate) ClearLastLoginAt() *AdminUserUpdate {
 }
 
 // SetJwtIssuedAt sets the "jwt_issued_at" field.
-func (auu *AdminUserUpdate) SetJwtIssuedAt(t time.Time) *AdminUserUpdate {
-	auu.mutation.SetJwtIssuedAt(t)
+func (auu *AdminUserUpdate) SetJwtIssuedAt(i int) *AdminUserUpdate {
+	auu.mutation.ResetJwtIssuedAt()
+	auu.mutation.SetJwtIssuedAt(i)
 	return auu
 }
 
 // SetNillableJwtIssuedAt sets the "jwt_issued_at" field if the given value is not nil.
-func (auu *AdminUserUpdate) SetNillableJwtIssuedAt(t *time.Time) *AdminUserUpdate {
-	if t != nil {
-		auu.SetJwtIssuedAt(*t)
+func (auu *AdminUserUpdate) SetNillableJwtIssuedAt(i *int) *AdminUserUpdate {
+	if i != nil {
+		auu.SetJwtIssuedAt(*i)
 	}
+	return auu
+}
+
+// AddJwtIssuedAt adds i to the "jwt_issued_at" field.
+func (auu *AdminUserUpdate) AddJwtIssuedAt(i int) *AdminUserUpdate {
+	auu.mutation.AddJwtIssuedAt(i)
 	return auu
 }
 
@@ -128,22 +141,63 @@ func (auu *AdminUserUpdate) ClearJwtIssuedAt() *AdminUserUpdate {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (auu *AdminUserUpdate) SetCreatedAt(t time.Time) *AdminUserUpdate {
-	auu.mutation.SetCreatedAt(t)
+func (auu *AdminUserUpdate) SetCreatedAt(i int) *AdminUserUpdate {
+	auu.mutation.ResetCreatedAt()
+	auu.mutation.SetCreatedAt(i)
 	return auu
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (auu *AdminUserUpdate) SetNillableCreatedAt(t *time.Time) *AdminUserUpdate {
-	if t != nil {
-		auu.SetCreatedAt(*t)
+func (auu *AdminUserUpdate) SetNillableCreatedAt(i *int) *AdminUserUpdate {
+	if i != nil {
+		auu.SetCreatedAt(*i)
 	}
 	return auu
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (auu *AdminUserUpdate) AddCreatedAt(i int) *AdminUserUpdate {
+	auu.mutation.AddCreatedAt(i)
+	return auu
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (auu *AdminUserUpdate) SetUpdatedAt(t time.Time) *AdminUserUpdate {
-	auu.mutation.SetUpdatedAt(t)
+func (auu *AdminUserUpdate) SetUpdatedAt(i int) *AdminUserUpdate {
+	auu.mutation.ResetUpdatedAt()
+	auu.mutation.SetUpdatedAt(i)
+	return auu
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (auu *AdminUserUpdate) AddUpdatedAt(i int) *AdminUserUpdate {
+	auu.mutation.AddUpdatedAt(i)
+	return auu
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (auu *AdminUserUpdate) SetDeletedAt(i int) *AdminUserUpdate {
+	auu.mutation.ResetDeletedAt()
+	auu.mutation.SetDeletedAt(i)
+	return auu
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (auu *AdminUserUpdate) SetNillableDeletedAt(i *int) *AdminUserUpdate {
+	if i != nil {
+		auu.SetDeletedAt(*i)
+	}
+	return auu
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (auu *AdminUserUpdate) AddDeletedAt(i int) *AdminUserUpdate {
+	auu.mutation.AddDeletedAt(i)
+	return auu
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (auu *AdminUserUpdate) ClearDeletedAt() *AdminUserUpdate {
+	auu.mutation.ClearDeletedAt()
 	return auu
 }
 
@@ -282,22 +336,43 @@ func (auu *AdminUserUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(adminuser.FieldIsActive, field.TypeBool, value)
 	}
 	if value, ok := auu.mutation.LastLoginAt(); ok {
-		_spec.SetField(adminuser.FieldLastLoginAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldLastLoginAt, field.TypeInt, value)
+	}
+	if value, ok := auu.mutation.AddedLastLoginAt(); ok {
+		_spec.AddField(adminuser.FieldLastLoginAt, field.TypeInt, value)
 	}
 	if auu.mutation.LastLoginAtCleared() {
-		_spec.ClearField(adminuser.FieldLastLoginAt, field.TypeTime)
+		_spec.ClearField(adminuser.FieldLastLoginAt, field.TypeInt)
 	}
 	if value, ok := auu.mutation.JwtIssuedAt(); ok {
-		_spec.SetField(adminuser.FieldJwtIssuedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldJwtIssuedAt, field.TypeInt, value)
+	}
+	if value, ok := auu.mutation.AddedJwtIssuedAt(); ok {
+		_spec.AddField(adminuser.FieldJwtIssuedAt, field.TypeInt, value)
 	}
 	if auu.mutation.JwtIssuedAtCleared() {
-		_spec.ClearField(adminuser.FieldJwtIssuedAt, field.TypeTime)
+		_spec.ClearField(adminuser.FieldJwtIssuedAt, field.TypeInt)
 	}
 	if value, ok := auu.mutation.CreatedAt(); ok {
-		_spec.SetField(adminuser.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := auu.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminuser.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := auu.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminuser.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := auu.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminuser.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := auu.mutation.DeletedAt(); ok {
+		_spec.SetField(adminuser.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := auu.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminuser.FieldDeletedAt, field.TypeInt, value)
+	}
+	if auu.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminuser.FieldDeletedAt, field.TypeInt)
 	}
 	if auu.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -466,16 +541,23 @@ func (auuo *AdminUserUpdateOne) SetNillableIsActive(b *bool) *AdminUserUpdateOne
 }
 
 // SetLastLoginAt sets the "last_login_at" field.
-func (auuo *AdminUserUpdateOne) SetLastLoginAt(t time.Time) *AdminUserUpdateOne {
-	auuo.mutation.SetLastLoginAt(t)
+func (auuo *AdminUserUpdateOne) SetLastLoginAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.ResetLastLoginAt()
+	auuo.mutation.SetLastLoginAt(i)
 	return auuo
 }
 
 // SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (auuo *AdminUserUpdateOne) SetNillableLastLoginAt(t *time.Time) *AdminUserUpdateOne {
-	if t != nil {
-		auuo.SetLastLoginAt(*t)
+func (auuo *AdminUserUpdateOne) SetNillableLastLoginAt(i *int) *AdminUserUpdateOne {
+	if i != nil {
+		auuo.SetLastLoginAt(*i)
 	}
+	return auuo
+}
+
+// AddLastLoginAt adds i to the "last_login_at" field.
+func (auuo *AdminUserUpdateOne) AddLastLoginAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.AddLastLoginAt(i)
 	return auuo
 }
 
@@ -486,16 +568,23 @@ func (auuo *AdminUserUpdateOne) ClearLastLoginAt() *AdminUserUpdateOne {
 }
 
 // SetJwtIssuedAt sets the "jwt_issued_at" field.
-func (auuo *AdminUserUpdateOne) SetJwtIssuedAt(t time.Time) *AdminUserUpdateOne {
-	auuo.mutation.SetJwtIssuedAt(t)
+func (auuo *AdminUserUpdateOne) SetJwtIssuedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.ResetJwtIssuedAt()
+	auuo.mutation.SetJwtIssuedAt(i)
 	return auuo
 }
 
 // SetNillableJwtIssuedAt sets the "jwt_issued_at" field if the given value is not nil.
-func (auuo *AdminUserUpdateOne) SetNillableJwtIssuedAt(t *time.Time) *AdminUserUpdateOne {
-	if t != nil {
-		auuo.SetJwtIssuedAt(*t)
+func (auuo *AdminUserUpdateOne) SetNillableJwtIssuedAt(i *int) *AdminUserUpdateOne {
+	if i != nil {
+		auuo.SetJwtIssuedAt(*i)
 	}
+	return auuo
+}
+
+// AddJwtIssuedAt adds i to the "jwt_issued_at" field.
+func (auuo *AdminUserUpdateOne) AddJwtIssuedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.AddJwtIssuedAt(i)
 	return auuo
 }
 
@@ -506,22 +595,63 @@ func (auuo *AdminUserUpdateOne) ClearJwtIssuedAt() *AdminUserUpdateOne {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (auuo *AdminUserUpdateOne) SetCreatedAt(t time.Time) *AdminUserUpdateOne {
-	auuo.mutation.SetCreatedAt(t)
+func (auuo *AdminUserUpdateOne) SetCreatedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.ResetCreatedAt()
+	auuo.mutation.SetCreatedAt(i)
 	return auuo
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (auuo *AdminUserUpdateOne) SetNillableCreatedAt(t *time.Time) *AdminUserUpdateOne {
-	if t != nil {
-		auuo.SetCreatedAt(*t)
+func (auuo *AdminUserUpdateOne) SetNillableCreatedAt(i *int) *AdminUserUpdateOne {
+	if i != nil {
+		auuo.SetCreatedAt(*i)
 	}
 	return auuo
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (auuo *AdminUserUpdateOne) AddCreatedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.AddCreatedAt(i)
+	return auuo
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (auuo *AdminUserUpdateOne) SetUpdatedAt(t time.Time) *AdminUserUpdateOne {
-	auuo.mutation.SetUpdatedAt(t)
+func (auuo *AdminUserUpdateOne) SetUpdatedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.ResetUpdatedAt()
+	auuo.mutation.SetUpdatedAt(i)
+	return auuo
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (auuo *AdminUserUpdateOne) AddUpdatedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.AddUpdatedAt(i)
+	return auuo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (auuo *AdminUserUpdateOne) SetDeletedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.ResetDeletedAt()
+	auuo.mutation.SetDeletedAt(i)
+	return auuo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (auuo *AdminUserUpdateOne) SetNillableDeletedAt(i *int) *AdminUserUpdateOne {
+	if i != nil {
+		auuo.SetDeletedAt(*i)
+	}
+	return auuo
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (auuo *AdminUserUpdateOne) AddDeletedAt(i int) *AdminUserUpdateOne {
+	auuo.mutation.AddDeletedAt(i)
+	return auuo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (auuo *AdminUserUpdateOne) ClearDeletedAt() *AdminUserUpdateOne {
+	auuo.mutation.ClearDeletedAt()
 	return auuo
 }
 
@@ -690,22 +820,43 @@ func (auuo *AdminUserUpdateOne) sqlSave(ctx context.Context) (_node *AdminUser, 
 		_spec.SetField(adminuser.FieldIsActive, field.TypeBool, value)
 	}
 	if value, ok := auuo.mutation.LastLoginAt(); ok {
-		_spec.SetField(adminuser.FieldLastLoginAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldLastLoginAt, field.TypeInt, value)
+	}
+	if value, ok := auuo.mutation.AddedLastLoginAt(); ok {
+		_spec.AddField(adminuser.FieldLastLoginAt, field.TypeInt, value)
 	}
 	if auuo.mutation.LastLoginAtCleared() {
-		_spec.ClearField(adminuser.FieldLastLoginAt, field.TypeTime)
+		_spec.ClearField(adminuser.FieldLastLoginAt, field.TypeInt)
 	}
 	if value, ok := auuo.mutation.JwtIssuedAt(); ok {
-		_spec.SetField(adminuser.FieldJwtIssuedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldJwtIssuedAt, field.TypeInt, value)
+	}
+	if value, ok := auuo.mutation.AddedJwtIssuedAt(); ok {
+		_spec.AddField(adminuser.FieldJwtIssuedAt, field.TypeInt, value)
 	}
 	if auuo.mutation.JwtIssuedAtCleared() {
-		_spec.ClearField(adminuser.FieldJwtIssuedAt, field.TypeTime)
+		_spec.ClearField(adminuser.FieldJwtIssuedAt, field.TypeInt)
 	}
 	if value, ok := auuo.mutation.CreatedAt(); ok {
-		_spec.SetField(adminuser.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := auuo.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminuser.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := auuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminuser.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := auuo.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminuser.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := auuo.mutation.DeletedAt(); ok {
+		_spec.SetField(adminuser.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := auuo.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminuser.FieldDeletedAt, field.TypeInt, value)
+	}
+	if auuo.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminuser.FieldDeletedAt, field.TypeInt)
 	}
 	if auuo.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{

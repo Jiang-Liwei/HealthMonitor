@@ -299,7 +299,7 @@ func (umq *UserMealQuery) WithFood(opts ...func(*UserMealFoodQuery)) *UserMealQu
 // Example:
 //
 //	var v []struct {
-//		UserID int `json:"user_id,omitempty"`
+//		UserID uuid.UUID `json:"user_id,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
@@ -322,7 +322,7 @@ func (umq *UserMealQuery) GroupBy(field string, fields ...string) *UserMealGroup
 // Example:
 //
 //	var v []struct {
-//		UserID int `json:"user_id,omitempty"`
+//		UserID uuid.UUID `json:"user_id,omitempty"`
 //	}
 //
 //	client.UserMeal.Query().

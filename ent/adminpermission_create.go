@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminpermission"
 	"healthmonitor/ent/adminrolepermission"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -55,29 +54,43 @@ func (apc *AdminPermissionCreate) SetMethod(s string) *AdminPermissionCreate {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (apc *AdminPermissionCreate) SetCreatedAt(t time.Time) *AdminPermissionCreate {
-	apc.mutation.SetCreatedAt(t)
+func (apc *AdminPermissionCreate) SetCreatedAt(i int) *AdminPermissionCreate {
+	apc.mutation.SetCreatedAt(i)
 	return apc
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (apc *AdminPermissionCreate) SetNillableCreatedAt(t *time.Time) *AdminPermissionCreate {
-	if t != nil {
-		apc.SetCreatedAt(*t)
+func (apc *AdminPermissionCreate) SetNillableCreatedAt(i *int) *AdminPermissionCreate {
+	if i != nil {
+		apc.SetCreatedAt(*i)
 	}
 	return apc
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (apc *AdminPermissionCreate) SetUpdatedAt(t time.Time) *AdminPermissionCreate {
-	apc.mutation.SetUpdatedAt(t)
+func (apc *AdminPermissionCreate) SetUpdatedAt(i int) *AdminPermissionCreate {
+	apc.mutation.SetUpdatedAt(i)
 	return apc
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (apc *AdminPermissionCreate) SetNillableUpdatedAt(t *time.Time) *AdminPermissionCreate {
-	if t != nil {
-		apc.SetUpdatedAt(*t)
+func (apc *AdminPermissionCreate) SetNillableUpdatedAt(i *int) *AdminPermissionCreate {
+	if i != nil {
+		apc.SetUpdatedAt(*i)
+	}
+	return apc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (apc *AdminPermissionCreate) SetDeletedAt(i int) *AdminPermissionCreate {
+	apc.mutation.SetDeletedAt(i)
+	return apc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (apc *AdminPermissionCreate) SetNillableDeletedAt(i *int) *AdminPermissionCreate {
+	if i != nil {
+		apc.SetDeletedAt(*i)
 	}
 	return apc
 }
@@ -147,11 +160,11 @@ func (apc *AdminPermissionCreate) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (apc *AdminPermissionCreate) defaults() {
 	if _, ok := apc.mutation.CreatedAt(); !ok {
-		v := adminpermission.DefaultCreatedAt()
+		v := adminpermission.DefaultCreatedAt
 		apc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := apc.mutation.UpdatedAt(); !ok {
-		v := adminpermission.DefaultUpdatedAt()
+		v := adminpermission.DefaultUpdatedAt
 		apc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := apc.mutation.ID(); !ok {
@@ -229,12 +242,16 @@ func (apc *AdminPermissionCreate) createSpec() (*AdminPermission, *sqlgraph.Crea
 		_node.Method = value
 	}
 	if value, ok := apc.mutation.CreatedAt(); ok {
-		_spec.SetField(adminpermission.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminpermission.FieldCreatedAt, field.TypeInt, value)
 		_node.CreatedAt = value
 	}
 	if value, ok := apc.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminpermission.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminpermission.FieldUpdatedAt, field.TypeInt, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := apc.mutation.DeletedAt(); ok {
+		_spec.SetField(adminpermission.FieldDeletedAt, field.TypeInt, value)
+		_node.DeletedAt = value
 	}
 	if nodes := apc.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

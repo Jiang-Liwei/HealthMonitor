@@ -9,7 +9,6 @@ import (
 	"healthmonitor/ent/adminpermission"
 	"healthmonitor/ent/adminrolepermission"
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -92,22 +91,63 @@ func (apu *AdminPermissionUpdate) SetNillableMethod(s *string) *AdminPermissionU
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (apu *AdminPermissionUpdate) SetCreatedAt(t time.Time) *AdminPermissionUpdate {
-	apu.mutation.SetCreatedAt(t)
+func (apu *AdminPermissionUpdate) SetCreatedAt(i int) *AdminPermissionUpdate {
+	apu.mutation.ResetCreatedAt()
+	apu.mutation.SetCreatedAt(i)
 	return apu
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (apu *AdminPermissionUpdate) SetNillableCreatedAt(t *time.Time) *AdminPermissionUpdate {
-	if t != nil {
-		apu.SetCreatedAt(*t)
+func (apu *AdminPermissionUpdate) SetNillableCreatedAt(i *int) *AdminPermissionUpdate {
+	if i != nil {
+		apu.SetCreatedAt(*i)
 	}
 	return apu
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (apu *AdminPermissionUpdate) AddCreatedAt(i int) *AdminPermissionUpdate {
+	apu.mutation.AddCreatedAt(i)
+	return apu
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (apu *AdminPermissionUpdate) SetUpdatedAt(t time.Time) *AdminPermissionUpdate {
-	apu.mutation.SetUpdatedAt(t)
+func (apu *AdminPermissionUpdate) SetUpdatedAt(i int) *AdminPermissionUpdate {
+	apu.mutation.ResetUpdatedAt()
+	apu.mutation.SetUpdatedAt(i)
+	return apu
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (apu *AdminPermissionUpdate) AddUpdatedAt(i int) *AdminPermissionUpdate {
+	apu.mutation.AddUpdatedAt(i)
+	return apu
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (apu *AdminPermissionUpdate) SetDeletedAt(i int) *AdminPermissionUpdate {
+	apu.mutation.ResetDeletedAt()
+	apu.mutation.SetDeletedAt(i)
+	return apu
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (apu *AdminPermissionUpdate) SetNillableDeletedAt(i *int) *AdminPermissionUpdate {
+	if i != nil {
+		apu.SetDeletedAt(*i)
+	}
+	return apu
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (apu *AdminPermissionUpdate) AddDeletedAt(i int) *AdminPermissionUpdate {
+	apu.mutation.AddDeletedAt(i)
+	return apu
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (apu *AdminPermissionUpdate) ClearDeletedAt() *AdminPermissionUpdate {
+	apu.mutation.ClearDeletedAt()
 	return apu
 }
 
@@ -213,10 +253,25 @@ func (apu *AdminPermissionUpdate) sqlSave(ctx context.Context) (n int, err error
 		_spec.SetField(adminpermission.FieldMethod, field.TypeString, value)
 	}
 	if value, ok := apu.mutation.CreatedAt(); ok {
-		_spec.SetField(adminpermission.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminpermission.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := apu.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminpermission.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := apu.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminpermission.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminpermission.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := apu.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminpermission.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := apu.mutation.DeletedAt(); ok {
+		_spec.SetField(adminpermission.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := apu.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminpermission.FieldDeletedAt, field.TypeInt, value)
+	}
+	if apu.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminpermission.FieldDeletedAt, field.TypeInt)
 	}
 	if apu.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -346,22 +401,63 @@ func (apuo *AdminPermissionUpdateOne) SetNillableMethod(s *string) *AdminPermiss
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (apuo *AdminPermissionUpdateOne) SetCreatedAt(t time.Time) *AdminPermissionUpdateOne {
-	apuo.mutation.SetCreatedAt(t)
+func (apuo *AdminPermissionUpdateOne) SetCreatedAt(i int) *AdminPermissionUpdateOne {
+	apuo.mutation.ResetCreatedAt()
+	apuo.mutation.SetCreatedAt(i)
 	return apuo
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (apuo *AdminPermissionUpdateOne) SetNillableCreatedAt(t *time.Time) *AdminPermissionUpdateOne {
-	if t != nil {
-		apuo.SetCreatedAt(*t)
+func (apuo *AdminPermissionUpdateOne) SetNillableCreatedAt(i *int) *AdminPermissionUpdateOne {
+	if i != nil {
+		apuo.SetCreatedAt(*i)
 	}
 	return apuo
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (apuo *AdminPermissionUpdateOne) AddCreatedAt(i int) *AdminPermissionUpdateOne {
+	apuo.mutation.AddCreatedAt(i)
+	return apuo
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (apuo *AdminPermissionUpdateOne) SetUpdatedAt(t time.Time) *AdminPermissionUpdateOne {
-	apuo.mutation.SetUpdatedAt(t)
+func (apuo *AdminPermissionUpdateOne) SetUpdatedAt(i int) *AdminPermissionUpdateOne {
+	apuo.mutation.ResetUpdatedAt()
+	apuo.mutation.SetUpdatedAt(i)
+	return apuo
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (apuo *AdminPermissionUpdateOne) AddUpdatedAt(i int) *AdminPermissionUpdateOne {
+	apuo.mutation.AddUpdatedAt(i)
+	return apuo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (apuo *AdminPermissionUpdateOne) SetDeletedAt(i int) *AdminPermissionUpdateOne {
+	apuo.mutation.ResetDeletedAt()
+	apuo.mutation.SetDeletedAt(i)
+	return apuo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (apuo *AdminPermissionUpdateOne) SetNillableDeletedAt(i *int) *AdminPermissionUpdateOne {
+	if i != nil {
+		apuo.SetDeletedAt(*i)
+	}
+	return apuo
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (apuo *AdminPermissionUpdateOne) AddDeletedAt(i int) *AdminPermissionUpdateOne {
+	apuo.mutation.AddDeletedAt(i)
+	return apuo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (apuo *AdminPermissionUpdateOne) ClearDeletedAt() *AdminPermissionUpdateOne {
+	apuo.mutation.ClearDeletedAt()
 	return apuo
 }
 
@@ -497,10 +593,25 @@ func (apuo *AdminPermissionUpdateOne) sqlSave(ctx context.Context) (_node *Admin
 		_spec.SetField(adminpermission.FieldMethod, field.TypeString, value)
 	}
 	if value, ok := apuo.mutation.CreatedAt(); ok {
-		_spec.SetField(adminpermission.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminpermission.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := apuo.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminpermission.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := apuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminpermission.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminpermission.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := apuo.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminpermission.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := apuo.mutation.DeletedAt(); ok {
+		_spec.SetField(adminpermission.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := apuo.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminpermission.FieldDeletedAt, field.TypeInt, value)
+	}
+	if apuo.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminpermission.FieldDeletedAt, field.TypeInt)
 	}
 	if apuo.mutation.RolesCleared() {
 		edge := &sqlgraph.EdgeSpec{

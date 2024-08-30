@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"healthmonitor/ent/adminjwtblacklist"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -27,21 +26,21 @@ func (ajbc *AdminJWTBlacklistCreate) SetJti(s string) *AdminJWTBlacklistCreate {
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (ajbc *AdminJWTBlacklistCreate) SetExpiresAt(t time.Time) *AdminJWTBlacklistCreate {
-	ajbc.mutation.SetExpiresAt(t)
+func (ajbc *AdminJWTBlacklistCreate) SetExpiresAt(i int) *AdminJWTBlacklistCreate {
+	ajbc.mutation.SetExpiresAt(i)
 	return ajbc
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (ajbc *AdminJWTBlacklistCreate) SetRevokedAt(t time.Time) *AdminJWTBlacklistCreate {
-	ajbc.mutation.SetRevokedAt(t)
+func (ajbc *AdminJWTBlacklistCreate) SetRevokedAt(i int) *AdminJWTBlacklistCreate {
+	ajbc.mutation.SetRevokedAt(i)
 	return ajbc
 }
 
 // SetNillableRevokedAt sets the "revoked_at" field if the given value is not nil.
-func (ajbc *AdminJWTBlacklistCreate) SetNillableRevokedAt(t *time.Time) *AdminJWTBlacklistCreate {
-	if t != nil {
-		ajbc.SetRevokedAt(*t)
+func (ajbc *AdminJWTBlacklistCreate) SetNillableRevokedAt(i *int) *AdminJWTBlacklistCreate {
+	if i != nil {
+		ajbc.SetRevokedAt(*i)
 	}
 	return ajbc
 }
@@ -53,6 +52,7 @@ func (ajbc *AdminJWTBlacklistCreate) Mutation() *AdminJWTBlacklistMutation {
 
 // Save creates the AdminJWTBlacklist in the database.
 func (ajbc *AdminJWTBlacklistCreate) Save(ctx context.Context) (*AdminJWTBlacklist, error) {
+	ajbc.defaults()
 	return withHooks(ctx, ajbc.sqlSave, ajbc.mutation, ajbc.hooks)
 }
 
@@ -78,6 +78,14 @@ func (ajbc *AdminJWTBlacklistCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (ajbc *AdminJWTBlacklistCreate) defaults() {
+	if _, ok := ajbc.mutation.RevokedAt(); !ok {
+		v := adminjwtblacklist.DefaultRevokedAt
+		ajbc.mutation.SetRevokedAt(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (ajbc *AdminJWTBlacklistCreate) check() error {
 	if _, ok := ajbc.mutation.Jti(); !ok {
@@ -85,6 +93,9 @@ func (ajbc *AdminJWTBlacklistCreate) check() error {
 	}
 	if _, ok := ajbc.mutation.ExpiresAt(); !ok {
 		return &ValidationError{Name: "expires_at", err: errors.New(`ent: missing required field "AdminJWTBlacklist.expires_at"`)}
+	}
+	if _, ok := ajbc.mutation.RevokedAt(); !ok {
+		return &ValidationError{Name: "revoked_at", err: errors.New(`ent: missing required field "AdminJWTBlacklist.revoked_at"`)}
 	}
 	return nil
 }
@@ -117,11 +128,11 @@ func (ajbc *AdminJWTBlacklistCreate) createSpec() (*AdminJWTBlacklist, *sqlgraph
 		_node.Jti = value
 	}
 	if value, ok := ajbc.mutation.ExpiresAt(); ok {
-		_spec.SetField(adminjwtblacklist.FieldExpiresAt, field.TypeTime, value)
+		_spec.SetField(adminjwtblacklist.FieldExpiresAt, field.TypeInt, value)
 		_node.ExpiresAt = value
 	}
 	if value, ok := ajbc.mutation.RevokedAt(); ok {
-		_spec.SetField(adminjwtblacklist.FieldRevokedAt, field.TypeTime, value)
+		_spec.SetField(adminjwtblacklist.FieldRevokedAt, field.TypeInt, value)
 		_node.RevokedAt = value
 	}
 	return _node, _spec
@@ -145,6 +156,7 @@ func (ajbcb *AdminJWTBlacklistCreateBulk) Save(ctx context.Context) ([]*AdminJWT
 	for i := range ajbcb.builders {
 		func(i int, root context.Context) {
 			builder := ajbcb.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*AdminJWTBlacklistMutation)
 				if !ok {

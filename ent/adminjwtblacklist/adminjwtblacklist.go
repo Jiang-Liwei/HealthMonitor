@@ -39,6 +39,11 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// DefaultRevokedAt holds the default value on creation for the "revoked_at" field.
+	DefaultRevokedAt int
+)
+
 // OrderOption defines the ordering options for the AdminJWTBlacklist queries.
 type OrderOption func(*sql.Selector)
 

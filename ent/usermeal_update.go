@@ -9,11 +9,11 @@ import (
 	"healthmonitor/ent/predicate"
 	"healthmonitor/ent/usermeal"
 	"healthmonitor/ent/usermealfood"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // UserMealUpdate is the builder for updating UserMeal entities.
@@ -30,37 +30,37 @@ func (umu *UserMealUpdate) Where(ps ...predicate.UserMeal) *UserMealUpdate {
 }
 
 // SetUserID sets the "user_id" field.
-func (umu *UserMealUpdate) SetUserID(i int) *UserMealUpdate {
-	umu.mutation.ResetUserID()
-	umu.mutation.SetUserID(i)
+func (umu *UserMealUpdate) SetUserID(u uuid.UUID) *UserMealUpdate {
+	umu.mutation.SetUserID(u)
 	return umu
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (umu *UserMealUpdate) SetNillableUserID(i *int) *UserMealUpdate {
-	if i != nil {
-		umu.SetUserID(*i)
+func (umu *UserMealUpdate) SetNillableUserID(u *uuid.UUID) *UserMealUpdate {
+	if u != nil {
+		umu.SetUserID(*u)
 	}
-	return umu
-}
-
-// AddUserID adds i to the "user_id" field.
-func (umu *UserMealUpdate) AddUserID(i int) *UserMealUpdate {
-	umu.mutation.AddUserID(i)
 	return umu
 }
 
 // SetRecordDate sets the "record_date" field.
-func (umu *UserMealUpdate) SetRecordDate(t time.Time) *UserMealUpdate {
-	umu.mutation.SetRecordDate(t)
+func (umu *UserMealUpdate) SetRecordDate(i int) *UserMealUpdate {
+	umu.mutation.ResetRecordDate()
+	umu.mutation.SetRecordDate(i)
 	return umu
 }
 
 // SetNillableRecordDate sets the "record_date" field if the given value is not nil.
-func (umu *UserMealUpdate) SetNillableRecordDate(t *time.Time) *UserMealUpdate {
-	if t != nil {
-		umu.SetRecordDate(*t)
+func (umu *UserMealUpdate) SetNillableRecordDate(i *int) *UserMealUpdate {
+	if i != nil {
+		umu.SetRecordDate(*i)
 	}
+	return umu
+}
+
+// AddRecordDate adds i to the "record_date" field.
+func (umu *UserMealUpdate) AddRecordDate(i int) *UserMealUpdate {
+	umu.mutation.AddRecordDate(i)
 	return umu
 }
 
@@ -183,13 +183,13 @@ func (umu *UserMealUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 	}
 	if value, ok := umu.mutation.UserID(); ok {
-		_spec.SetField(usermeal.FieldUserID, field.TypeInt, value)
-	}
-	if value, ok := umu.mutation.AddedUserID(); ok {
-		_spec.AddField(usermeal.FieldUserID, field.TypeInt, value)
+		_spec.SetField(usermeal.FieldUserID, field.TypeUUID, value)
 	}
 	if value, ok := umu.mutation.RecordDate(); ok {
-		_spec.SetField(usermeal.FieldRecordDate, field.TypeTime, value)
+		_spec.SetField(usermeal.FieldRecordDate, field.TypeInt, value)
+	}
+	if value, ok := umu.mutation.AddedRecordDate(); ok {
+		_spec.AddField(usermeal.FieldRecordDate, field.TypeInt, value)
 	}
 	if value, ok := umu.mutation.MealType(); ok {
 		_spec.SetField(usermeal.FieldMealType, field.TypeEnum, value)
@@ -263,37 +263,37 @@ type UserMealUpdateOne struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (umuo *UserMealUpdateOne) SetUserID(i int) *UserMealUpdateOne {
-	umuo.mutation.ResetUserID()
-	umuo.mutation.SetUserID(i)
+func (umuo *UserMealUpdateOne) SetUserID(u uuid.UUID) *UserMealUpdateOne {
+	umuo.mutation.SetUserID(u)
 	return umuo
 }
 
 // SetNillableUserID sets the "user_id" field if the given value is not nil.
-func (umuo *UserMealUpdateOne) SetNillableUserID(i *int) *UserMealUpdateOne {
-	if i != nil {
-		umuo.SetUserID(*i)
+func (umuo *UserMealUpdateOne) SetNillableUserID(u *uuid.UUID) *UserMealUpdateOne {
+	if u != nil {
+		umuo.SetUserID(*u)
 	}
-	return umuo
-}
-
-// AddUserID adds i to the "user_id" field.
-func (umuo *UserMealUpdateOne) AddUserID(i int) *UserMealUpdateOne {
-	umuo.mutation.AddUserID(i)
 	return umuo
 }
 
 // SetRecordDate sets the "record_date" field.
-func (umuo *UserMealUpdateOne) SetRecordDate(t time.Time) *UserMealUpdateOne {
-	umuo.mutation.SetRecordDate(t)
+func (umuo *UserMealUpdateOne) SetRecordDate(i int) *UserMealUpdateOne {
+	umuo.mutation.ResetRecordDate()
+	umuo.mutation.SetRecordDate(i)
 	return umuo
 }
 
 // SetNillableRecordDate sets the "record_date" field if the given value is not nil.
-func (umuo *UserMealUpdateOne) SetNillableRecordDate(t *time.Time) *UserMealUpdateOne {
-	if t != nil {
-		umuo.SetRecordDate(*t)
+func (umuo *UserMealUpdateOne) SetNillableRecordDate(i *int) *UserMealUpdateOne {
+	if i != nil {
+		umuo.SetRecordDate(*i)
 	}
+	return umuo
+}
+
+// AddRecordDate adds i to the "record_date" field.
+func (umuo *UserMealUpdateOne) AddRecordDate(i int) *UserMealUpdateOne {
+	umuo.mutation.AddRecordDate(i)
 	return umuo
 }
 
@@ -446,13 +446,13 @@ func (umuo *UserMealUpdateOne) sqlSave(ctx context.Context) (_node *UserMeal, er
 		}
 	}
 	if value, ok := umuo.mutation.UserID(); ok {
-		_spec.SetField(usermeal.FieldUserID, field.TypeInt, value)
-	}
-	if value, ok := umuo.mutation.AddedUserID(); ok {
-		_spec.AddField(usermeal.FieldUserID, field.TypeInt, value)
+		_spec.SetField(usermeal.FieldUserID, field.TypeUUID, value)
 	}
 	if value, ok := umuo.mutation.RecordDate(); ok {
-		_spec.SetField(usermeal.FieldRecordDate, field.TypeTime, value)
+		_spec.SetField(usermeal.FieldRecordDate, field.TypeInt, value)
+	}
+	if value, ok := umuo.mutation.AddedRecordDate(); ok {
+		_spec.AddField(usermeal.FieldRecordDate, field.TypeInt, value)
 	}
 	if value, ok := umuo.mutation.MealType(); ok {
 		_spec.SetField(usermeal.FieldMealType, field.TypeEnum, value)

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminjwtblacklist"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -20,9 +19,9 @@ type AdminJWTBlacklist struct {
 	// Jti holds the value of the "jti" field.
 	Jti string `json:"jti,omitempty"`
 	// ExpiresAt holds the value of the "expires_at" field.
-	ExpiresAt time.Time `json:"expires_at,omitempty"`
+	ExpiresAt int `json:"expires_at,omitempty"`
 	// RevokedAt holds the value of the "revoked_at" field.
-	RevokedAt    time.Time `json:"revoked_at,omitempty"`
+	RevokedAt    int `json:"revoked_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -31,12 +30,10 @@ func (*AdminJWTBlacklist) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case adminjwtblacklist.FieldID:
+		case adminjwtblacklist.FieldID, adminjwtblacklist.FieldExpiresAt, adminjwtblacklist.FieldRevokedAt:
 			values[i] = new(sql.NullInt64)
 		case adminjwtblacklist.FieldJti:
 			values[i] = new(sql.NullString)
-		case adminjwtblacklist.FieldExpiresAt, adminjwtblacklist.FieldRevokedAt:
-			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -65,16 +62,16 @@ func (ajb *AdminJWTBlacklist) assignValues(columns []string, values []any) error
 				ajb.Jti = value.String
 			}
 		case adminjwtblacklist.FieldExpiresAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				ajb.ExpiresAt = value.Time
+				ajb.ExpiresAt = int(value.Int64)
 			}
 		case adminjwtblacklist.FieldRevokedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_at", values[i])
 			} else if value.Valid {
-				ajb.RevokedAt = value.Time
+				ajb.RevokedAt = int(value.Int64)
 			}
 		default:
 			ajb.selectValues.Set(columns[i], values[i])
@@ -116,10 +113,10 @@ func (ajb *AdminJWTBlacklist) String() string {
 	builder.WriteString(ajb.Jti)
 	builder.WriteString(", ")
 	builder.WriteString("expires_at=")
-	builder.WriteString(ajb.ExpiresAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", ajb.ExpiresAt))
 	builder.WriteString(", ")
 	builder.WriteString("revoked_at=")
-	builder.WriteString(ajb.RevokedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", ajb.RevokedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

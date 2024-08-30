@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"healthmonitor/ent/bloodstatusrecord"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -28,8 +27,8 @@ func (bsrc *BloodStatusRecordCreate) SetUserID(u uuid.UUID) *BloodStatusRecordCr
 }
 
 // SetRecordDate sets the "record_date" field.
-func (bsrc *BloodStatusRecordCreate) SetRecordDate(t time.Time) *BloodStatusRecordCreate {
-	bsrc.mutation.SetRecordDate(t)
+func (bsrc *BloodStatusRecordCreate) SetRecordDate(i int) *BloodStatusRecordCreate {
+	bsrc.mutation.SetRecordDate(i)
 	return bsrc
 }
 
@@ -60,6 +59,48 @@ func (bsrc *BloodStatusRecordCreate) SetDiastolicPressure(f float64) *BloodStatu
 // SetPulse sets the "pulse" field.
 func (bsrc *BloodStatusRecordCreate) SetPulse(f float64) *BloodStatusRecordCreate {
 	bsrc.mutation.SetPulse(f)
+	return bsrc
+}
+
+// SetCreatedAt sets the "created_at" field.
+func (bsrc *BloodStatusRecordCreate) SetCreatedAt(i int) *BloodStatusRecordCreate {
+	bsrc.mutation.SetCreatedAt(i)
+	return bsrc
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (bsrc *BloodStatusRecordCreate) SetNillableCreatedAt(i *int) *BloodStatusRecordCreate {
+	if i != nil {
+		bsrc.SetCreatedAt(*i)
+	}
+	return bsrc
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bsrc *BloodStatusRecordCreate) SetUpdatedAt(i int) *BloodStatusRecordCreate {
+	bsrc.mutation.SetUpdatedAt(i)
+	return bsrc
+}
+
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (bsrc *BloodStatusRecordCreate) SetNillableUpdatedAt(i *int) *BloodStatusRecordCreate {
+	if i != nil {
+		bsrc.SetUpdatedAt(*i)
+	}
+	return bsrc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (bsrc *BloodStatusRecordCreate) SetDeletedAt(i int) *BloodStatusRecordCreate {
+	bsrc.mutation.SetDeletedAt(i)
+	return bsrc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (bsrc *BloodStatusRecordCreate) SetNillableDeletedAt(i *int) *BloodStatusRecordCreate {
+	if i != nil {
+		bsrc.SetDeletedAt(*i)
+	}
 	return bsrc
 }
 
@@ -112,6 +153,14 @@ func (bsrc *BloodStatusRecordCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (bsrc *BloodStatusRecordCreate) defaults() {
+	if _, ok := bsrc.mutation.CreatedAt(); !ok {
+		v := bloodstatusrecord.DefaultCreatedAt
+		bsrc.mutation.SetCreatedAt(v)
+	}
+	if _, ok := bsrc.mutation.UpdatedAt(); !ok {
+		v := bloodstatusrecord.DefaultUpdatedAt
+		bsrc.mutation.SetUpdatedAt(v)
+	}
 	if _, ok := bsrc.mutation.ID(); !ok {
 		v := bloodstatusrecord.DefaultID()
 		bsrc.mutation.SetID(v)
@@ -150,6 +199,12 @@ func (bsrc *BloodStatusRecordCreate) check() error {
 	}
 	if _, ok := bsrc.mutation.Pulse(); !ok {
 		return &ValidationError{Name: "pulse", err: errors.New(`ent: missing required field "BloodStatusRecord.pulse"`)}
+	}
+	if _, ok := bsrc.mutation.CreatedAt(); !ok {
+		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "BloodStatusRecord.created_at"`)}
+	}
+	if _, ok := bsrc.mutation.UpdatedAt(); !ok {
+		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "BloodStatusRecord.updated_at"`)}
 	}
 	return nil
 }
@@ -191,7 +246,7 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 		_node.UserID = value
 	}
 	if value, ok := bsrc.mutation.RecordDate(); ok {
-		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeTime, value)
+		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
 		_node.RecordDate = value
 	}
 	if value, ok := bsrc.mutation.TimeOfDay(); ok {
@@ -213,6 +268,18 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 	if value, ok := bsrc.mutation.Pulse(); ok {
 		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
 		_node.Pulse = value
+	}
+	if value, ok := bsrc.mutation.CreatedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
+		_node.CreatedAt = value
+	}
+	if value, ok := bsrc.mutation.UpdatedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldUpdatedAt, field.TypeInt, value)
+		_node.UpdatedAt = value
+	}
+	if value, ok := bsrc.mutation.DeletedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldDeletedAt, field.TypeInt, value)
+		_node.DeletedAt = value
 	}
 	return _node, _spec
 }

@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminuser"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -35,15 +34,15 @@ func (alc *AdminLogCreate) SetIPAddress(s string) *AdminLogCreate {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (alc *AdminLogCreate) SetCreatedAt(t time.Time) *AdminLogCreate {
-	alc.mutation.SetCreatedAt(t)
+func (alc *AdminLogCreate) SetCreatedAt(i int) *AdminLogCreate {
+	alc.mutation.SetCreatedAt(i)
 	return alc
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (alc *AdminLogCreate) SetNillableCreatedAt(t *time.Time) *AdminLogCreate {
-	if t != nil {
-		alc.SetCreatedAt(*t)
+func (alc *AdminLogCreate) SetNillableCreatedAt(i *int) *AdminLogCreate {
+	if i != nil {
+		alc.SetCreatedAt(*i)
 	}
 	return alc
 }
@@ -117,7 +116,7 @@ func (alc *AdminLogCreate) ExecX(ctx context.Context) {
 // defaults sets the default values of the builder before save.
 func (alc *AdminLogCreate) defaults() {
 	if _, ok := alc.mutation.CreatedAt(); !ok {
-		v := adminlog.DefaultCreatedAt()
+		v := adminlog.DefaultCreatedAt
 		alc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := alc.mutation.ID(); !ok {
@@ -181,7 +180,7 @@ func (alc *AdminLogCreate) createSpec() (*AdminLog, *sqlgraph.CreateSpec) {
 		_node.IPAddress = value
 	}
 	if value, ok := alc.mutation.CreatedAt(); ok {
-		_spec.SetField(adminlog.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminlog.FieldCreatedAt, field.TypeInt, value)
 		_node.CreatedAt = value
 	}
 	if nodes := alc.mutation.UserIDs(); len(nodes) > 0 {

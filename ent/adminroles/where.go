@@ -4,7 +4,6 @@ package adminroles
 
 import (
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -67,13 +66,18 @@ func Description(v string) predicate.AdminRoles {
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v time.Time) predicate.AdminRoles {
+func CreatedAt(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
-func UpdatedAt(v time.Time) predicate.AdminRoles {
+func UpdatedAt(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
+func DeletedAt(v int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldEQ(FieldDeletedAt, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -217,83 +221,133 @@ func DescriptionContainsFold(v string) predicate.AdminRoles {
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v time.Time) predicate.AdminRoles {
+func CreatedAtEQ(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v time.Time) predicate.AdminRoles {
+func CreatedAtNEQ(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldNEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...time.Time) predicate.AdminRoles {
+func CreatedAtIn(vs ...int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...time.Time) predicate.AdminRoles {
+func CreatedAtNotIn(vs ...int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldNotIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v time.Time) predicate.AdminRoles {
+func CreatedAtGT(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldGT(FieldCreatedAt, v))
 }
 
 // CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v time.Time) predicate.AdminRoles {
+func CreatedAtGTE(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldGTE(FieldCreatedAt, v))
 }
 
 // CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v time.Time) predicate.AdminRoles {
+func CreatedAtLT(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldLT(FieldCreatedAt, v))
 }
 
 // CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v time.Time) predicate.AdminRoles {
+func CreatedAtLTE(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldLTE(FieldCreatedAt, v))
 }
 
 // UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
-func UpdatedAtEQ(v time.Time) predicate.AdminRoles {
+func UpdatedAtEQ(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
-func UpdatedAtNEQ(v time.Time) predicate.AdminRoles {
+func UpdatedAtNEQ(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldNEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtIn applies the In predicate on the "updated_at" field.
-func UpdatedAtIn(vs ...time.Time) predicate.AdminRoles {
+func UpdatedAtIn(vs ...int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
-func UpdatedAtNotIn(vs ...time.Time) predicate.AdminRoles {
+func UpdatedAtNotIn(vs ...int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldNotIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtGT applies the GT predicate on the "updated_at" field.
-func UpdatedAtGT(v time.Time) predicate.AdminRoles {
+func UpdatedAtGT(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldGT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
-func UpdatedAtGTE(v time.Time) predicate.AdminRoles {
+func UpdatedAtGTE(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldGTE(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLT applies the LT predicate on the "updated_at" field.
-func UpdatedAtLT(v time.Time) predicate.AdminRoles {
+func UpdatedAtLT(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldLT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
-func UpdatedAtLTE(v time.Time) predicate.AdminRoles {
+func UpdatedAtLTE(v int) predicate.AdminRoles {
 	return predicate.AdminRoles(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
+func DeletedAtEQ(v int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
+func DeletedAtNEQ(v int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldNEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtIn applies the In predicate on the "deleted_at" field.
+func DeletedAtIn(vs ...int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
+func DeletedAtNotIn(vs ...int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldNotIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtGT applies the GT predicate on the "deleted_at" field.
+func DeletedAtGT(v int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldGT(FieldDeletedAt, v))
+}
+
+// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
+func DeletedAtGTE(v int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldGTE(FieldDeletedAt, v))
+}
+
+// DeletedAtLT applies the LT predicate on the "deleted_at" field.
+func DeletedAtLT(v int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldLT(FieldDeletedAt, v))
+}
+
+// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
+func DeletedAtLTE(v int) predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldLTE(FieldDeletedAt, v))
+}
+
+// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
+func DeletedAtIsNil() predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldIsNull(FieldDeletedAt))
+}
+
+// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
+func DeletedAtNotNil() predicate.AdminRoles {
+	return predicate.AdminRoles(sql.FieldNotNull(FieldDeletedAt))
 }
 
 // HasPermissions applies the HasEdge predicate on the "permissions" edge.

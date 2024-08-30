@@ -10,7 +10,6 @@ import (
 	"healthmonitor/ent/adminroles"
 	"healthmonitor/ent/adminuserrole"
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -65,22 +64,63 @@ func (aru *AdminRolesUpdate) ClearDescription() *AdminRolesUpdate {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (aru *AdminRolesUpdate) SetCreatedAt(t time.Time) *AdminRolesUpdate {
-	aru.mutation.SetCreatedAt(t)
+func (aru *AdminRolesUpdate) SetCreatedAt(i int) *AdminRolesUpdate {
+	aru.mutation.ResetCreatedAt()
+	aru.mutation.SetCreatedAt(i)
 	return aru
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (aru *AdminRolesUpdate) SetNillableCreatedAt(t *time.Time) *AdminRolesUpdate {
-	if t != nil {
-		aru.SetCreatedAt(*t)
+func (aru *AdminRolesUpdate) SetNillableCreatedAt(i *int) *AdminRolesUpdate {
+	if i != nil {
+		aru.SetCreatedAt(*i)
 	}
 	return aru
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (aru *AdminRolesUpdate) AddCreatedAt(i int) *AdminRolesUpdate {
+	aru.mutation.AddCreatedAt(i)
+	return aru
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (aru *AdminRolesUpdate) SetUpdatedAt(t time.Time) *AdminRolesUpdate {
-	aru.mutation.SetUpdatedAt(t)
+func (aru *AdminRolesUpdate) SetUpdatedAt(i int) *AdminRolesUpdate {
+	aru.mutation.ResetUpdatedAt()
+	aru.mutation.SetUpdatedAt(i)
+	return aru
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (aru *AdminRolesUpdate) AddUpdatedAt(i int) *AdminRolesUpdate {
+	aru.mutation.AddUpdatedAt(i)
+	return aru
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (aru *AdminRolesUpdate) SetDeletedAt(i int) *AdminRolesUpdate {
+	aru.mutation.ResetDeletedAt()
+	aru.mutation.SetDeletedAt(i)
+	return aru
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (aru *AdminRolesUpdate) SetNillableDeletedAt(i *int) *AdminRolesUpdate {
+	if i != nil {
+		aru.SetDeletedAt(*i)
+	}
+	return aru
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (aru *AdminRolesUpdate) AddDeletedAt(i int) *AdminRolesUpdate {
+	aru.mutation.AddDeletedAt(i)
+	return aru
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (aru *AdminRolesUpdate) ClearDeletedAt() *AdminRolesUpdate {
+	aru.mutation.ClearDeletedAt()
 	return aru
 }
 
@@ -216,10 +256,25 @@ func (aru *AdminRolesUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.ClearField(adminroles.FieldDescription, field.TypeString)
 	}
 	if value, ok := aru.mutation.CreatedAt(); ok {
-		_spec.SetField(adminroles.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminroles.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := aru.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminroles.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := aru.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminroles.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminroles.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := aru.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminroles.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := aru.mutation.DeletedAt(); ok {
+		_spec.SetField(adminroles.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := aru.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminroles.FieldDeletedAt, field.TypeInt, value)
+	}
+	if aru.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminroles.FieldDeletedAt, field.TypeInt)
 	}
 	if aru.mutation.PermissionsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -366,22 +421,63 @@ func (aruo *AdminRolesUpdateOne) ClearDescription() *AdminRolesUpdateOne {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (aruo *AdminRolesUpdateOne) SetCreatedAt(t time.Time) *AdminRolesUpdateOne {
-	aruo.mutation.SetCreatedAt(t)
+func (aruo *AdminRolesUpdateOne) SetCreatedAt(i int) *AdminRolesUpdateOne {
+	aruo.mutation.ResetCreatedAt()
+	aruo.mutation.SetCreatedAt(i)
 	return aruo
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (aruo *AdminRolesUpdateOne) SetNillableCreatedAt(t *time.Time) *AdminRolesUpdateOne {
-	if t != nil {
-		aruo.SetCreatedAt(*t)
+func (aruo *AdminRolesUpdateOne) SetNillableCreatedAt(i *int) *AdminRolesUpdateOne {
+	if i != nil {
+		aruo.SetCreatedAt(*i)
 	}
 	return aruo
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (aruo *AdminRolesUpdateOne) AddCreatedAt(i int) *AdminRolesUpdateOne {
+	aruo.mutation.AddCreatedAt(i)
+	return aruo
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (aruo *AdminRolesUpdateOne) SetUpdatedAt(t time.Time) *AdminRolesUpdateOne {
-	aruo.mutation.SetUpdatedAt(t)
+func (aruo *AdminRolesUpdateOne) SetUpdatedAt(i int) *AdminRolesUpdateOne {
+	aruo.mutation.ResetUpdatedAt()
+	aruo.mutation.SetUpdatedAt(i)
+	return aruo
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (aruo *AdminRolesUpdateOne) AddUpdatedAt(i int) *AdminRolesUpdateOne {
+	aruo.mutation.AddUpdatedAt(i)
+	return aruo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (aruo *AdminRolesUpdateOne) SetDeletedAt(i int) *AdminRolesUpdateOne {
+	aruo.mutation.ResetDeletedAt()
+	aruo.mutation.SetDeletedAt(i)
+	return aruo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (aruo *AdminRolesUpdateOne) SetNillableDeletedAt(i *int) *AdminRolesUpdateOne {
+	if i != nil {
+		aruo.SetDeletedAt(*i)
+	}
+	return aruo
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (aruo *AdminRolesUpdateOne) AddDeletedAt(i int) *AdminRolesUpdateOne {
+	aruo.mutation.AddDeletedAt(i)
+	return aruo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (aruo *AdminRolesUpdateOne) ClearDeletedAt() *AdminRolesUpdateOne {
+	aruo.mutation.ClearDeletedAt()
 	return aruo
 }
 
@@ -547,10 +643,25 @@ func (aruo *AdminRolesUpdateOne) sqlSave(ctx context.Context) (_node *AdminRoles
 		_spec.ClearField(adminroles.FieldDescription, field.TypeString)
 	}
 	if value, ok := aruo.mutation.CreatedAt(); ok {
-		_spec.SetField(adminroles.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminroles.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := aruo.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminroles.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := aruo.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminroles.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminroles.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := aruo.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminroles.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := aruo.mutation.DeletedAt(); ok {
+		_spec.SetField(adminroles.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := aruo.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminroles.FieldDeletedAt, field.TypeInt, value)
+	}
+	if aruo.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminroles.FieldDeletedAt, field.TypeInt)
 	}
 	if aruo.mutation.PermissionsCleared() {
 		edge := &sqlgraph.EdgeSpec{

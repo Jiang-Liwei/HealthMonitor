@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/google/uuid"
+	"time"
 )
 
 // BloodStatusRecord holds the schema definition for the BloodStatusRecord entity.
@@ -27,7 +28,7 @@ func (BloodStatusRecord) Fields() []ent.Field {
 			Comment("记录的唯一标识符"),
 		field.UUID("user_id", uuid.New()).
 			Comment("用户id"),
-		field.Time("record_date").
+		field.Int("record_date").
 			Comment("记录日期"),
 		field.Enum("time_of_day").
 			Values("morning", "noon", "evening").
@@ -41,6 +42,12 @@ func (BloodStatusRecord) Fields() []ent.Field {
 			Comment("舒张压"),
 		field.Float("pulse").
 			Comment("脉搏"),
+		field.Int("created_at").
+			Default(int(time.Now().Unix())),
+		field.Int("updated_at").
+			Default(int(time.Now().Unix())).
+			UpdateDefault(func() int { return int(time.Now().Unix()) }),
+		field.Int("deleted_at").Optional(),
 	}
 }
 

@@ -19,9 +19,7 @@ func (AdminLog) Fields() []ent.Field {
 		field.UUID("id", uuid.New()).Default(uuid.New),
 		field.String("action"),
 		field.String("ip_address"),
-		field.Time("created_at").Default(time.Now).SchemaType(map[string]string{
-			"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP",
-		}),
+		field.Int("created_at").Default(int(time.Now().Unix())),
 	}
 }
 

@@ -17,15 +17,14 @@ func (AdminMenu) Fields() []ent.Field {
 	return []ent.Field{
 		field.UUID("id", uuid.New()).Default(uuid.New),
 		field.String("name"),
-		field.String("icon").Optional(), // 菜单图标
-		field.String("path"),            // 前端路由路径
-		field.Int("order").Default(0),   // 菜单排序
-		field.Time("created_at").Default(time.Now).SchemaType(map[string]string{
-			"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP",
-		}),
-		field.Time("updated_at").Default(time.Now).UpdateDefault(time.Now).SchemaType(map[string]string{
-			"mysql": "TIMESTAMP(0) DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
-		}),
+		field.String("icon").Optional(),  // 菜单图标
+		field.String("path"),             // 前端路由路径
+		field.Uint16("order").Default(0), // 菜单排序
+		field.Int("created_at").Default(int(time.Now().Unix())),
+		field.Int("updated_at").
+			Default(int(time.Now().Unix())).
+			UpdateDefault(func() int { return int(time.Now().Unix()) }), // 更新时间
+		field.Int("deleted_at").Optional(),
 	}
 }
 

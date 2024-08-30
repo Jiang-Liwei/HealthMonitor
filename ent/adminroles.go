@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminroles"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -23,9 +22,11 @@ type AdminRoles struct {
 	// Description holds the value of the "description" field.
 	Description string `json:"description,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	CreatedAt int `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	UpdatedAt int `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt int `json:"deleted_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AdminRolesQuery when eager-loading is set.
 	Edges        AdminRolesEdges `json:"edges"`
@@ -66,10 +67,10 @@ func (*AdminRoles) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case adminroles.FieldCreatedAt, adminroles.FieldUpdatedAt, adminroles.FieldDeletedAt:
+			values[i] = new(sql.NullInt64)
 		case adminroles.FieldName, adminroles.FieldDescription:
 			values[i] = new(sql.NullString)
-		case adminroles.FieldCreatedAt, adminroles.FieldUpdatedAt:
-			values[i] = new(sql.NullTime)
 		case adminroles.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -106,16 +107,22 @@ func (ar *AdminRoles) assignValues(columns []string, values []any) error {
 				ar.Description = value.String
 			}
 		case adminroles.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ar.CreatedAt = value.Time
+				ar.CreatedAt = int(value.Int64)
 			}
 		case adminroles.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ar.UpdatedAt = value.Time
+				ar.UpdatedAt = int(value.Int64)
+			}
+		case adminroles.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				ar.DeletedAt = int(value.Int64)
 			}
 		default:
 			ar.selectValues.Set(columns[i], values[i])
@@ -170,10 +177,13 @@ func (ar *AdminRoles) String() string {
 	builder.WriteString(ar.Description)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ar.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", ar.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ar.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", ar.UpdatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", ar.DeletedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

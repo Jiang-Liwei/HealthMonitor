@@ -7,7 +7,6 @@ import (
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminuser"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -24,7 +23,7 @@ type AdminLog struct {
 	// IPAddress holds the value of the "ip_address" field.
 	IPAddress string `json:"ip_address,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	CreatedAt int `json:"created_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AdminLogQuery when eager-loading is set.
 	Edges           AdminLogEdges `json:"edges"`
@@ -57,10 +56,10 @@ func (*AdminLog) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case adminlog.FieldCreatedAt:
+			values[i] = new(sql.NullInt64)
 		case adminlog.FieldAction, adminlog.FieldIPAddress:
 			values[i] = new(sql.NullString)
-		case adminlog.FieldCreatedAt:
-			values[i] = new(sql.NullTime)
 		case adminlog.FieldID:
 			values[i] = new(uuid.UUID)
 		case adminlog.ForeignKeys[0]: // admin_user_logs
@@ -99,10 +98,10 @@ func (al *AdminLog) assignValues(columns []string, values []any) error {
 				al.IPAddress = value.String
 			}
 		case adminlog.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				al.CreatedAt = value.Time
+				al.CreatedAt = int(value.Int64)
 			}
 		case adminlog.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullScanner); !ok {
@@ -159,7 +158,7 @@ func (al *AdminLog) String() string {
 	builder.WriteString(al.IPAddress)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(al.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", al.CreatedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminpermission"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -27,9 +26,11 @@ type AdminPermission struct {
 	// Method holds the value of the "method" field.
 	Method string `json:"method,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt time.Time `json:"created_at,omitempty"`
+	CreatedAt int `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt time.Time `json:"updated_at,omitempty"`
+	UpdatedAt int `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt int `json:"deleted_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AdminPermissionQuery when eager-loading is set.
 	Edges        AdminPermissionEdges `json:"edges"`
@@ -59,10 +60,10 @@ func (*AdminPermission) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case adminpermission.FieldCreatedAt, adminpermission.FieldUpdatedAt, adminpermission.FieldDeletedAt:
+			values[i] = new(sql.NullInt64)
 		case adminpermission.FieldName, adminpermission.FieldDescription, adminpermission.FieldPath, adminpermission.FieldMethod:
 			values[i] = new(sql.NullString)
-		case adminpermission.FieldCreatedAt, adminpermission.FieldUpdatedAt:
-			values[i] = new(sql.NullTime)
 		case adminpermission.FieldID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -111,16 +112,22 @@ func (ap *AdminPermission) assignValues(columns []string, values []any) error {
 				ap.Method = value.String
 			}
 		case adminpermission.FieldCreatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				ap.CreatedAt = value.Time
+				ap.CreatedAt = int(value.Int64)
 			}
 		case adminpermission.FieldUpdatedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				ap.UpdatedAt = value.Time
+				ap.UpdatedAt = int(value.Int64)
+			}
+		case adminpermission.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				ap.DeletedAt = int(value.Int64)
 			}
 		default:
 			ap.selectValues.Set(columns[i], values[i])
@@ -176,10 +183,13 @@ func (ap *AdminPermission) String() string {
 	builder.WriteString(ap.Method)
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
-	builder.WriteString(ap.CreatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", ap.CreatedAt))
 	builder.WriteString(", ")
 	builder.WriteString("updated_at=")
-	builder.WriteString(ap.UpdatedAt.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", ap.UpdatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", ap.DeletedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

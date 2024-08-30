@@ -4,10 +4,10 @@ package usermeal
 
 import (
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/google/uuid"
 )
 
 // ID filters vertices based on their ID field.
@@ -56,12 +56,12 @@ func IDLTE(id int) predicate.UserMeal {
 }
 
 // UserID applies equality check predicate on the "user_id" field. It's identical to UserIDEQ.
-func UserID(v int) predicate.UserMeal {
+func UserID(v uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldEQ(FieldUserID, v))
 }
 
 // RecordDate applies equality check predicate on the "record_date" field. It's identical to RecordDateEQ.
-func RecordDate(v time.Time) predicate.UserMeal {
+func RecordDate(v int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldEQ(FieldRecordDate, v))
 }
 
@@ -71,82 +71,82 @@ func Description(v string) predicate.UserMeal {
 }
 
 // UserIDEQ applies the EQ predicate on the "user_id" field.
-func UserIDEQ(v int) predicate.UserMeal {
+func UserIDEQ(v uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldEQ(FieldUserID, v))
 }
 
 // UserIDNEQ applies the NEQ predicate on the "user_id" field.
-func UserIDNEQ(v int) predicate.UserMeal {
+func UserIDNEQ(v uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldNEQ(FieldUserID, v))
 }
 
 // UserIDIn applies the In predicate on the "user_id" field.
-func UserIDIn(vs ...int) predicate.UserMeal {
+func UserIDIn(vs ...uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldIn(FieldUserID, vs...))
 }
 
 // UserIDNotIn applies the NotIn predicate on the "user_id" field.
-func UserIDNotIn(vs ...int) predicate.UserMeal {
+func UserIDNotIn(vs ...uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldNotIn(FieldUserID, vs...))
 }
 
 // UserIDGT applies the GT predicate on the "user_id" field.
-func UserIDGT(v int) predicate.UserMeal {
+func UserIDGT(v uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldGT(FieldUserID, v))
 }
 
 // UserIDGTE applies the GTE predicate on the "user_id" field.
-func UserIDGTE(v int) predicate.UserMeal {
+func UserIDGTE(v uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldGTE(FieldUserID, v))
 }
 
 // UserIDLT applies the LT predicate on the "user_id" field.
-func UserIDLT(v int) predicate.UserMeal {
+func UserIDLT(v uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldLT(FieldUserID, v))
 }
 
 // UserIDLTE applies the LTE predicate on the "user_id" field.
-func UserIDLTE(v int) predicate.UserMeal {
+func UserIDLTE(v uuid.UUID) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldLTE(FieldUserID, v))
 }
 
 // RecordDateEQ applies the EQ predicate on the "record_date" field.
-func RecordDateEQ(v time.Time) predicate.UserMeal {
+func RecordDateEQ(v int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldEQ(FieldRecordDate, v))
 }
 
 // RecordDateNEQ applies the NEQ predicate on the "record_date" field.
-func RecordDateNEQ(v time.Time) predicate.UserMeal {
+func RecordDateNEQ(v int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldNEQ(FieldRecordDate, v))
 }
 
 // RecordDateIn applies the In predicate on the "record_date" field.
-func RecordDateIn(vs ...time.Time) predicate.UserMeal {
+func RecordDateIn(vs ...int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldIn(FieldRecordDate, vs...))
 }
 
 // RecordDateNotIn applies the NotIn predicate on the "record_date" field.
-func RecordDateNotIn(vs ...time.Time) predicate.UserMeal {
+func RecordDateNotIn(vs ...int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldNotIn(FieldRecordDate, vs...))
 }
 
 // RecordDateGT applies the GT predicate on the "record_date" field.
-func RecordDateGT(v time.Time) predicate.UserMeal {
+func RecordDateGT(v int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldGT(FieldRecordDate, v))
 }
 
 // RecordDateGTE applies the GTE predicate on the "record_date" field.
-func RecordDateGTE(v time.Time) predicate.UserMeal {
+func RecordDateGTE(v int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldGTE(FieldRecordDate, v))
 }
 
 // RecordDateLT applies the LT predicate on the "record_date" field.
-func RecordDateLT(v time.Time) predicate.UserMeal {
+func RecordDateLT(v int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldLT(FieldRecordDate, v))
 }
 
 // RecordDateLTE applies the LTE predicate on the "record_date" field.
-func RecordDateLTE(v time.Time) predicate.UserMeal {
+func RecordDateLTE(v int) predicate.UserMeal {
 	return predicate.UserMeal(sql.FieldLTE(FieldRecordDate, v))
 }
 

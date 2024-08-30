@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"healthmonitor/ent/usermeal"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 // UserMeal is the model entity for the UserMeal schema.
@@ -17,10 +17,10 @@ type UserMeal struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// 用户ID
-	UserID int `json:"user_id,omitempty"`
+	// 用户id
+	UserID uuid.UUID `json:"user_id,omitempty"`
 	// 记录日期
-	RecordDate time.Time `json:"record_date,omitempty"`
+	RecordDate int `json:"record_date,omitempty"`
 	// 餐点类型，早餐、午餐、晚餐
 	MealType usermeal.MealType `json:"meal_type,omitempty"`
 	// 餐点描述
@@ -54,12 +54,12 @@ func (*UserMeal) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case usermeal.FieldID, usermeal.FieldUserID:
+		case usermeal.FieldID, usermeal.FieldRecordDate:
 			values[i] = new(sql.NullInt64)
 		case usermeal.FieldMealType, usermeal.FieldDescription:
 			values[i] = new(sql.NullString)
-		case usermeal.FieldRecordDate:
-			values[i] = new(sql.NullTime)
+		case usermeal.FieldUserID:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -82,16 +82,16 @@ func (um *UserMeal) assignValues(columns []string, values []any) error {
 			}
 			um.ID = int(value.Int64)
 		case usermeal.FieldUserID:
-			if value, ok := values[i].(*sql.NullInt64); !ok {
+			if value, ok := values[i].(*uuid.UUID); !ok {
 				return fmt.Errorf("unexpected type %T for field user_id", values[i])
-			} else if value.Valid {
-				um.UserID = int(value.Int64)
+			} else if value != nil {
+				um.UserID = *value
 			}
 		case usermeal.FieldRecordDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field record_date", values[i])
 			} else if value.Valid {
-				um.RecordDate = value.Time
+				um.RecordDate = int(value.Int64)
 			}
 		case usermeal.FieldMealType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -150,7 +150,7 @@ func (um *UserMeal) String() string {
 	builder.WriteString(fmt.Sprintf("%v", um.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("record_date=")
-	builder.WriteString(um.RecordDate.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", um.RecordDate))
 	builder.WriteString(", ")
 	builder.WriteString("meal_type=")
 	builder.WriteString(fmt.Sprintf("%v", um.MealType))

@@ -4,7 +4,6 @@ package adminmenu
 
 import (
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/google/uuid"
@@ -71,18 +70,23 @@ func Path(v string) predicate.AdminMenu {
 }
 
 // Order applies equality check predicate on the "order" field. It's identical to OrderEQ.
-func Order(v int) predicate.AdminMenu {
+func Order(v uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldEQ(FieldOrder, v))
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v time.Time) predicate.AdminMenu {
+func CreatedAt(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
-func UpdatedAt(v time.Time) predicate.AdminMenu {
+func UpdatedAt(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldEQ(FieldUpdatedAt, v))
+}
+
+// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
+func DeletedAt(v int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldEQ(FieldDeletedAt, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.
@@ -291,123 +295,173 @@ func PathContainsFold(v string) predicate.AdminMenu {
 }
 
 // OrderEQ applies the EQ predicate on the "order" field.
-func OrderEQ(v int) predicate.AdminMenu {
+func OrderEQ(v uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldEQ(FieldOrder, v))
 }
 
 // OrderNEQ applies the NEQ predicate on the "order" field.
-func OrderNEQ(v int) predicate.AdminMenu {
+func OrderNEQ(v uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldNEQ(FieldOrder, v))
 }
 
 // OrderIn applies the In predicate on the "order" field.
-func OrderIn(vs ...int) predicate.AdminMenu {
+func OrderIn(vs ...uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldIn(FieldOrder, vs...))
 }
 
 // OrderNotIn applies the NotIn predicate on the "order" field.
-func OrderNotIn(vs ...int) predicate.AdminMenu {
+func OrderNotIn(vs ...uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldNotIn(FieldOrder, vs...))
 }
 
 // OrderGT applies the GT predicate on the "order" field.
-func OrderGT(v int) predicate.AdminMenu {
+func OrderGT(v uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldGT(FieldOrder, v))
 }
 
 // OrderGTE applies the GTE predicate on the "order" field.
-func OrderGTE(v int) predicate.AdminMenu {
+func OrderGTE(v uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldGTE(FieldOrder, v))
 }
 
 // OrderLT applies the LT predicate on the "order" field.
-func OrderLT(v int) predicate.AdminMenu {
+func OrderLT(v uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldLT(FieldOrder, v))
 }
 
 // OrderLTE applies the LTE predicate on the "order" field.
-func OrderLTE(v int) predicate.AdminMenu {
+func OrderLTE(v uint16) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldLTE(FieldOrder, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v time.Time) predicate.AdminMenu {
+func CreatedAtEQ(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v time.Time) predicate.AdminMenu {
+func CreatedAtNEQ(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldNEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...time.Time) predicate.AdminMenu {
+func CreatedAtIn(vs ...int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...time.Time) predicate.AdminMenu {
+func CreatedAtNotIn(vs ...int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldNotIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v time.Time) predicate.AdminMenu {
+func CreatedAtGT(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldGT(FieldCreatedAt, v))
 }
 
 // CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v time.Time) predicate.AdminMenu {
+func CreatedAtGTE(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldGTE(FieldCreatedAt, v))
 }
 
 // CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v time.Time) predicate.AdminMenu {
+func CreatedAtLT(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldLT(FieldCreatedAt, v))
 }
 
 // CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v time.Time) predicate.AdminMenu {
+func CreatedAtLTE(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldLTE(FieldCreatedAt, v))
 }
 
 // UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
-func UpdatedAtEQ(v time.Time) predicate.AdminMenu {
+func UpdatedAtEQ(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
-func UpdatedAtNEQ(v time.Time) predicate.AdminMenu {
+func UpdatedAtNEQ(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldNEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtIn applies the In predicate on the "updated_at" field.
-func UpdatedAtIn(vs ...time.Time) predicate.AdminMenu {
+func UpdatedAtIn(vs ...int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
-func UpdatedAtNotIn(vs ...time.Time) predicate.AdminMenu {
+func UpdatedAtNotIn(vs ...int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldNotIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtGT applies the GT predicate on the "updated_at" field.
-func UpdatedAtGT(v time.Time) predicate.AdminMenu {
+func UpdatedAtGT(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldGT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
-func UpdatedAtGTE(v time.Time) predicate.AdminMenu {
+func UpdatedAtGTE(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldGTE(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLT applies the LT predicate on the "updated_at" field.
-func UpdatedAtLT(v time.Time) predicate.AdminMenu {
+func UpdatedAtLT(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldLT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
-func UpdatedAtLTE(v time.Time) predicate.AdminMenu {
+func UpdatedAtLTE(v int) predicate.AdminMenu {
 	return predicate.AdminMenu(sql.FieldLTE(FieldUpdatedAt, v))
+}
+
+// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
+func DeletedAtEQ(v int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
+func DeletedAtNEQ(v int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldNEQ(FieldDeletedAt, v))
+}
+
+// DeletedAtIn applies the In predicate on the "deleted_at" field.
+func DeletedAtIn(vs ...int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
+func DeletedAtNotIn(vs ...int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldNotIn(FieldDeletedAt, vs...))
+}
+
+// DeletedAtGT applies the GT predicate on the "deleted_at" field.
+func DeletedAtGT(v int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldGT(FieldDeletedAt, v))
+}
+
+// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
+func DeletedAtGTE(v int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldGTE(FieldDeletedAt, v))
+}
+
+// DeletedAtLT applies the LT predicate on the "deleted_at" field.
+func DeletedAtLT(v int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldLT(FieldDeletedAt, v))
+}
+
+// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
+func DeletedAtLTE(v int) predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldLTE(FieldDeletedAt, v))
+}
+
+// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
+func DeletedAtIsNil() predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldIsNull(FieldDeletedAt))
+}
+
+// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
+func DeletedAtNotNil() predicate.AdminMenu {
+	return predicate.AdminMenu(sql.FieldNotNull(FieldDeletedAt))
 }
 
 // And groups predicates with the AND operator between them.

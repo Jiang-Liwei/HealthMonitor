@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"healthmonitor/ent/adminmenu"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -48,43 +47,57 @@ func (amc *AdminMenuCreate) SetPath(s string) *AdminMenuCreate {
 }
 
 // SetOrder sets the "order" field.
-func (amc *AdminMenuCreate) SetOrder(i int) *AdminMenuCreate {
-	amc.mutation.SetOrder(i)
+func (amc *AdminMenuCreate) SetOrder(u uint16) *AdminMenuCreate {
+	amc.mutation.SetOrder(u)
 	return amc
 }
 
 // SetNillableOrder sets the "order" field if the given value is not nil.
-func (amc *AdminMenuCreate) SetNillableOrder(i *int) *AdminMenuCreate {
-	if i != nil {
-		amc.SetOrder(*i)
+func (amc *AdminMenuCreate) SetNillableOrder(u *uint16) *AdminMenuCreate {
+	if u != nil {
+		amc.SetOrder(*u)
 	}
 	return amc
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (amc *AdminMenuCreate) SetCreatedAt(t time.Time) *AdminMenuCreate {
-	amc.mutation.SetCreatedAt(t)
+func (amc *AdminMenuCreate) SetCreatedAt(i int) *AdminMenuCreate {
+	amc.mutation.SetCreatedAt(i)
 	return amc
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (amc *AdminMenuCreate) SetNillableCreatedAt(t *time.Time) *AdminMenuCreate {
-	if t != nil {
-		amc.SetCreatedAt(*t)
+func (amc *AdminMenuCreate) SetNillableCreatedAt(i *int) *AdminMenuCreate {
+	if i != nil {
+		amc.SetCreatedAt(*i)
 	}
 	return amc
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (amc *AdminMenuCreate) SetUpdatedAt(t time.Time) *AdminMenuCreate {
-	amc.mutation.SetUpdatedAt(t)
+func (amc *AdminMenuCreate) SetUpdatedAt(i int) *AdminMenuCreate {
+	amc.mutation.SetUpdatedAt(i)
 	return amc
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (amc *AdminMenuCreate) SetNillableUpdatedAt(t *time.Time) *AdminMenuCreate {
-	if t != nil {
-		amc.SetUpdatedAt(*t)
+func (amc *AdminMenuCreate) SetNillableUpdatedAt(i *int) *AdminMenuCreate {
+	if i != nil {
+		amc.SetUpdatedAt(*i)
+	}
+	return amc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (amc *AdminMenuCreate) SetDeletedAt(i int) *AdminMenuCreate {
+	amc.mutation.SetDeletedAt(i)
+	return amc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (amc *AdminMenuCreate) SetNillableDeletedAt(i *int) *AdminMenuCreate {
+	if i != nil {
+		amc.SetDeletedAt(*i)
 	}
 	return amc
 }
@@ -143,11 +156,11 @@ func (amc *AdminMenuCreate) defaults() {
 		amc.mutation.SetOrder(v)
 	}
 	if _, ok := amc.mutation.CreatedAt(); !ok {
-		v := adminmenu.DefaultCreatedAt()
+		v := adminmenu.DefaultCreatedAt
 		amc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := amc.mutation.UpdatedAt(); !ok {
-		v := adminmenu.DefaultUpdatedAt()
+		v := adminmenu.DefaultUpdatedAt
 		amc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := amc.mutation.ID(); !ok {
@@ -221,16 +234,20 @@ func (amc *AdminMenuCreate) createSpec() (*AdminMenu, *sqlgraph.CreateSpec) {
 		_node.Path = value
 	}
 	if value, ok := amc.mutation.Order(); ok {
-		_spec.SetField(adminmenu.FieldOrder, field.TypeInt, value)
+		_spec.SetField(adminmenu.FieldOrder, field.TypeUint16, value)
 		_node.Order = value
 	}
 	if value, ok := amc.mutation.CreatedAt(); ok {
-		_spec.SetField(adminmenu.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminmenu.FieldCreatedAt, field.TypeInt, value)
 		_node.CreatedAt = value
 	}
 	if value, ok := amc.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminmenu.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminmenu.FieldUpdatedAt, field.TypeInt, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := amc.mutation.DeletedAt(); ok {
+		_spec.SetField(adminmenu.FieldDeletedAt, field.TypeInt, value)
+		_node.DeletedAt = value
 	}
 	return _node, _spec
 }

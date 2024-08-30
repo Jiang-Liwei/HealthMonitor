@@ -9,7 +9,6 @@ import (
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminuser"
 	"healthmonitor/ent/adminuserrole"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
@@ -56,57 +55,71 @@ func (auc *AdminUserCreate) SetNillableIsActive(b *bool) *AdminUserCreate {
 }
 
 // SetLastLoginAt sets the "last_login_at" field.
-func (auc *AdminUserCreate) SetLastLoginAt(t time.Time) *AdminUserCreate {
-	auc.mutation.SetLastLoginAt(t)
+func (auc *AdminUserCreate) SetLastLoginAt(i int) *AdminUserCreate {
+	auc.mutation.SetLastLoginAt(i)
 	return auc
 }
 
 // SetNillableLastLoginAt sets the "last_login_at" field if the given value is not nil.
-func (auc *AdminUserCreate) SetNillableLastLoginAt(t *time.Time) *AdminUserCreate {
-	if t != nil {
-		auc.SetLastLoginAt(*t)
+func (auc *AdminUserCreate) SetNillableLastLoginAt(i *int) *AdminUserCreate {
+	if i != nil {
+		auc.SetLastLoginAt(*i)
 	}
 	return auc
 }
 
 // SetJwtIssuedAt sets the "jwt_issued_at" field.
-func (auc *AdminUserCreate) SetJwtIssuedAt(t time.Time) *AdminUserCreate {
-	auc.mutation.SetJwtIssuedAt(t)
+func (auc *AdminUserCreate) SetJwtIssuedAt(i int) *AdminUserCreate {
+	auc.mutation.SetJwtIssuedAt(i)
 	return auc
 }
 
 // SetNillableJwtIssuedAt sets the "jwt_issued_at" field if the given value is not nil.
-func (auc *AdminUserCreate) SetNillableJwtIssuedAt(t *time.Time) *AdminUserCreate {
-	if t != nil {
-		auc.SetJwtIssuedAt(*t)
+func (auc *AdminUserCreate) SetNillableJwtIssuedAt(i *int) *AdminUserCreate {
+	if i != nil {
+		auc.SetJwtIssuedAt(*i)
 	}
 	return auc
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (auc *AdminUserCreate) SetCreatedAt(t time.Time) *AdminUserCreate {
-	auc.mutation.SetCreatedAt(t)
+func (auc *AdminUserCreate) SetCreatedAt(i int) *AdminUserCreate {
+	auc.mutation.SetCreatedAt(i)
 	return auc
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (auc *AdminUserCreate) SetNillableCreatedAt(t *time.Time) *AdminUserCreate {
-	if t != nil {
-		auc.SetCreatedAt(*t)
+func (auc *AdminUserCreate) SetNillableCreatedAt(i *int) *AdminUserCreate {
+	if i != nil {
+		auc.SetCreatedAt(*i)
 	}
 	return auc
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (auc *AdminUserCreate) SetUpdatedAt(t time.Time) *AdminUserCreate {
-	auc.mutation.SetUpdatedAt(t)
+func (auc *AdminUserCreate) SetUpdatedAt(i int) *AdminUserCreate {
+	auc.mutation.SetUpdatedAt(i)
 	return auc
 }
 
 // SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (auc *AdminUserCreate) SetNillableUpdatedAt(t *time.Time) *AdminUserCreate {
-	if t != nil {
-		auc.SetUpdatedAt(*t)
+func (auc *AdminUserCreate) SetNillableUpdatedAt(i *int) *AdminUserCreate {
+	if i != nil {
+		auc.SetUpdatedAt(*i)
+	}
+	return auc
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (auc *AdminUserCreate) SetDeletedAt(i int) *AdminUserCreate {
+	auc.mutation.SetDeletedAt(i)
+	return auc
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (auc *AdminUserCreate) SetNillableDeletedAt(i *int) *AdminUserCreate {
+	if i != nil {
+		auc.SetDeletedAt(*i)
 	}
 	return auc
 }
@@ -195,11 +208,11 @@ func (auc *AdminUserCreate) defaults() {
 		auc.mutation.SetIsActive(v)
 	}
 	if _, ok := auc.mutation.CreatedAt(); !ok {
-		v := adminuser.DefaultCreatedAt()
+		v := adminuser.DefaultCreatedAt
 		auc.mutation.SetCreatedAt(v)
 	}
 	if _, ok := auc.mutation.UpdatedAt(); !ok {
-		v := adminuser.DefaultUpdatedAt()
+		v := adminuser.DefaultUpdatedAt
 		auc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := auc.mutation.ID(); !ok {
@@ -280,20 +293,24 @@ func (auc *AdminUserCreate) createSpec() (*AdminUser, *sqlgraph.CreateSpec) {
 		_node.IsActive = value
 	}
 	if value, ok := auc.mutation.LastLoginAt(); ok {
-		_spec.SetField(adminuser.FieldLastLoginAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldLastLoginAt, field.TypeInt, value)
 		_node.LastLoginAt = value
 	}
 	if value, ok := auc.mutation.JwtIssuedAt(); ok {
-		_spec.SetField(adminuser.FieldJwtIssuedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldJwtIssuedAt, field.TypeInt, value)
 		_node.JwtIssuedAt = value
 	}
 	if value, ok := auc.mutation.CreatedAt(); ok {
-		_spec.SetField(adminuser.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldCreatedAt, field.TypeInt, value)
 		_node.CreatedAt = value
 	}
 	if value, ok := auc.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminuser.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminuser.FieldUpdatedAt, field.TypeInt, value)
 		_node.UpdatedAt = value
+	}
+	if value, ok := auc.mutation.DeletedAt(); ok {
+		_spec.SetField(adminuser.FieldDeletedAt, field.TypeInt, value)
+		_node.DeletedAt = value
 	}
 	if nodes := auc.mutation.RolesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

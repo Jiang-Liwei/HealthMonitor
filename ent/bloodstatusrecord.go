@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/bloodstatusrecord"
 	"strings"
-	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
@@ -22,7 +21,7 @@ type BloodStatusRecord struct {
 	// 用户id
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// 记录日期
-	RecordDate time.Time `json:"record_date,omitempty"`
+	RecordDate int `json:"record_date,omitempty"`
 	// 记录时间段，早晨、中午、晚上
 	TimeOfDay bloodstatusrecord.TimeOfDay `json:"time_of_day,omitempty"`
 	// 餐前餐后，前、后
@@ -32,7 +31,13 @@ type BloodStatusRecord struct {
 	// 舒张压
 	DiastolicPressure float64 `json:"diastolic_pressure,omitempty"`
 	// 脉搏
-	Pulse        float64 `json:"pulse,omitempty"`
+	Pulse float64 `json:"pulse,omitempty"`
+	// CreatedAt holds the value of the "created_at" field.
+	CreatedAt int `json:"created_at,omitempty"`
+	// UpdatedAt holds the value of the "updated_at" field.
+	UpdatedAt int `json:"updated_at,omitempty"`
+	// DeletedAt holds the value of the "deleted_at" field.
+	DeletedAt    int `json:"deleted_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -43,10 +48,10 @@ func (*BloodStatusRecord) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case bloodstatusrecord.FieldSystolicPressure, bloodstatusrecord.FieldDiastolicPressure, bloodstatusrecord.FieldPulse:
 			values[i] = new(sql.NullFloat64)
+		case bloodstatusrecord.FieldRecordDate, bloodstatusrecord.FieldCreatedAt, bloodstatusrecord.FieldUpdatedAt, bloodstatusrecord.FieldDeletedAt:
+			values[i] = new(sql.NullInt64)
 		case bloodstatusrecord.FieldTimeOfDay, bloodstatusrecord.FieldBeforeAfterMeals:
 			values[i] = new(sql.NullString)
-		case bloodstatusrecord.FieldRecordDate:
-			values[i] = new(sql.NullTime)
 		case bloodstatusrecord.FieldID, bloodstatusrecord.FieldUserID:
 			values[i] = new(uuid.UUID)
 		default:
@@ -77,10 +82,10 @@ func (bsr *BloodStatusRecord) assignValues(columns []string, values []any) error
 				bsr.UserID = *value
 			}
 		case bloodstatusrecord.FieldRecordDate:
-			if value, ok := values[i].(*sql.NullTime); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field record_date", values[i])
 			} else if value.Valid {
-				bsr.RecordDate = value.Time
+				bsr.RecordDate = int(value.Int64)
 			}
 		case bloodstatusrecord.FieldTimeOfDay:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -111,6 +116,24 @@ func (bsr *BloodStatusRecord) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field pulse", values[i])
 			} else if value.Valid {
 				bsr.Pulse = value.Float64
+			}
+		case bloodstatusrecord.FieldCreatedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field created_at", values[i])
+			} else if value.Valid {
+				bsr.CreatedAt = int(value.Int64)
+			}
+		case bloodstatusrecord.FieldUpdatedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
+			} else if value.Valid {
+				bsr.UpdatedAt = int(value.Int64)
+			}
+		case bloodstatusrecord.FieldDeletedAt:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
+			} else if value.Valid {
+				bsr.DeletedAt = int(value.Int64)
 			}
 		default:
 			bsr.selectValues.Set(columns[i], values[i])
@@ -152,7 +175,7 @@ func (bsr *BloodStatusRecord) String() string {
 	builder.WriteString(fmt.Sprintf("%v", bsr.UserID))
 	builder.WriteString(", ")
 	builder.WriteString("record_date=")
-	builder.WriteString(bsr.RecordDate.Format(time.ANSIC))
+	builder.WriteString(fmt.Sprintf("%v", bsr.RecordDate))
 	builder.WriteString(", ")
 	builder.WriteString("time_of_day=")
 	builder.WriteString(fmt.Sprintf("%v", bsr.TimeOfDay))
@@ -168,6 +191,15 @@ func (bsr *BloodStatusRecord) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pulse=")
 	builder.WriteString(fmt.Sprintf("%v", bsr.Pulse))
+	builder.WriteString(", ")
+	builder.WriteString("created_at=")
+	builder.WriteString(fmt.Sprintf("%v", bsr.CreatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("updated_at=")
+	builder.WriteString(fmt.Sprintf("%v", bsr.UpdatedAt))
+	builder.WriteString(", ")
+	builder.WriteString("deleted_at=")
+	builder.WriteString(fmt.Sprintf("%v", bsr.DeletedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -6,6 +6,7 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // UserMeal holds the schema definition for the UserMeal entity.
@@ -23,9 +24,9 @@ func (UserMeal) Annotations() []schema.Annotation {
 // Fields of the UserMeal.
 func (UserMeal) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("user_id").
-			Comment("用户ID"),
-		field.Time("record_date").
+		field.UUID("user_id", uuid.New()).
+			Comment("用户id"),
+		field.Int("record_date").
 			Comment("记录日期"),
 		field.Enum("meal_type").
 			Values("breakfast", "lunch", "dinner").

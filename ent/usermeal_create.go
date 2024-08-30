@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"healthmonitor/ent/usermeal"
 	"healthmonitor/ent/usermealfood"
-	"time"
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 )
 
 // UserMealCreate is the builder for creating a UserMeal entity.
@@ -22,14 +22,14 @@ type UserMealCreate struct {
 }
 
 // SetUserID sets the "user_id" field.
-func (umc *UserMealCreate) SetUserID(i int) *UserMealCreate {
-	umc.mutation.SetUserID(i)
+func (umc *UserMealCreate) SetUserID(u uuid.UUID) *UserMealCreate {
+	umc.mutation.SetUserID(u)
 	return umc
 }
 
 // SetRecordDate sets the "record_date" field.
-func (umc *UserMealCreate) SetRecordDate(t time.Time) *UserMealCreate {
-	umc.mutation.SetRecordDate(t)
+func (umc *UserMealCreate) SetRecordDate(i int) *UserMealCreate {
+	umc.mutation.SetRecordDate(i)
 	return umc
 }
 
@@ -138,11 +138,11 @@ func (umc *UserMealCreate) createSpec() (*UserMeal, *sqlgraph.CreateSpec) {
 		_spec = sqlgraph.NewCreateSpec(usermeal.Table, sqlgraph.NewFieldSpec(usermeal.FieldID, field.TypeInt))
 	)
 	if value, ok := umc.mutation.UserID(); ok {
-		_spec.SetField(usermeal.FieldUserID, field.TypeInt, value)
+		_spec.SetField(usermeal.FieldUserID, field.TypeUUID, value)
 		_node.UserID = value
 	}
 	if value, ok := umc.mutation.RecordDate(); ok {
-		_spec.SetField(usermeal.FieldRecordDate, field.TypeTime, value)
+		_spec.SetField(usermeal.FieldRecordDate, field.TypeInt, value)
 		_node.RecordDate = value
 	}
 	if value, ok := umc.mutation.MealType(); ok {

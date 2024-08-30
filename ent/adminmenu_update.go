@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/adminmenu"
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -77,43 +76,84 @@ func (amu *AdminMenuUpdate) SetNillablePath(s *string) *AdminMenuUpdate {
 }
 
 // SetOrder sets the "order" field.
-func (amu *AdminMenuUpdate) SetOrder(i int) *AdminMenuUpdate {
+func (amu *AdminMenuUpdate) SetOrder(u uint16) *AdminMenuUpdate {
 	amu.mutation.ResetOrder()
-	amu.mutation.SetOrder(i)
+	amu.mutation.SetOrder(u)
 	return amu
 }
 
 // SetNillableOrder sets the "order" field if the given value is not nil.
-func (amu *AdminMenuUpdate) SetNillableOrder(i *int) *AdminMenuUpdate {
-	if i != nil {
-		amu.SetOrder(*i)
+func (amu *AdminMenuUpdate) SetNillableOrder(u *uint16) *AdminMenuUpdate {
+	if u != nil {
+		amu.SetOrder(*u)
 	}
 	return amu
 }
 
-// AddOrder adds i to the "order" field.
-func (amu *AdminMenuUpdate) AddOrder(i int) *AdminMenuUpdate {
-	amu.mutation.AddOrder(i)
+// AddOrder adds u to the "order" field.
+func (amu *AdminMenuUpdate) AddOrder(u int16) *AdminMenuUpdate {
+	amu.mutation.AddOrder(u)
 	return amu
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (amu *AdminMenuUpdate) SetCreatedAt(t time.Time) *AdminMenuUpdate {
-	amu.mutation.SetCreatedAt(t)
+func (amu *AdminMenuUpdate) SetCreatedAt(i int) *AdminMenuUpdate {
+	amu.mutation.ResetCreatedAt()
+	amu.mutation.SetCreatedAt(i)
 	return amu
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (amu *AdminMenuUpdate) SetNillableCreatedAt(t *time.Time) *AdminMenuUpdate {
-	if t != nil {
-		amu.SetCreatedAt(*t)
+func (amu *AdminMenuUpdate) SetNillableCreatedAt(i *int) *AdminMenuUpdate {
+	if i != nil {
+		amu.SetCreatedAt(*i)
 	}
 	return amu
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (amu *AdminMenuUpdate) AddCreatedAt(i int) *AdminMenuUpdate {
+	amu.mutation.AddCreatedAt(i)
+	return amu
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (amu *AdminMenuUpdate) SetUpdatedAt(t time.Time) *AdminMenuUpdate {
-	amu.mutation.SetUpdatedAt(t)
+func (amu *AdminMenuUpdate) SetUpdatedAt(i int) *AdminMenuUpdate {
+	amu.mutation.ResetUpdatedAt()
+	amu.mutation.SetUpdatedAt(i)
+	return amu
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (amu *AdminMenuUpdate) AddUpdatedAt(i int) *AdminMenuUpdate {
+	amu.mutation.AddUpdatedAt(i)
+	return amu
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (amu *AdminMenuUpdate) SetDeletedAt(i int) *AdminMenuUpdate {
+	amu.mutation.ResetDeletedAt()
+	amu.mutation.SetDeletedAt(i)
+	return amu
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (amu *AdminMenuUpdate) SetNillableDeletedAt(i *int) *AdminMenuUpdate {
+	if i != nil {
+		amu.SetDeletedAt(*i)
+	}
+	return amu
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (amu *AdminMenuUpdate) AddDeletedAt(i int) *AdminMenuUpdate {
+	amu.mutation.AddDeletedAt(i)
+	return amu
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (amu *AdminMenuUpdate) ClearDeletedAt() *AdminMenuUpdate {
+	amu.mutation.ClearDeletedAt()
 	return amu
 }
 
@@ -180,16 +220,31 @@ func (amu *AdminMenuUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(adminmenu.FieldPath, field.TypeString, value)
 	}
 	if value, ok := amu.mutation.Order(); ok {
-		_spec.SetField(adminmenu.FieldOrder, field.TypeInt, value)
+		_spec.SetField(adminmenu.FieldOrder, field.TypeUint16, value)
 	}
 	if value, ok := amu.mutation.AddedOrder(); ok {
-		_spec.AddField(adminmenu.FieldOrder, field.TypeInt, value)
+		_spec.AddField(adminmenu.FieldOrder, field.TypeUint16, value)
 	}
 	if value, ok := amu.mutation.CreatedAt(); ok {
-		_spec.SetField(adminmenu.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminmenu.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := amu.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminmenu.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := amu.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminmenu.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminmenu.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := amu.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminmenu.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := amu.mutation.DeletedAt(); ok {
+		_spec.SetField(adminmenu.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := amu.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminmenu.FieldDeletedAt, field.TypeInt, value)
+	}
+	if amu.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminmenu.FieldDeletedAt, field.TypeInt)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, amu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -260,43 +315,84 @@ func (amuo *AdminMenuUpdateOne) SetNillablePath(s *string) *AdminMenuUpdateOne {
 }
 
 // SetOrder sets the "order" field.
-func (amuo *AdminMenuUpdateOne) SetOrder(i int) *AdminMenuUpdateOne {
+func (amuo *AdminMenuUpdateOne) SetOrder(u uint16) *AdminMenuUpdateOne {
 	amuo.mutation.ResetOrder()
-	amuo.mutation.SetOrder(i)
+	amuo.mutation.SetOrder(u)
 	return amuo
 }
 
 // SetNillableOrder sets the "order" field if the given value is not nil.
-func (amuo *AdminMenuUpdateOne) SetNillableOrder(i *int) *AdminMenuUpdateOne {
-	if i != nil {
-		amuo.SetOrder(*i)
+func (amuo *AdminMenuUpdateOne) SetNillableOrder(u *uint16) *AdminMenuUpdateOne {
+	if u != nil {
+		amuo.SetOrder(*u)
 	}
 	return amuo
 }
 
-// AddOrder adds i to the "order" field.
-func (amuo *AdminMenuUpdateOne) AddOrder(i int) *AdminMenuUpdateOne {
-	amuo.mutation.AddOrder(i)
+// AddOrder adds u to the "order" field.
+func (amuo *AdminMenuUpdateOne) AddOrder(u int16) *AdminMenuUpdateOne {
+	amuo.mutation.AddOrder(u)
 	return amuo
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (amuo *AdminMenuUpdateOne) SetCreatedAt(t time.Time) *AdminMenuUpdateOne {
-	amuo.mutation.SetCreatedAt(t)
+func (amuo *AdminMenuUpdateOne) SetCreatedAt(i int) *AdminMenuUpdateOne {
+	amuo.mutation.ResetCreatedAt()
+	amuo.mutation.SetCreatedAt(i)
 	return amuo
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (amuo *AdminMenuUpdateOne) SetNillableCreatedAt(t *time.Time) *AdminMenuUpdateOne {
-	if t != nil {
-		amuo.SetCreatedAt(*t)
+func (amuo *AdminMenuUpdateOne) SetNillableCreatedAt(i *int) *AdminMenuUpdateOne {
+	if i != nil {
+		amuo.SetCreatedAt(*i)
 	}
 	return amuo
 }
 
+// AddCreatedAt adds i to the "created_at" field.
+func (amuo *AdminMenuUpdateOne) AddCreatedAt(i int) *AdminMenuUpdateOne {
+	amuo.mutation.AddCreatedAt(i)
+	return amuo
+}
+
 // SetUpdatedAt sets the "updated_at" field.
-func (amuo *AdminMenuUpdateOne) SetUpdatedAt(t time.Time) *AdminMenuUpdateOne {
-	amuo.mutation.SetUpdatedAt(t)
+func (amuo *AdminMenuUpdateOne) SetUpdatedAt(i int) *AdminMenuUpdateOne {
+	amuo.mutation.ResetUpdatedAt()
+	amuo.mutation.SetUpdatedAt(i)
+	return amuo
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (amuo *AdminMenuUpdateOne) AddUpdatedAt(i int) *AdminMenuUpdateOne {
+	amuo.mutation.AddUpdatedAt(i)
+	return amuo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (amuo *AdminMenuUpdateOne) SetDeletedAt(i int) *AdminMenuUpdateOne {
+	amuo.mutation.ResetDeletedAt()
+	amuo.mutation.SetDeletedAt(i)
+	return amuo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (amuo *AdminMenuUpdateOne) SetNillableDeletedAt(i *int) *AdminMenuUpdateOne {
+	if i != nil {
+		amuo.SetDeletedAt(*i)
+	}
+	return amuo
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (amuo *AdminMenuUpdateOne) AddDeletedAt(i int) *AdminMenuUpdateOne {
+	amuo.mutation.AddDeletedAt(i)
+	return amuo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (amuo *AdminMenuUpdateOne) ClearDeletedAt() *AdminMenuUpdateOne {
+	amuo.mutation.ClearDeletedAt()
 	return amuo
 }
 
@@ -393,16 +489,31 @@ func (amuo *AdminMenuUpdateOne) sqlSave(ctx context.Context) (_node *AdminMenu, 
 		_spec.SetField(adminmenu.FieldPath, field.TypeString, value)
 	}
 	if value, ok := amuo.mutation.Order(); ok {
-		_spec.SetField(adminmenu.FieldOrder, field.TypeInt, value)
+		_spec.SetField(adminmenu.FieldOrder, field.TypeUint16, value)
 	}
 	if value, ok := amuo.mutation.AddedOrder(); ok {
-		_spec.AddField(adminmenu.FieldOrder, field.TypeInt, value)
+		_spec.AddField(adminmenu.FieldOrder, field.TypeUint16, value)
 	}
 	if value, ok := amuo.mutation.CreatedAt(); ok {
-		_spec.SetField(adminmenu.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminmenu.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := amuo.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminmenu.FieldCreatedAt, field.TypeInt, value)
 	}
 	if value, ok := amuo.mutation.UpdatedAt(); ok {
-		_spec.SetField(adminmenu.FieldUpdatedAt, field.TypeTime, value)
+		_spec.SetField(adminmenu.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := amuo.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(adminmenu.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := amuo.mutation.DeletedAt(); ok {
+		_spec.SetField(adminmenu.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := amuo.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(adminmenu.FieldDeletedAt, field.TypeInt, value)
+	}
+	if amuo.mutation.DeletedAtCleared() {
+		_spec.ClearField(adminmenu.FieldDeletedAt, field.TypeInt)
 	}
 	_node = &AdminMenu{config: amuo.config}
 	_spec.Assign = _node.assignValues

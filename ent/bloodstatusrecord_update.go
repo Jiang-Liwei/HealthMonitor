@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"healthmonitor/ent/bloodstatusrecord"
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -44,16 +43,23 @@ func (bsru *BloodStatusRecordUpdate) SetNillableUserID(u *uuid.UUID) *BloodStatu
 }
 
 // SetRecordDate sets the "record_date" field.
-func (bsru *BloodStatusRecordUpdate) SetRecordDate(t time.Time) *BloodStatusRecordUpdate {
-	bsru.mutation.SetRecordDate(t)
+func (bsru *BloodStatusRecordUpdate) SetRecordDate(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.ResetRecordDate()
+	bsru.mutation.SetRecordDate(i)
 	return bsru
 }
 
 // SetNillableRecordDate sets the "record_date" field if the given value is not nil.
-func (bsru *BloodStatusRecordUpdate) SetNillableRecordDate(t *time.Time) *BloodStatusRecordUpdate {
-	if t != nil {
-		bsru.SetRecordDate(*t)
+func (bsru *BloodStatusRecordUpdate) SetNillableRecordDate(i *int) *BloodStatusRecordUpdate {
+	if i != nil {
+		bsru.SetRecordDate(*i)
 	}
+	return bsru
+}
+
+// AddRecordDate adds i to the "record_date" field.
+func (bsru *BloodStatusRecordUpdate) AddRecordDate(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.AddRecordDate(i)
 	return bsru
 }
 
@@ -148,6 +154,67 @@ func (bsru *BloodStatusRecordUpdate) AddPulse(f float64) *BloodStatusRecordUpdat
 	return bsru
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (bsru *BloodStatusRecordUpdate) SetCreatedAt(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.ResetCreatedAt()
+	bsru.mutation.SetCreatedAt(i)
+	return bsru
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (bsru *BloodStatusRecordUpdate) SetNillableCreatedAt(i *int) *BloodStatusRecordUpdate {
+	if i != nil {
+		bsru.SetCreatedAt(*i)
+	}
+	return bsru
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (bsru *BloodStatusRecordUpdate) AddCreatedAt(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.AddCreatedAt(i)
+	return bsru
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bsru *BloodStatusRecordUpdate) SetUpdatedAt(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.ResetUpdatedAt()
+	bsru.mutation.SetUpdatedAt(i)
+	return bsru
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (bsru *BloodStatusRecordUpdate) AddUpdatedAt(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.AddUpdatedAt(i)
+	return bsru
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (bsru *BloodStatusRecordUpdate) SetDeletedAt(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.ResetDeletedAt()
+	bsru.mutation.SetDeletedAt(i)
+	return bsru
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (bsru *BloodStatusRecordUpdate) SetNillableDeletedAt(i *int) *BloodStatusRecordUpdate {
+	if i != nil {
+		bsru.SetDeletedAt(*i)
+	}
+	return bsru
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (bsru *BloodStatusRecordUpdate) AddDeletedAt(i int) *BloodStatusRecordUpdate {
+	bsru.mutation.AddDeletedAt(i)
+	return bsru
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (bsru *BloodStatusRecordUpdate) ClearDeletedAt() *BloodStatusRecordUpdate {
+	bsru.mutation.ClearDeletedAt()
+	return bsru
+}
+
 // Mutation returns the BloodStatusRecordMutation object of the builder.
 func (bsru *BloodStatusRecordUpdate) Mutation() *BloodStatusRecordMutation {
 	return bsru.mutation
@@ -155,6 +222,7 @@ func (bsru *BloodStatusRecordUpdate) Mutation() *BloodStatusRecordMutation {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (bsru *BloodStatusRecordUpdate) Save(ctx context.Context) (int, error) {
+	bsru.defaults()
 	return withHooks(ctx, bsru.sqlSave, bsru.mutation, bsru.hooks)
 }
 
@@ -177,6 +245,14 @@ func (bsru *BloodStatusRecordUpdate) Exec(ctx context.Context) error {
 func (bsru *BloodStatusRecordUpdate) ExecX(ctx context.Context) {
 	if err := bsru.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (bsru *BloodStatusRecordUpdate) defaults() {
+	if _, ok := bsru.mutation.UpdatedAt(); !ok {
+		v := bloodstatusrecord.UpdateDefaultUpdatedAt()
+		bsru.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -211,7 +287,10 @@ func (bsru *BloodStatusRecordUpdate) sqlSave(ctx context.Context) (n int, err er
 		_spec.SetField(bloodstatusrecord.FieldUserID, field.TypeUUID, value)
 	}
 	if value, ok := bsru.mutation.RecordDate(); ok {
-		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeTime, value)
+		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
+	}
+	if value, ok := bsru.mutation.AddedRecordDate(); ok {
+		_spec.AddField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
 	}
 	if value, ok := bsru.mutation.TimeOfDay(); ok {
 		_spec.SetField(bloodstatusrecord.FieldTimeOfDay, field.TypeEnum, value)
@@ -236,6 +315,27 @@ func (bsru *BloodStatusRecordUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if value, ok := bsru.mutation.AddedPulse(); ok {
 		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
+	}
+	if value, ok := bsru.mutation.CreatedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsru.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsru.mutation.UpdatedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsru.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(bloodstatusrecord.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsru.mutation.DeletedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := bsru.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(bloodstatusrecord.FieldDeletedAt, field.TypeInt, value)
+	}
+	if bsru.mutation.DeletedAtCleared() {
+		_spec.ClearField(bloodstatusrecord.FieldDeletedAt, field.TypeInt)
 	}
 	if n, err = sqlgraph.UpdateNodes(ctx, bsru.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
@@ -272,16 +372,23 @@ func (bsruo *BloodStatusRecordUpdateOne) SetNillableUserID(u *uuid.UUID) *BloodS
 }
 
 // SetRecordDate sets the "record_date" field.
-func (bsruo *BloodStatusRecordUpdateOne) SetRecordDate(t time.Time) *BloodStatusRecordUpdateOne {
-	bsruo.mutation.SetRecordDate(t)
+func (bsruo *BloodStatusRecordUpdateOne) SetRecordDate(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.ResetRecordDate()
+	bsruo.mutation.SetRecordDate(i)
 	return bsruo
 }
 
 // SetNillableRecordDate sets the "record_date" field if the given value is not nil.
-func (bsruo *BloodStatusRecordUpdateOne) SetNillableRecordDate(t *time.Time) *BloodStatusRecordUpdateOne {
-	if t != nil {
-		bsruo.SetRecordDate(*t)
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableRecordDate(i *int) *BloodStatusRecordUpdateOne {
+	if i != nil {
+		bsruo.SetRecordDate(*i)
 	}
+	return bsruo
+}
+
+// AddRecordDate adds i to the "record_date" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddRecordDate(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddRecordDate(i)
 	return bsruo
 }
 
@@ -376,6 +483,67 @@ func (bsruo *BloodStatusRecordUpdateOne) AddPulse(f float64) *BloodStatusRecordU
 	return bsruo
 }
 
+// SetCreatedAt sets the "created_at" field.
+func (bsruo *BloodStatusRecordUpdateOne) SetCreatedAt(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.ResetCreatedAt()
+	bsruo.mutation.SetCreatedAt(i)
+	return bsruo
+}
+
+// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableCreatedAt(i *int) *BloodStatusRecordUpdateOne {
+	if i != nil {
+		bsruo.SetCreatedAt(*i)
+	}
+	return bsruo
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddCreatedAt(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddCreatedAt(i)
+	return bsruo
+}
+
+// SetUpdatedAt sets the "updated_at" field.
+func (bsruo *BloodStatusRecordUpdateOne) SetUpdatedAt(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.ResetUpdatedAt()
+	bsruo.mutation.SetUpdatedAt(i)
+	return bsruo
+}
+
+// AddUpdatedAt adds i to the "updated_at" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddUpdatedAt(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddUpdatedAt(i)
+	return bsruo
+}
+
+// SetDeletedAt sets the "deleted_at" field.
+func (bsruo *BloodStatusRecordUpdateOne) SetDeletedAt(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.ResetDeletedAt()
+	bsruo.mutation.SetDeletedAt(i)
+	return bsruo
+}
+
+// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableDeletedAt(i *int) *BloodStatusRecordUpdateOne {
+	if i != nil {
+		bsruo.SetDeletedAt(*i)
+	}
+	return bsruo
+}
+
+// AddDeletedAt adds i to the "deleted_at" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddDeletedAt(i int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddDeletedAt(i)
+	return bsruo
+}
+
+// ClearDeletedAt clears the value of the "deleted_at" field.
+func (bsruo *BloodStatusRecordUpdateOne) ClearDeletedAt() *BloodStatusRecordUpdateOne {
+	bsruo.mutation.ClearDeletedAt()
+	return bsruo
+}
+
 // Mutation returns the BloodStatusRecordMutation object of the builder.
 func (bsruo *BloodStatusRecordUpdateOne) Mutation() *BloodStatusRecordMutation {
 	return bsruo.mutation
@@ -396,6 +564,7 @@ func (bsruo *BloodStatusRecordUpdateOne) Select(field string, fields ...string) 
 
 // Save executes the query and returns the updated BloodStatusRecord entity.
 func (bsruo *BloodStatusRecordUpdateOne) Save(ctx context.Context) (*BloodStatusRecord, error) {
+	bsruo.defaults()
 	return withHooks(ctx, bsruo.sqlSave, bsruo.mutation, bsruo.hooks)
 }
 
@@ -418,6 +587,14 @@ func (bsruo *BloodStatusRecordUpdateOne) Exec(ctx context.Context) error {
 func (bsruo *BloodStatusRecordUpdateOne) ExecX(ctx context.Context) {
 	if err := bsruo.Exec(ctx); err != nil {
 		panic(err)
+	}
+}
+
+// defaults sets the default values of the builder before save.
+func (bsruo *BloodStatusRecordUpdateOne) defaults() {
+	if _, ok := bsruo.mutation.UpdatedAt(); !ok {
+		v := bloodstatusrecord.UpdateDefaultUpdatedAt()
+		bsruo.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -469,7 +646,10 @@ func (bsruo *BloodStatusRecordUpdateOne) sqlSave(ctx context.Context) (_node *Bl
 		_spec.SetField(bloodstatusrecord.FieldUserID, field.TypeUUID, value)
 	}
 	if value, ok := bsruo.mutation.RecordDate(); ok {
-		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeTime, value)
+		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
+	}
+	if value, ok := bsruo.mutation.AddedRecordDate(); ok {
+		_spec.AddField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
 	}
 	if value, ok := bsruo.mutation.TimeOfDay(); ok {
 		_spec.SetField(bloodstatusrecord.FieldTimeOfDay, field.TypeEnum, value)
@@ -494,6 +674,27 @@ func (bsruo *BloodStatusRecordUpdateOne) sqlSave(ctx context.Context) (_node *Bl
 	}
 	if value, ok := bsruo.mutation.AddedPulse(); ok {
 		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
+	}
+	if value, ok := bsruo.mutation.CreatedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsruo.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsruo.mutation.UpdatedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsruo.mutation.AddedUpdatedAt(); ok {
+		_spec.AddField(bloodstatusrecord.FieldUpdatedAt, field.TypeInt, value)
+	}
+	if value, ok := bsruo.mutation.DeletedAt(); ok {
+		_spec.SetField(bloodstatusrecord.FieldDeletedAt, field.TypeInt, value)
+	}
+	if value, ok := bsruo.mutation.AddedDeletedAt(); ok {
+		_spec.AddField(bloodstatusrecord.FieldDeletedAt, field.TypeInt, value)
+	}
+	if bsruo.mutation.DeletedAtCleared() {
+		_spec.ClearField(bloodstatusrecord.FieldDeletedAt, field.TypeInt)
 	}
 	_node = &BloodStatusRecord{config: bsruo.config}
 	_spec.Assign = _node.assignValues

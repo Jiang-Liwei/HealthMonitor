@@ -3,6 +3,7 @@
 package ent
 
 import (
+	"healthmonitor/ent/adminjwtblacklist"
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminmenu"
 	"healthmonitor/ent/adminpermission"
@@ -13,7 +14,6 @@ import (
 	"healthmonitor/ent/ingredients"
 	"healthmonitor/ent/nutrient"
 	"healthmonitor/ent/schema"
-	"time"
 
 	"github.com/google/uuid"
 )
@@ -22,12 +22,18 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	adminjwtblacklistFields := schema.AdminJWTBlacklist{}.Fields()
+	_ = adminjwtblacklistFields
+	// adminjwtblacklistDescRevokedAt is the schema descriptor for revoked_at field.
+	adminjwtblacklistDescRevokedAt := adminjwtblacklistFields[2].Descriptor()
+	// adminjwtblacklist.DefaultRevokedAt holds the default value on creation for the revoked_at field.
+	adminjwtblacklist.DefaultRevokedAt = adminjwtblacklistDescRevokedAt.Default.(int)
 	adminlogFields := schema.AdminLog{}.Fields()
 	_ = adminlogFields
 	// adminlogDescCreatedAt is the schema descriptor for created_at field.
 	adminlogDescCreatedAt := adminlogFields[3].Descriptor()
 	// adminlog.DefaultCreatedAt holds the default value on creation for the created_at field.
-	adminlog.DefaultCreatedAt = adminlogDescCreatedAt.Default.(func() time.Time)
+	adminlog.DefaultCreatedAt = adminlogDescCreatedAt.Default.(int)
 	// adminlogDescID is the schema descriptor for id field.
 	adminlogDescID := adminlogFields[0].Descriptor()
 	// adminlog.DefaultID holds the default value on creation for the id field.
@@ -37,17 +43,17 @@ func init() {
 	// adminmenuDescOrder is the schema descriptor for order field.
 	adminmenuDescOrder := adminmenuFields[4].Descriptor()
 	// adminmenu.DefaultOrder holds the default value on creation for the order field.
-	adminmenu.DefaultOrder = adminmenuDescOrder.Default.(int)
+	adminmenu.DefaultOrder = adminmenuDescOrder.Default.(uint16)
 	// adminmenuDescCreatedAt is the schema descriptor for created_at field.
 	adminmenuDescCreatedAt := adminmenuFields[5].Descriptor()
 	// adminmenu.DefaultCreatedAt holds the default value on creation for the created_at field.
-	adminmenu.DefaultCreatedAt = adminmenuDescCreatedAt.Default.(func() time.Time)
+	adminmenu.DefaultCreatedAt = adminmenuDescCreatedAt.Default.(int)
 	// adminmenuDescUpdatedAt is the schema descriptor for updated_at field.
 	adminmenuDescUpdatedAt := adminmenuFields[6].Descriptor()
 	// adminmenu.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	adminmenu.DefaultUpdatedAt = adminmenuDescUpdatedAt.Default.(func() time.Time)
+	adminmenu.DefaultUpdatedAt = adminmenuDescUpdatedAt.Default.(int)
 	// adminmenu.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	adminmenu.UpdateDefaultUpdatedAt = adminmenuDescUpdatedAt.UpdateDefault.(func() time.Time)
+	adminmenu.UpdateDefaultUpdatedAt = adminmenuDescUpdatedAt.UpdateDefault.(func() int)
 	// adminmenuDescID is the schema descriptor for id field.
 	adminmenuDescID := adminmenuFields[0].Descriptor()
 	// adminmenu.DefaultID holds the default value on creation for the id field.
@@ -57,13 +63,13 @@ func init() {
 	// adminpermissionDescCreatedAt is the schema descriptor for created_at field.
 	adminpermissionDescCreatedAt := adminpermissionFields[5].Descriptor()
 	// adminpermission.DefaultCreatedAt holds the default value on creation for the created_at field.
-	adminpermission.DefaultCreatedAt = adminpermissionDescCreatedAt.Default.(func() time.Time)
+	adminpermission.DefaultCreatedAt = adminpermissionDescCreatedAt.Default.(int)
 	// adminpermissionDescUpdatedAt is the schema descriptor for updated_at field.
 	adminpermissionDescUpdatedAt := adminpermissionFields[6].Descriptor()
 	// adminpermission.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	adminpermission.DefaultUpdatedAt = adminpermissionDescUpdatedAt.Default.(func() time.Time)
+	adminpermission.DefaultUpdatedAt = adminpermissionDescUpdatedAt.Default.(int)
 	// adminpermission.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	adminpermission.UpdateDefaultUpdatedAt = adminpermissionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	adminpermission.UpdateDefaultUpdatedAt = adminpermissionDescUpdatedAt.UpdateDefault.(func() int)
 	// adminpermissionDescID is the schema descriptor for id field.
 	adminpermissionDescID := adminpermissionFields[0].Descriptor()
 	// adminpermission.DefaultID holds the default value on creation for the id field.
@@ -73,13 +79,13 @@ func init() {
 	// adminrolesDescCreatedAt is the schema descriptor for created_at field.
 	adminrolesDescCreatedAt := adminrolesFields[3].Descriptor()
 	// adminroles.DefaultCreatedAt holds the default value on creation for the created_at field.
-	adminroles.DefaultCreatedAt = adminrolesDescCreatedAt.Default.(func() time.Time)
+	adminroles.DefaultCreatedAt = adminrolesDescCreatedAt.Default.(int)
 	// adminrolesDescUpdatedAt is the schema descriptor for updated_at field.
 	adminrolesDescUpdatedAt := adminrolesFields[4].Descriptor()
 	// adminroles.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	adminroles.DefaultUpdatedAt = adminrolesDescUpdatedAt.Default.(func() time.Time)
+	adminroles.DefaultUpdatedAt = adminrolesDescUpdatedAt.Default.(int)
 	// adminroles.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	adminroles.UpdateDefaultUpdatedAt = adminrolesDescUpdatedAt.UpdateDefault.(func() time.Time)
+	adminroles.UpdateDefaultUpdatedAt = adminrolesDescUpdatedAt.UpdateDefault.(func() int)
 	// adminrolesDescID is the schema descriptor for id field.
 	adminrolesDescID := adminrolesFields[0].Descriptor()
 	// adminroles.DefaultID holds the default value on creation for the id field.
@@ -93,19 +99,29 @@ func init() {
 	// adminuserDescCreatedAt is the schema descriptor for created_at field.
 	adminuserDescCreatedAt := adminuserFields[7].Descriptor()
 	// adminuser.DefaultCreatedAt holds the default value on creation for the created_at field.
-	adminuser.DefaultCreatedAt = adminuserDescCreatedAt.Default.(func() time.Time)
+	adminuser.DefaultCreatedAt = adminuserDescCreatedAt.Default.(int)
 	// adminuserDescUpdatedAt is the schema descriptor for updated_at field.
 	adminuserDescUpdatedAt := adminuserFields[8].Descriptor()
 	// adminuser.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	adminuser.DefaultUpdatedAt = adminuserDescUpdatedAt.Default.(func() time.Time)
+	adminuser.DefaultUpdatedAt = adminuserDescUpdatedAt.Default.(int)
 	// adminuser.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	adminuser.UpdateDefaultUpdatedAt = adminuserDescUpdatedAt.UpdateDefault.(func() time.Time)
+	adminuser.UpdateDefaultUpdatedAt = adminuserDescUpdatedAt.UpdateDefault.(func() int)
 	// adminuserDescID is the schema descriptor for id field.
 	adminuserDescID := adminuserFields[0].Descriptor()
 	// adminuser.DefaultID holds the default value on creation for the id field.
 	adminuser.DefaultID = adminuserDescID.Default.(func() uuid.UUID)
 	bloodstatusrecordFields := schema.BloodStatusRecord{}.Fields()
 	_ = bloodstatusrecordFields
+	// bloodstatusrecordDescCreatedAt is the schema descriptor for created_at field.
+	bloodstatusrecordDescCreatedAt := bloodstatusrecordFields[8].Descriptor()
+	// bloodstatusrecord.DefaultCreatedAt holds the default value on creation for the created_at field.
+	bloodstatusrecord.DefaultCreatedAt = bloodstatusrecordDescCreatedAt.Default.(int)
+	// bloodstatusrecordDescUpdatedAt is the schema descriptor for updated_at field.
+	bloodstatusrecordDescUpdatedAt := bloodstatusrecordFields[9].Descriptor()
+	// bloodstatusrecord.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	bloodstatusrecord.DefaultUpdatedAt = bloodstatusrecordDescUpdatedAt.Default.(int)
+	// bloodstatusrecord.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	bloodstatusrecord.UpdateDefaultUpdatedAt = bloodstatusrecordDescUpdatedAt.UpdateDefault.(func() int)
 	// bloodstatusrecordDescID is the schema descriptor for id field.
 	bloodstatusrecordDescID := bloodstatusrecordFields[0].Descriptor()
 	// bloodstatusrecord.DefaultID holds the default value on creation for the id field.

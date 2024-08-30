@@ -9,7 +9,6 @@ import (
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminuser"
 	"healthmonitor/ent/predicate"
-	"time"
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
@@ -59,16 +58,23 @@ func (alu *AdminLogUpdate) SetNillableIPAddress(s *string) *AdminLogUpdate {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (alu *AdminLogUpdate) SetCreatedAt(t time.Time) *AdminLogUpdate {
-	alu.mutation.SetCreatedAt(t)
+func (alu *AdminLogUpdate) SetCreatedAt(i int) *AdminLogUpdate {
+	alu.mutation.ResetCreatedAt()
+	alu.mutation.SetCreatedAt(i)
 	return alu
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (alu *AdminLogUpdate) SetNillableCreatedAt(t *time.Time) *AdminLogUpdate {
-	if t != nil {
-		alu.SetCreatedAt(*t)
+func (alu *AdminLogUpdate) SetNillableCreatedAt(i *int) *AdminLogUpdate {
+	if i != nil {
+		alu.SetCreatedAt(*i)
 	}
+	return alu
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (alu *AdminLogUpdate) AddCreatedAt(i int) *AdminLogUpdate {
+	alu.mutation.AddCreatedAt(i)
 	return alu
 }
 
@@ -145,7 +151,10 @@ func (alu *AdminLogUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		_spec.SetField(adminlog.FieldIPAddress, field.TypeString, value)
 	}
 	if value, ok := alu.mutation.CreatedAt(); ok {
-		_spec.SetField(adminlog.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminlog.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := alu.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminlog.FieldCreatedAt, field.TypeInt, value)
 	}
 	if alu.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -225,16 +234,23 @@ func (aluo *AdminLogUpdateOne) SetNillableIPAddress(s *string) *AdminLogUpdateOn
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (aluo *AdminLogUpdateOne) SetCreatedAt(t time.Time) *AdminLogUpdateOne {
-	aluo.mutation.SetCreatedAt(t)
+func (aluo *AdminLogUpdateOne) SetCreatedAt(i int) *AdminLogUpdateOne {
+	aluo.mutation.ResetCreatedAt()
+	aluo.mutation.SetCreatedAt(i)
 	return aluo
 }
 
 // SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (aluo *AdminLogUpdateOne) SetNillableCreatedAt(t *time.Time) *AdminLogUpdateOne {
-	if t != nil {
-		aluo.SetCreatedAt(*t)
+func (aluo *AdminLogUpdateOne) SetNillableCreatedAt(i *int) *AdminLogUpdateOne {
+	if i != nil {
+		aluo.SetCreatedAt(*i)
 	}
+	return aluo
+}
+
+// AddCreatedAt adds i to the "created_at" field.
+func (aluo *AdminLogUpdateOne) AddCreatedAt(i int) *AdminLogUpdateOne {
+	aluo.mutation.AddCreatedAt(i)
 	return aluo
 }
 
@@ -341,7 +357,10 @@ func (aluo *AdminLogUpdateOne) sqlSave(ctx context.Context) (_node *AdminLog, er
 		_spec.SetField(adminlog.FieldIPAddress, field.TypeString, value)
 	}
 	if value, ok := aluo.mutation.CreatedAt(); ok {
-		_spec.SetField(adminlog.FieldCreatedAt, field.TypeTime, value)
+		_spec.SetField(adminlog.FieldCreatedAt, field.TypeInt, value)
+	}
+	if value, ok := aluo.mutation.AddedCreatedAt(); ok {
+		_spec.AddField(adminlog.FieldCreatedAt, field.TypeInt, value)
 	}
 	if aluo.mutation.UserCleared() {
 		edge := &sqlgraph.EdgeSpec{
