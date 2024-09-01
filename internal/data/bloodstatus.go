@@ -8,6 +8,7 @@ import (
 	"healthmonitor/ent"
 	"healthmonitor/ent/bloodstatusrecord"
 	"healthmonitor/internal/biz"
+	"healthmonitor/internal/common"
 )
 
 type bloodStatusRepo struct {
@@ -81,7 +82,7 @@ func (bsr *bloodStatusRepo) FindByID(ctx context.Context, id uuid.UUID) (*ent.Bl
 	return p, nil
 }
 
-func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, page int, pageSize int) (*PageData[*ent.BloodStatusRecord], error) {
+func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, page int, pageSize int) (*common.PageData[*ent.BloodStatusRecord], error) {
 
 	userID, err := uuid.Parse(UserIDUUID)
 	if err != nil {
@@ -106,6 +107,5 @@ func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, page int, pageSize
 	if err != nil {
 		return nil, err
 	}
-
-	return NewPageData[*ent.BloodStatusRecord](page, pageSize, totalCount, records), nil
+	return common.NewPageData(page, pageSize, totalCount, records), nil
 }

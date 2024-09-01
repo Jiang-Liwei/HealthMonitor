@@ -110,15 +110,14 @@ func (s *BloodStatusService) ListBloodStatus(ctx context.Context, req *pb.ListBl
 	s.log.Infof("input data %v", req)
 
 	// 调用 Usecase 层的方法获取数据
-	pageFunc, data, err := s.uc.List(ctx, int(req.Page), int(req.PageSize))
+	data, err := s.uc.List(ctx, int(req.Page), int(req.PageSize))
 
 	if err != nil {
 		return nil, err
 	}
-	pageData := pageFunc(data)
 	// 转换数据为 Protobuf 格式
 	replyData := make([]*pb.BloodStatusRecord, 0)
-	for _, v := range pageData.Data {
+	for _, v := range data.Data {
 		replyData = append(replyData, &pb.BloodStatusRecord{
 			RecordDate:        uint64(v.RecordDate),
 			TimeOfDay:         v.TimeOfDay.String(),
@@ -132,10 +131,10 @@ func (s *BloodStatusService) ListBloodStatus(ctx context.Context, req *pb.ListBl
 	// 构造并返回分页响应
 	return &pb.ListBloodStatusReply{
 		Data: &pb.PageData{
-			Page:       int64(pageData.Page),
-			PageSize:   int64(pageData.PageSize),
-			TotalPages: int64(pageData.TotalPages),
-			TotalCount: int64(pageData.TotalCount),
+			Page:       int64(data.Page),
+			PageSize:   int64(data.PageSize),
+			TotalPages: int64(data.TotalPages),
+			TotalCount: int64(data.TotalCount),
 			Data:       replyData, // 注意这里使用 replyData
 		},
 	}, nil

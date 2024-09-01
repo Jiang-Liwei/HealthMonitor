@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"healthmonitor/ent"
 	"healthmonitor/ent/bloodstatusrecord"
-	"healthmonitor/internal/data"
+	"healthmonitor/internal/common"
 )
 
 type BloodStatus struct {
@@ -25,7 +25,7 @@ type BloodStatusRepo interface {
 	Update(context.Context, uuid.UUID, *BloodStatus) (*ent.BloodStatusRecord, error)
 	DeleteBloodStatus(context.Context, uuid.UUID) error
 	FindByID(context.Context, uuid.UUID) (*ent.BloodStatusRecord, error)
-	ListByUserID(context.Context, int, int) (*data.PageData[*ent.BloodStatusRecord], error)
+	ListByUserID(context.Context, int, int) (*common.PageData[*ent.BloodStatusRecord], error)
 }
 
 // BloodStatusUsecase is a Greeter usecase.
@@ -63,6 +63,7 @@ func (uc *BloodStatusUsecase) FindByID(ctx context.Context, id uuid.UUID) (*ent.
 }
 
 // List returns the BloodStatus.
-func (uc *BloodStatusUsecase) List(ctx context.Context, page int, pageSize int) (*data.PageData[*ent.BloodStatusRecord], error) {
-	return uc.repo.ListByUserID(ctx, page, pageSize)
+func (uc *BloodStatusUsecase) List(ctx context.Context, page int, pageSize int) (*common.PageData[*ent.BloodStatusRecord], error) {
+	records, _ := uc.repo.ListByUserID(ctx, page, pageSize)
+	return records, nil
 }

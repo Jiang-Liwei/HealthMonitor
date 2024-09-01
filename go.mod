@@ -1,8 +1,6 @@
 module healthmonitor
 
-go 1.21
-
-toolchain go1.22.6
+go 1.22
 
 require (
 	entgo.io/ent v0.14.0
