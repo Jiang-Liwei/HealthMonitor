@@ -1,6 +1,6 @@
 module healthmonitor
 
-go 1.22
+go 1.23
 
 require (
 	entgo.io/ent v0.14.0
@@ -9,6 +9,7 @@ require (
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
+	github.com/gorilla/handlers v1.5.2
 	github.com/redis/go-redis/extra/redisotel/v9 v9.5.3
 	github.com/redis/go-redis/v9 v9.6.1
 	go.opentelemetry.io/otel v1.24.0
@@ -27,6 +28,7 @@ require (
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
+	github.com/felixge/httpsnoop v1.0.3 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-kratos/aegis v0.2.0 // indirect
 	github.com/go-logr/logr v1.4.1 // indirect

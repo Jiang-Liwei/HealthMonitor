@@ -5,6 +5,7 @@ package server
 import (
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
 	"github.com/go-kratos/kratos/v2/transport/http"
+	"github.com/gorilla/handlers"
 	bloodStatusV1 "healthmonitor/api/bloodstatus/v1"
 	indexV1 "healthmonitor/api/index/v1"
 )
@@ -25,6 +26,11 @@ func NewHTTPServer(cfg HTTPServerConfig) *http.Server {
 	if cfg.Conf.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(cfg.Conf.Http.Timeout.AsDuration()))
 	}
+	opts = append(opts, http.Filter(handlers.CORS(
+		handlers.AllowedOrigins([]string{"*"}),
+		handlers.AllowedMethods([]string{"GET", "POST"}),
+	)))
+
 	srv := http.NewServer(opts...)
 	indexV1.RegisterIndexHTTPServer(srv, cfg.Index)
 	bloodStatusV1.RegisterBloodStatusHTTPServer(srv, cfg.BloodStatus)
