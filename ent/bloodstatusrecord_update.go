@@ -43,23 +43,23 @@ func (bsru *BloodStatusRecordUpdate) SetNillableUserID(u *uuid.UUID) *BloodStatu
 }
 
 // SetRecordDate sets the "record_date" field.
-func (bsru *BloodStatusRecordUpdate) SetRecordDate(i int) *BloodStatusRecordUpdate {
+func (bsru *BloodStatusRecordUpdate) SetRecordDate(u uint) *BloodStatusRecordUpdate {
 	bsru.mutation.ResetRecordDate()
-	bsru.mutation.SetRecordDate(i)
+	bsru.mutation.SetRecordDate(u)
 	return bsru
 }
 
 // SetNillableRecordDate sets the "record_date" field if the given value is not nil.
-func (bsru *BloodStatusRecordUpdate) SetNillableRecordDate(i *int) *BloodStatusRecordUpdate {
-	if i != nil {
-		bsru.SetRecordDate(*i)
+func (bsru *BloodStatusRecordUpdate) SetNillableRecordDate(u *uint) *BloodStatusRecordUpdate {
+	if u != nil {
+		bsru.SetRecordDate(*u)
 	}
 	return bsru
 }
 
-// AddRecordDate adds i to the "record_date" field.
-func (bsru *BloodStatusRecordUpdate) AddRecordDate(i int) *BloodStatusRecordUpdate {
-	bsru.mutation.AddRecordDate(i)
+// AddRecordDate adds u to the "record_date" field.
+func (bsru *BloodStatusRecordUpdate) AddRecordDate(u int) *BloodStatusRecordUpdate {
+	bsru.mutation.AddRecordDate(u)
 	return bsru
 }
 
@@ -92,65 +92,65 @@ func (bsru *BloodStatusRecordUpdate) SetNillableBeforeAfterMeals(bam *bloodstatu
 }
 
 // SetSystolicPressure sets the "systolic_pressure" field.
-func (bsru *BloodStatusRecordUpdate) SetSystolicPressure(f float64) *BloodStatusRecordUpdate {
+func (bsru *BloodStatusRecordUpdate) SetSystolicPressure(u uint8) *BloodStatusRecordUpdate {
 	bsru.mutation.ResetSystolicPressure()
-	bsru.mutation.SetSystolicPressure(f)
+	bsru.mutation.SetSystolicPressure(u)
 	return bsru
 }
 
 // SetNillableSystolicPressure sets the "systolic_pressure" field if the given value is not nil.
-func (bsru *BloodStatusRecordUpdate) SetNillableSystolicPressure(f *float64) *BloodStatusRecordUpdate {
-	if f != nil {
-		bsru.SetSystolicPressure(*f)
+func (bsru *BloodStatusRecordUpdate) SetNillableSystolicPressure(u *uint8) *BloodStatusRecordUpdate {
+	if u != nil {
+		bsru.SetSystolicPressure(*u)
 	}
 	return bsru
 }
 
-// AddSystolicPressure adds f to the "systolic_pressure" field.
-func (bsru *BloodStatusRecordUpdate) AddSystolicPressure(f float64) *BloodStatusRecordUpdate {
-	bsru.mutation.AddSystolicPressure(f)
+// AddSystolicPressure adds u to the "systolic_pressure" field.
+func (bsru *BloodStatusRecordUpdate) AddSystolicPressure(u int8) *BloodStatusRecordUpdate {
+	bsru.mutation.AddSystolicPressure(u)
 	return bsru
 }
 
 // SetDiastolicPressure sets the "diastolic_pressure" field.
-func (bsru *BloodStatusRecordUpdate) SetDiastolicPressure(f float64) *BloodStatusRecordUpdate {
+func (bsru *BloodStatusRecordUpdate) SetDiastolicPressure(u uint8) *BloodStatusRecordUpdate {
 	bsru.mutation.ResetDiastolicPressure()
-	bsru.mutation.SetDiastolicPressure(f)
+	bsru.mutation.SetDiastolicPressure(u)
 	return bsru
 }
 
 // SetNillableDiastolicPressure sets the "diastolic_pressure" field if the given value is not nil.
-func (bsru *BloodStatusRecordUpdate) SetNillableDiastolicPressure(f *float64) *BloodStatusRecordUpdate {
-	if f != nil {
-		bsru.SetDiastolicPressure(*f)
+func (bsru *BloodStatusRecordUpdate) SetNillableDiastolicPressure(u *uint8) *BloodStatusRecordUpdate {
+	if u != nil {
+		bsru.SetDiastolicPressure(*u)
 	}
 	return bsru
 }
 
-// AddDiastolicPressure adds f to the "diastolic_pressure" field.
-func (bsru *BloodStatusRecordUpdate) AddDiastolicPressure(f float64) *BloodStatusRecordUpdate {
-	bsru.mutation.AddDiastolicPressure(f)
+// AddDiastolicPressure adds u to the "diastolic_pressure" field.
+func (bsru *BloodStatusRecordUpdate) AddDiastolicPressure(u int8) *BloodStatusRecordUpdate {
+	bsru.mutation.AddDiastolicPressure(u)
 	return bsru
 }
 
 // SetPulse sets the "pulse" field.
-func (bsru *BloodStatusRecordUpdate) SetPulse(f float64) *BloodStatusRecordUpdate {
+func (bsru *BloodStatusRecordUpdate) SetPulse(u uint8) *BloodStatusRecordUpdate {
 	bsru.mutation.ResetPulse()
-	bsru.mutation.SetPulse(f)
+	bsru.mutation.SetPulse(u)
 	return bsru
 }
 
 // SetNillablePulse sets the "pulse" field if the given value is not nil.
-func (bsru *BloodStatusRecordUpdate) SetNillablePulse(f *float64) *BloodStatusRecordUpdate {
-	if f != nil {
-		bsru.SetPulse(*f)
+func (bsru *BloodStatusRecordUpdate) SetNillablePulse(u *uint8) *BloodStatusRecordUpdate {
+	if u != nil {
+		bsru.SetPulse(*u)
 	}
 	return bsru
 }
 
-// AddPulse adds f to the "pulse" field.
-func (bsru *BloodStatusRecordUpdate) AddPulse(f float64) *BloodStatusRecordUpdate {
-	bsru.mutation.AddPulse(f)
+// AddPulse adds u to the "pulse" field.
+func (bsru *BloodStatusRecordUpdate) AddPulse(u int8) *BloodStatusRecordUpdate {
+	bsru.mutation.AddPulse(u)
 	return bsru
 }
 
@@ -287,10 +287,10 @@ func (bsru *BloodStatusRecordUpdate) sqlSave(ctx context.Context) (n int, err er
 		_spec.SetField(bloodstatusrecord.FieldUserID, field.TypeUUID, value)
 	}
 	if value, ok := bsru.mutation.RecordDate(); ok {
-		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
+		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeUint, value)
 	}
 	if value, ok := bsru.mutation.AddedRecordDate(); ok {
-		_spec.AddField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
+		_spec.AddField(bloodstatusrecord.FieldRecordDate, field.TypeUint, value)
 	}
 	if value, ok := bsru.mutation.TimeOfDay(); ok {
 		_spec.SetField(bloodstatusrecord.FieldTimeOfDay, field.TypeEnum, value)
@@ -299,22 +299,22 @@ func (bsru *BloodStatusRecordUpdate) sqlSave(ctx context.Context) (n int, err er
 		_spec.SetField(bloodstatusrecord.FieldBeforeAfterMeals, field.TypeEnum, value)
 	}
 	if value, ok := bsru.mutation.SystolicPressure(); ok {
-		_spec.SetField(bloodstatusrecord.FieldSystolicPressure, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldSystolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsru.mutation.AddedSystolicPressure(); ok {
-		_spec.AddField(bloodstatusrecord.FieldSystolicPressure, field.TypeFloat64, value)
+		_spec.AddField(bloodstatusrecord.FieldSystolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsru.mutation.DiastolicPressure(); ok {
-		_spec.SetField(bloodstatusrecord.FieldDiastolicPressure, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldDiastolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsru.mutation.AddedDiastolicPressure(); ok {
-		_spec.AddField(bloodstatusrecord.FieldDiastolicPressure, field.TypeFloat64, value)
+		_spec.AddField(bloodstatusrecord.FieldDiastolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsru.mutation.Pulse(); ok {
-		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
 	}
 	if value, ok := bsru.mutation.AddedPulse(); ok {
-		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
+		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
 	}
 	if value, ok := bsru.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
@@ -372,23 +372,23 @@ func (bsruo *BloodStatusRecordUpdateOne) SetNillableUserID(u *uuid.UUID) *BloodS
 }
 
 // SetRecordDate sets the "record_date" field.
-func (bsruo *BloodStatusRecordUpdateOne) SetRecordDate(i int) *BloodStatusRecordUpdateOne {
+func (bsruo *BloodStatusRecordUpdateOne) SetRecordDate(u uint) *BloodStatusRecordUpdateOne {
 	bsruo.mutation.ResetRecordDate()
-	bsruo.mutation.SetRecordDate(i)
+	bsruo.mutation.SetRecordDate(u)
 	return bsruo
 }
 
 // SetNillableRecordDate sets the "record_date" field if the given value is not nil.
-func (bsruo *BloodStatusRecordUpdateOne) SetNillableRecordDate(i *int) *BloodStatusRecordUpdateOne {
-	if i != nil {
-		bsruo.SetRecordDate(*i)
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableRecordDate(u *uint) *BloodStatusRecordUpdateOne {
+	if u != nil {
+		bsruo.SetRecordDate(*u)
 	}
 	return bsruo
 }
 
-// AddRecordDate adds i to the "record_date" field.
-func (bsruo *BloodStatusRecordUpdateOne) AddRecordDate(i int) *BloodStatusRecordUpdateOne {
-	bsruo.mutation.AddRecordDate(i)
+// AddRecordDate adds u to the "record_date" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddRecordDate(u int) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddRecordDate(u)
 	return bsruo
 }
 
@@ -421,65 +421,65 @@ func (bsruo *BloodStatusRecordUpdateOne) SetNillableBeforeAfterMeals(bam *bloods
 }
 
 // SetSystolicPressure sets the "systolic_pressure" field.
-func (bsruo *BloodStatusRecordUpdateOne) SetSystolicPressure(f float64) *BloodStatusRecordUpdateOne {
+func (bsruo *BloodStatusRecordUpdateOne) SetSystolicPressure(u uint8) *BloodStatusRecordUpdateOne {
 	bsruo.mutation.ResetSystolicPressure()
-	bsruo.mutation.SetSystolicPressure(f)
+	bsruo.mutation.SetSystolicPressure(u)
 	return bsruo
 }
 
 // SetNillableSystolicPressure sets the "systolic_pressure" field if the given value is not nil.
-func (bsruo *BloodStatusRecordUpdateOne) SetNillableSystolicPressure(f *float64) *BloodStatusRecordUpdateOne {
-	if f != nil {
-		bsruo.SetSystolicPressure(*f)
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableSystolicPressure(u *uint8) *BloodStatusRecordUpdateOne {
+	if u != nil {
+		bsruo.SetSystolicPressure(*u)
 	}
 	return bsruo
 }
 
-// AddSystolicPressure adds f to the "systolic_pressure" field.
-func (bsruo *BloodStatusRecordUpdateOne) AddSystolicPressure(f float64) *BloodStatusRecordUpdateOne {
-	bsruo.mutation.AddSystolicPressure(f)
+// AddSystolicPressure adds u to the "systolic_pressure" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddSystolicPressure(u int8) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddSystolicPressure(u)
 	return bsruo
 }
 
 // SetDiastolicPressure sets the "diastolic_pressure" field.
-func (bsruo *BloodStatusRecordUpdateOne) SetDiastolicPressure(f float64) *BloodStatusRecordUpdateOne {
+func (bsruo *BloodStatusRecordUpdateOne) SetDiastolicPressure(u uint8) *BloodStatusRecordUpdateOne {
 	bsruo.mutation.ResetDiastolicPressure()
-	bsruo.mutation.SetDiastolicPressure(f)
+	bsruo.mutation.SetDiastolicPressure(u)
 	return bsruo
 }
 
 // SetNillableDiastolicPressure sets the "diastolic_pressure" field if the given value is not nil.
-func (bsruo *BloodStatusRecordUpdateOne) SetNillableDiastolicPressure(f *float64) *BloodStatusRecordUpdateOne {
-	if f != nil {
-		bsruo.SetDiastolicPressure(*f)
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableDiastolicPressure(u *uint8) *BloodStatusRecordUpdateOne {
+	if u != nil {
+		bsruo.SetDiastolicPressure(*u)
 	}
 	return bsruo
 }
 
-// AddDiastolicPressure adds f to the "diastolic_pressure" field.
-func (bsruo *BloodStatusRecordUpdateOne) AddDiastolicPressure(f float64) *BloodStatusRecordUpdateOne {
-	bsruo.mutation.AddDiastolicPressure(f)
+// AddDiastolicPressure adds u to the "diastolic_pressure" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddDiastolicPressure(u int8) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddDiastolicPressure(u)
 	return bsruo
 }
 
 // SetPulse sets the "pulse" field.
-func (bsruo *BloodStatusRecordUpdateOne) SetPulse(f float64) *BloodStatusRecordUpdateOne {
+func (bsruo *BloodStatusRecordUpdateOne) SetPulse(u uint8) *BloodStatusRecordUpdateOne {
 	bsruo.mutation.ResetPulse()
-	bsruo.mutation.SetPulse(f)
+	bsruo.mutation.SetPulse(u)
 	return bsruo
 }
 
 // SetNillablePulse sets the "pulse" field if the given value is not nil.
-func (bsruo *BloodStatusRecordUpdateOne) SetNillablePulse(f *float64) *BloodStatusRecordUpdateOne {
-	if f != nil {
-		bsruo.SetPulse(*f)
+func (bsruo *BloodStatusRecordUpdateOne) SetNillablePulse(u *uint8) *BloodStatusRecordUpdateOne {
+	if u != nil {
+		bsruo.SetPulse(*u)
 	}
 	return bsruo
 }
 
-// AddPulse adds f to the "pulse" field.
-func (bsruo *BloodStatusRecordUpdateOne) AddPulse(f float64) *BloodStatusRecordUpdateOne {
-	bsruo.mutation.AddPulse(f)
+// AddPulse adds u to the "pulse" field.
+func (bsruo *BloodStatusRecordUpdateOne) AddPulse(u int8) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.AddPulse(u)
 	return bsruo
 }
 
@@ -646,10 +646,10 @@ func (bsruo *BloodStatusRecordUpdateOne) sqlSave(ctx context.Context) (_node *Bl
 		_spec.SetField(bloodstatusrecord.FieldUserID, field.TypeUUID, value)
 	}
 	if value, ok := bsruo.mutation.RecordDate(); ok {
-		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
+		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeUint, value)
 	}
 	if value, ok := bsruo.mutation.AddedRecordDate(); ok {
-		_spec.AddField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
+		_spec.AddField(bloodstatusrecord.FieldRecordDate, field.TypeUint, value)
 	}
 	if value, ok := bsruo.mutation.TimeOfDay(); ok {
 		_spec.SetField(bloodstatusrecord.FieldTimeOfDay, field.TypeEnum, value)
@@ -658,22 +658,22 @@ func (bsruo *BloodStatusRecordUpdateOne) sqlSave(ctx context.Context) (_node *Bl
 		_spec.SetField(bloodstatusrecord.FieldBeforeAfterMeals, field.TypeEnum, value)
 	}
 	if value, ok := bsruo.mutation.SystolicPressure(); ok {
-		_spec.SetField(bloodstatusrecord.FieldSystolicPressure, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldSystolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsruo.mutation.AddedSystolicPressure(); ok {
-		_spec.AddField(bloodstatusrecord.FieldSystolicPressure, field.TypeFloat64, value)
+		_spec.AddField(bloodstatusrecord.FieldSystolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsruo.mutation.DiastolicPressure(); ok {
-		_spec.SetField(bloodstatusrecord.FieldDiastolicPressure, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldDiastolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsruo.mutation.AddedDiastolicPressure(); ok {
-		_spec.AddField(bloodstatusrecord.FieldDiastolicPressure, field.TypeFloat64, value)
+		_spec.AddField(bloodstatusrecord.FieldDiastolicPressure, field.TypeUint8, value)
 	}
 	if value, ok := bsruo.mutation.Pulse(); ok {
-		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
 	}
 	if value, ok := bsruo.mutation.AddedPulse(); ok {
-		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
+		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
 	}
 	if value, ok := bsruo.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)

@@ -21,17 +21,17 @@ type BloodStatusRecord struct {
 	// 用户id
 	UserID uuid.UUID `json:"user_id,omitempty"`
 	// 记录日期
-	RecordDate int `json:"record_date,omitempty"`
+	RecordDate uint `json:"record_date,omitempty"`
 	// 记录时间段，早晨、中午、晚上
 	TimeOfDay bloodstatusrecord.TimeOfDay `json:"time_of_day,omitempty"`
 	// 餐前餐后，前、后
 	BeforeAfterMeals bloodstatusrecord.BeforeAfterMeals `json:"before_after_meals,omitempty"`
 	// 收缩压
-	SystolicPressure float64 `json:"systolic_pressure,omitempty"`
+	SystolicPressure uint8 `json:"systolic_pressure,omitempty"`
 	// 舒张压
-	DiastolicPressure float64 `json:"diastolic_pressure,omitempty"`
+	DiastolicPressure uint8 `json:"diastolic_pressure,omitempty"`
 	// 脉搏
-	Pulse float64 `json:"pulse,omitempty"`
+	Pulse uint8 `json:"pulse,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -46,9 +46,7 @@ func (*BloodStatusRecord) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case bloodstatusrecord.FieldSystolicPressure, bloodstatusrecord.FieldDiastolicPressure, bloodstatusrecord.FieldPulse:
-			values[i] = new(sql.NullFloat64)
-		case bloodstatusrecord.FieldRecordDate, bloodstatusrecord.FieldCreatedAt, bloodstatusrecord.FieldUpdatedAt, bloodstatusrecord.FieldDeletedAt:
+		case bloodstatusrecord.FieldRecordDate, bloodstatusrecord.FieldSystolicPressure, bloodstatusrecord.FieldDiastolicPressure, bloodstatusrecord.FieldPulse, bloodstatusrecord.FieldCreatedAt, bloodstatusrecord.FieldUpdatedAt, bloodstatusrecord.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
 		case bloodstatusrecord.FieldTimeOfDay, bloodstatusrecord.FieldBeforeAfterMeals:
 			values[i] = new(sql.NullString)
@@ -85,7 +83,7 @@ func (bsr *BloodStatusRecord) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field record_date", values[i])
 			} else if value.Valid {
-				bsr.RecordDate = int(value.Int64)
+				bsr.RecordDate = uint(value.Int64)
 			}
 		case bloodstatusrecord.FieldTimeOfDay:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -100,22 +98,22 @@ func (bsr *BloodStatusRecord) assignValues(columns []string, values []any) error
 				bsr.BeforeAfterMeals = bloodstatusrecord.BeforeAfterMeals(value.String)
 			}
 		case bloodstatusrecord.FieldSystolicPressure:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field systolic_pressure", values[i])
 			} else if value.Valid {
-				bsr.SystolicPressure = value.Float64
+				bsr.SystolicPressure = uint8(value.Int64)
 			}
 		case bloodstatusrecord.FieldDiastolicPressure:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field diastolic_pressure", values[i])
 			} else if value.Valid {
-				bsr.DiastolicPressure = value.Float64
+				bsr.DiastolicPressure = uint8(value.Int64)
 			}
 		case bloodstatusrecord.FieldPulse:
-			if value, ok := values[i].(*sql.NullFloat64); !ok {
+			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field pulse", values[i])
 			} else if value.Valid {
-				bsr.Pulse = value.Float64
+				bsr.Pulse = uint8(value.Int64)
 			}
 		case bloodstatusrecord.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {

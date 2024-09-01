@@ -105,6 +105,15 @@ paths:
             tags:
                 - BloodStatus
             operationId: BloodStatus_ListBloodStatus
+            parameters:
+                - name: page
+                  in: query
+                  schema:
+                    type: string
+                - name: pageSize
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
@@ -146,8 +155,20 @@ components:
         CreateBloodStatusRequest:
             type: object
             properties:
-                bloodStatus:
-                    $ref: '#/components/schemas/BloodStatusRecord'
+                recordDate:
+                    type: string
+                timeOfDay:
+                    type: integer
+                    format: enum
+                beforeAfterMeals:
+                    type: integer
+                    format: enum
+                systolicPressure:
+                    type: string
+                diastolicPressure:
+                    type: string
+                pulse:
+                    type: string
         DeleteBloodStatusReply:
             type: object
             properties: {}
@@ -167,7 +188,20 @@ components:
         ListBloodStatusReply:
             type: object
             properties:
-                bloodStatuses:
+                data:
+                    $ref: '#/components/schemas/PageData'
+        PageData:
+            type: object
+            properties:
+                page:
+                    type: string
+                PageSize:
+                    type: string
+                TotalPages:
+                    type: string
+                TotalCount:
+                    type: string
+                data:
                     type: array
                     items:
                         $ref: '#/components/schemas/BloodStatusRecord'
@@ -195,7 +229,21 @@ components:
         UpdateBloodStatusRequest:
             type: object
             properties:
-                bloodStatus:
-                    $ref: '#/components/schemas/BloodStatusRecord'
+                id:
+                    type: string
+                recordDate:
+                    type: string
+                timeOfDay:
+                    type: integer
+                    format: enum
+                beforeAfterMeals:
+                    type: integer
+                    format: enum
+                systolicPressure:
+                    type: string
+                diastolicPressure:
+                    type: string
+                pulse:
+                    type: string
 tags:
     - name: BloodStatus

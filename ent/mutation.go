@@ -5655,16 +5655,16 @@ type BloodStatusRecordMutation struct {
 	typ                   string
 	id                    *uuid.UUID
 	user_id               *uuid.UUID
-	record_date           *int
+	record_date           *uint
 	addrecord_date        *int
 	time_of_day           *bloodstatusrecord.TimeOfDay
 	before_after_meals    *bloodstatusrecord.BeforeAfterMeals
-	systolic_pressure     *float64
-	addsystolic_pressure  *float64
-	diastolic_pressure    *float64
-	adddiastolic_pressure *float64
-	pulse                 *float64
-	addpulse              *float64
+	systolic_pressure     *uint8
+	addsystolic_pressure  *int8
+	diastolic_pressure    *uint8
+	adddiastolic_pressure *int8
+	pulse                 *uint8
+	addpulse              *int8
 	created_at            *int
 	addcreated_at         *int
 	updated_at            *int
@@ -5818,13 +5818,13 @@ func (m *BloodStatusRecordMutation) ResetUserID() {
 }
 
 // SetRecordDate sets the "record_date" field.
-func (m *BloodStatusRecordMutation) SetRecordDate(i int) {
-	m.record_date = &i
+func (m *BloodStatusRecordMutation) SetRecordDate(u uint) {
+	m.record_date = &u
 	m.addrecord_date = nil
 }
 
 // RecordDate returns the value of the "record_date" field in the mutation.
-func (m *BloodStatusRecordMutation) RecordDate() (r int, exists bool) {
+func (m *BloodStatusRecordMutation) RecordDate() (r uint, exists bool) {
 	v := m.record_date
 	if v == nil {
 		return
@@ -5835,7 +5835,7 @@ func (m *BloodStatusRecordMutation) RecordDate() (r int, exists bool) {
 // OldRecordDate returns the old "record_date" field's value of the BloodStatusRecord entity.
 // If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BloodStatusRecordMutation) OldRecordDate(ctx context.Context) (v int, err error) {
+func (m *BloodStatusRecordMutation) OldRecordDate(ctx context.Context) (v uint, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRecordDate is only allowed on UpdateOne operations")
 	}
@@ -5849,12 +5849,12 @@ func (m *BloodStatusRecordMutation) OldRecordDate(ctx context.Context) (v int, e
 	return oldValue.RecordDate, nil
 }
 
-// AddRecordDate adds i to the "record_date" field.
-func (m *BloodStatusRecordMutation) AddRecordDate(i int) {
+// AddRecordDate adds u to the "record_date" field.
+func (m *BloodStatusRecordMutation) AddRecordDate(u int) {
 	if m.addrecord_date != nil {
-		*m.addrecord_date += i
+		*m.addrecord_date += u
 	} else {
-		m.addrecord_date = &i
+		m.addrecord_date = &u
 	}
 }
 
@@ -5946,13 +5946,13 @@ func (m *BloodStatusRecordMutation) ResetBeforeAfterMeals() {
 }
 
 // SetSystolicPressure sets the "systolic_pressure" field.
-func (m *BloodStatusRecordMutation) SetSystolicPressure(f float64) {
-	m.systolic_pressure = &f
+func (m *BloodStatusRecordMutation) SetSystolicPressure(u uint8) {
+	m.systolic_pressure = &u
 	m.addsystolic_pressure = nil
 }
 
 // SystolicPressure returns the value of the "systolic_pressure" field in the mutation.
-func (m *BloodStatusRecordMutation) SystolicPressure() (r float64, exists bool) {
+func (m *BloodStatusRecordMutation) SystolicPressure() (r uint8, exists bool) {
 	v := m.systolic_pressure
 	if v == nil {
 		return
@@ -5963,7 +5963,7 @@ func (m *BloodStatusRecordMutation) SystolicPressure() (r float64, exists bool) 
 // OldSystolicPressure returns the old "systolic_pressure" field's value of the BloodStatusRecord entity.
 // If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BloodStatusRecordMutation) OldSystolicPressure(ctx context.Context) (v float64, err error) {
+func (m *BloodStatusRecordMutation) OldSystolicPressure(ctx context.Context) (v uint8, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldSystolicPressure is only allowed on UpdateOne operations")
 	}
@@ -5977,17 +5977,17 @@ func (m *BloodStatusRecordMutation) OldSystolicPressure(ctx context.Context) (v 
 	return oldValue.SystolicPressure, nil
 }
 
-// AddSystolicPressure adds f to the "systolic_pressure" field.
-func (m *BloodStatusRecordMutation) AddSystolicPressure(f float64) {
+// AddSystolicPressure adds u to the "systolic_pressure" field.
+func (m *BloodStatusRecordMutation) AddSystolicPressure(u int8) {
 	if m.addsystolic_pressure != nil {
-		*m.addsystolic_pressure += f
+		*m.addsystolic_pressure += u
 	} else {
-		m.addsystolic_pressure = &f
+		m.addsystolic_pressure = &u
 	}
 }
 
 // AddedSystolicPressure returns the value that was added to the "systolic_pressure" field in this mutation.
-func (m *BloodStatusRecordMutation) AddedSystolicPressure() (r float64, exists bool) {
+func (m *BloodStatusRecordMutation) AddedSystolicPressure() (r int8, exists bool) {
 	v := m.addsystolic_pressure
 	if v == nil {
 		return
@@ -6002,13 +6002,13 @@ func (m *BloodStatusRecordMutation) ResetSystolicPressure() {
 }
 
 // SetDiastolicPressure sets the "diastolic_pressure" field.
-func (m *BloodStatusRecordMutation) SetDiastolicPressure(f float64) {
-	m.diastolic_pressure = &f
+func (m *BloodStatusRecordMutation) SetDiastolicPressure(u uint8) {
+	m.diastolic_pressure = &u
 	m.adddiastolic_pressure = nil
 }
 
 // DiastolicPressure returns the value of the "diastolic_pressure" field in the mutation.
-func (m *BloodStatusRecordMutation) DiastolicPressure() (r float64, exists bool) {
+func (m *BloodStatusRecordMutation) DiastolicPressure() (r uint8, exists bool) {
 	v := m.diastolic_pressure
 	if v == nil {
 		return
@@ -6019,7 +6019,7 @@ func (m *BloodStatusRecordMutation) DiastolicPressure() (r float64, exists bool)
 // OldDiastolicPressure returns the old "diastolic_pressure" field's value of the BloodStatusRecord entity.
 // If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BloodStatusRecordMutation) OldDiastolicPressure(ctx context.Context) (v float64, err error) {
+func (m *BloodStatusRecordMutation) OldDiastolicPressure(ctx context.Context) (v uint8, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDiastolicPressure is only allowed on UpdateOne operations")
 	}
@@ -6033,17 +6033,17 @@ func (m *BloodStatusRecordMutation) OldDiastolicPressure(ctx context.Context) (v
 	return oldValue.DiastolicPressure, nil
 }
 
-// AddDiastolicPressure adds f to the "diastolic_pressure" field.
-func (m *BloodStatusRecordMutation) AddDiastolicPressure(f float64) {
+// AddDiastolicPressure adds u to the "diastolic_pressure" field.
+func (m *BloodStatusRecordMutation) AddDiastolicPressure(u int8) {
 	if m.adddiastolic_pressure != nil {
-		*m.adddiastolic_pressure += f
+		*m.adddiastolic_pressure += u
 	} else {
-		m.adddiastolic_pressure = &f
+		m.adddiastolic_pressure = &u
 	}
 }
 
 // AddedDiastolicPressure returns the value that was added to the "diastolic_pressure" field in this mutation.
-func (m *BloodStatusRecordMutation) AddedDiastolicPressure() (r float64, exists bool) {
+func (m *BloodStatusRecordMutation) AddedDiastolicPressure() (r int8, exists bool) {
 	v := m.adddiastolic_pressure
 	if v == nil {
 		return
@@ -6058,13 +6058,13 @@ func (m *BloodStatusRecordMutation) ResetDiastolicPressure() {
 }
 
 // SetPulse sets the "pulse" field.
-func (m *BloodStatusRecordMutation) SetPulse(f float64) {
-	m.pulse = &f
+func (m *BloodStatusRecordMutation) SetPulse(u uint8) {
+	m.pulse = &u
 	m.addpulse = nil
 }
 
 // Pulse returns the value of the "pulse" field in the mutation.
-func (m *BloodStatusRecordMutation) Pulse() (r float64, exists bool) {
+func (m *BloodStatusRecordMutation) Pulse() (r uint8, exists bool) {
 	v := m.pulse
 	if v == nil {
 		return
@@ -6075,7 +6075,7 @@ func (m *BloodStatusRecordMutation) Pulse() (r float64, exists bool) {
 // OldPulse returns the old "pulse" field's value of the BloodStatusRecord entity.
 // If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BloodStatusRecordMutation) OldPulse(ctx context.Context) (v float64, err error) {
+func (m *BloodStatusRecordMutation) OldPulse(ctx context.Context) (v uint8, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldPulse is only allowed on UpdateOne operations")
 	}
@@ -6089,17 +6089,17 @@ func (m *BloodStatusRecordMutation) OldPulse(ctx context.Context) (v float64, er
 	return oldValue.Pulse, nil
 }
 
-// AddPulse adds f to the "pulse" field.
-func (m *BloodStatusRecordMutation) AddPulse(f float64) {
+// AddPulse adds u to the "pulse" field.
+func (m *BloodStatusRecordMutation) AddPulse(u int8) {
 	if m.addpulse != nil {
-		*m.addpulse += f
+		*m.addpulse += u
 	} else {
-		m.addpulse = &f
+		m.addpulse = &u
 	}
 }
 
 // AddedPulse returns the value that was added to the "pulse" field in this mutation.
-func (m *BloodStatusRecordMutation) AddedPulse() (r float64, exists bool) {
+func (m *BloodStatusRecordMutation) AddedPulse() (r int8, exists bool) {
 	v := m.addpulse
 	if v == nil {
 		return
@@ -6434,7 +6434,7 @@ func (m *BloodStatusRecordMutation) SetField(name string, value ent.Value) error
 		m.SetUserID(v)
 		return nil
 	case bloodstatusrecord.FieldRecordDate:
-		v, ok := value.(int)
+		v, ok := value.(uint)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6455,21 +6455,21 @@ func (m *BloodStatusRecordMutation) SetField(name string, value ent.Value) error
 		m.SetBeforeAfterMeals(v)
 		return nil
 	case bloodstatusrecord.FieldSystolicPressure:
-		v, ok := value.(float64)
+		v, ok := value.(uint8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetSystolicPressure(v)
 		return nil
 	case bloodstatusrecord.FieldDiastolicPressure:
-		v, ok := value.(float64)
+		v, ok := value.(uint8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetDiastolicPressure(v)
 		return nil
 	case bloodstatusrecord.FieldPulse:
-		v, ok := value.(float64)
+		v, ok := value.(uint8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6564,21 +6564,21 @@ func (m *BloodStatusRecordMutation) AddField(name string, value ent.Value) error
 		m.AddRecordDate(v)
 		return nil
 	case bloodstatusrecord.FieldSystolicPressure:
-		v, ok := value.(float64)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddSystolicPressure(v)
 		return nil
 	case bloodstatusrecord.FieldDiastolicPressure:
-		v, ok := value.(float64)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddDiastolicPressure(v)
 		return nil
 	case bloodstatusrecord.FieldPulse:
-		v, ok := value.(float64)
+		v, ok := value.(int8)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}

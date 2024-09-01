@@ -18,6 +18,7 @@ type BloodStatusRecord struct {
 func (BloodStatusRecord) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Options: "COMMENT='血压状态记录表'"},
+		entsql.WithComments(true),
 	}
 }
 
@@ -28,7 +29,7 @@ func (BloodStatusRecord) Fields() []ent.Field {
 			Comment("记录的唯一标识符"),
 		field.UUID("user_id", uuid.New()).
 			Comment("用户id"),
-		field.Int("record_date").
+		field.Uint("record_date").
 			Comment("记录日期"),
 		field.Enum("time_of_day").
 			Values("morning", "noon", "evening").
@@ -36,11 +37,11 @@ func (BloodStatusRecord) Fields() []ent.Field {
 		field.Enum("before_after_meals").
 			Values("before", "after").
 			Comment("餐前餐后，前、后"),
-		field.Float("systolic_pressure").
+		field.Uint8("systolic_pressure").
 			Comment("收缩压"),
-		field.Float("diastolic_pressure").
+		field.Uint8("diastolic_pressure").
 			Comment("舒张压"),
-		field.Float("pulse").
+		field.Uint8("pulse").
 			Comment("脉搏"),
 		field.Int("created_at").
 			Default(int(time.Now().Unix())),

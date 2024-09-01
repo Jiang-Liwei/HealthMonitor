@@ -6,6 +6,7 @@ toolchain go1.22.6
 
 require (
 	entgo.io/ent v0.14.0
+	github.com/envoyproxy/protoc-gen-validate v1.0.4
 	github.com/go-kratos/kratos/v2 v2.8.0
 	github.com/go-sql-driver/mysql v1.8.1
 	github.com/google/uuid v1.6.0

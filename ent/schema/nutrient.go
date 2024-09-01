@@ -18,6 +18,7 @@ type Nutrient struct {
 func (Nutrient) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Options: "COMMENT='营养表'"},
+		entsql.WithComments(true),
 	}
 }
 

@@ -31,7 +31,7 @@ func wireApp(c *conf.Server, d *conf.Data, logger log.Logger) (*kratos.App, func
 	}
 	bloodStatusRepo := data.NewBloodStatusRepo(dataData, logger)
 	bloodStatusUsecase := biz.NewBloodStatusUsecase(bloodStatusRepo, logger)
-	bloodStatusService := service.NewBloodStatusService(bloodStatusUsecase)
+	bloodStatusService := service.NewBloodStatusService(bloodStatusUsecase, logger)
 	httpServerConfig := ProvideHTTPServerConfig(c, indexService, bloodStatusService, logger)
 	grpcServer := server.NewGRPCServer(httpServerConfig)
 	httpServer := server.NewHTTPServer(httpServerConfig)

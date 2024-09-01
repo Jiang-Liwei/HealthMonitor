@@ -18,6 +18,7 @@ type Food struct {
 func (Food) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Options: "COMMENT='食物表'"},
+		entsql.WithComments(true),
 	}
 }
 

@@ -14,7 +14,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "jti", Type: field.TypeString, Unique: true},
 		{Name: "expires_at", Type: field.TypeInt},
-		{Name: "revoked_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "revoked_at", Type: field.TypeInt, Default: 1725110824},
 	}
 	// AdminJwtBlacklistsTable holds the schema information for the "admin_jwt_blacklists" table.
 	AdminJwtBlacklistsTable = &schema.Table{
@@ -27,7 +27,7 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "action", Type: field.TypeString},
 		{Name: "ip_address", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
 		{Name: "admin_user_logs", Type: field.TypeUUID, Nullable: true},
 	}
 	// AdminLogsTable holds the schema information for the "admin_logs" table.
@@ -51,8 +51,8 @@ var (
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "order", Type: field.TypeUint16, Default: 0},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminMenusTable holds the schema information for the "admin_menus" table.
@@ -68,8 +68,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "method", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminPermissionsTable holds the schema information for the "admin_permissions" table.
@@ -109,8 +109,8 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminRolesTable holds the schema information for the "admin_roles" table.
@@ -128,8 +128,8 @@ var (
 		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "last_login_at", Type: field.TypeInt, Nullable: true},
 		{Name: "jwt_issued_at", Type: field.TypeInt, Nullable: true},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminUsersTable holds the schema information for the "admin_users" table.
@@ -166,16 +166,16 @@ var (
 	}
 	// BloodStatusRecordsColumns holds the columns for the "blood_status_records" table.
 	BloodStatusRecordsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
-		{Name: "user_id", Type: field.TypeUUID},
-		{Name: "record_date", Type: field.TypeInt},
-		{Name: "time_of_day", Type: field.TypeEnum, Enums: []string{"morning", "noon", "evening"}},
-		{Name: "before_after_meals", Type: field.TypeEnum, Enums: []string{"before", "after"}},
-		{Name: "systolic_pressure", Type: field.TypeFloat64},
-		{Name: "diastolic_pressure", Type: field.TypeFloat64},
-		{Name: "pulse", Type: field.TypeFloat64},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725026015},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725026015},
+		{Name: "id", Type: field.TypeUUID, Comment: "记录的唯一标识符"},
+		{Name: "user_id", Type: field.TypeUUID, Comment: "用户id"},
+		{Name: "record_date", Type: field.TypeUint, Comment: "记录日期"},
+		{Name: "time_of_day", Type: field.TypeEnum, Comment: "记录时间段，早晨、中午、晚上", Enums: []string{"morning", "noon", "evening"}},
+		{Name: "before_after_meals", Type: field.TypeEnum, Comment: "餐前餐后，前、后", Enums: []string{"before", "after"}},
+		{Name: "systolic_pressure", Type: field.TypeUint8, Comment: "收缩压"},
+		{Name: "diastolic_pressure", Type: field.TypeUint8, Comment: "舒张压"},
+		{Name: "pulse", Type: field.TypeUint8, Comment: "脉搏"},
+		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// BloodStatusRecordsTable holds the schema information for the "blood_status_records" table.
@@ -186,9 +186,9 @@ var (
 	}
 	// FoodsColumns holds the columns for the "foods" table.
 	FoodsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
-		{Name: "name", Type: field.TypeString},
-		{Name: "effect", Type: field.TypeEnum, Enums: []string{"beneficial", "neutral", "harmful"}},
+		{Name: "id", Type: field.TypeUUID, Comment: "食物ID"},
+		{Name: "name", Type: field.TypeString, Comment: "食物名称"},
+		{Name: "effect", Type: field.TypeEnum, Comment: "对血压等的影响，益处、中性、害处", Enums: []string{"beneficial", "neutral", "harmful"}},
 	}
 	// FoodsTable holds the schema information for the "foods" table.
 	FoodsTable = &schema.Table{
@@ -250,9 +250,9 @@ var (
 	}
 	// IngredientsColumns holds the columns for the "ingredients" table.
 	IngredientsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
-		{Name: "name", Type: field.TypeString},
-		{Name: "effect", Type: field.TypeEnum, Enums: []string{"beneficial", "neutral", "harmful"}},
+		{Name: "id", Type: field.TypeUUID, Comment: "食材ID"},
+		{Name: "name", Type: field.TypeString, Comment: "食材名称"},
+		{Name: "effect", Type: field.TypeEnum, Comment: "对血压等的影响，益处、中性、害处", Enums: []string{"beneficial", "neutral", "harmful"}},
 	}
 	// IngredientsTable holds the schema information for the "ingredients" table.
 	IngredientsTable = &schema.Table{
@@ -262,9 +262,9 @@ var (
 	}
 	// NutrientsColumns holds the columns for the "nutrients" table.
 	NutrientsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeUUID},
-		{Name: "name", Type: field.TypeString},
-		{Name: "effect", Type: field.TypeEnum, Enums: []string{"beneficial", "neutral", "harmful"}},
+		{Name: "id", Type: field.TypeUUID, Comment: "营养ID"},
+		{Name: "name", Type: field.TypeString, Comment: "营养名称"},
+		{Name: "effect", Type: field.TypeEnum, Comment: "对血压等的影响，益处、中性、害处", Enums: []string{"beneficial", "neutral", "harmful"}},
 	}
 	// NutrientsTable holds the schema information for the "nutrients" table.
 	NutrientsTable = &schema.Table{
@@ -275,10 +275,10 @@ var (
 	// UserMealsColumns holds the columns for the "user_meals" table.
 	UserMealsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "user_id", Type: field.TypeUUID},
-		{Name: "record_date", Type: field.TypeInt},
-		{Name: "meal_type", Type: field.TypeEnum, Enums: []string{"breakfast", "lunch", "dinner"}},
-		{Name: "description", Type: field.TypeString},
+		{Name: "user_id", Type: field.TypeUUID, Comment: "用户id"},
+		{Name: "record_date", Type: field.TypeInt, Comment: "记录日期"},
+		{Name: "meal_type", Type: field.TypeEnum, Comment: "餐点类型，早餐、午餐、晚餐", Enums: []string{"breakfast", "lunch", "dinner"}},
+		{Name: "description", Type: field.TypeString, Comment: "餐点描述"},
 	}
 	// UserMealsTable holds the schema information for the "user_meals" table.
 	UserMealsTable = &schema.Table{

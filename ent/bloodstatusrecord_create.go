@@ -27,8 +27,8 @@ func (bsrc *BloodStatusRecordCreate) SetUserID(u uuid.UUID) *BloodStatusRecordCr
 }
 
 // SetRecordDate sets the "record_date" field.
-func (bsrc *BloodStatusRecordCreate) SetRecordDate(i int) *BloodStatusRecordCreate {
-	bsrc.mutation.SetRecordDate(i)
+func (bsrc *BloodStatusRecordCreate) SetRecordDate(u uint) *BloodStatusRecordCreate {
+	bsrc.mutation.SetRecordDate(u)
 	return bsrc
 }
 
@@ -45,20 +45,20 @@ func (bsrc *BloodStatusRecordCreate) SetBeforeAfterMeals(bam bloodstatusrecord.B
 }
 
 // SetSystolicPressure sets the "systolic_pressure" field.
-func (bsrc *BloodStatusRecordCreate) SetSystolicPressure(f float64) *BloodStatusRecordCreate {
-	bsrc.mutation.SetSystolicPressure(f)
+func (bsrc *BloodStatusRecordCreate) SetSystolicPressure(u uint8) *BloodStatusRecordCreate {
+	bsrc.mutation.SetSystolicPressure(u)
 	return bsrc
 }
 
 // SetDiastolicPressure sets the "diastolic_pressure" field.
-func (bsrc *BloodStatusRecordCreate) SetDiastolicPressure(f float64) *BloodStatusRecordCreate {
-	bsrc.mutation.SetDiastolicPressure(f)
+func (bsrc *BloodStatusRecordCreate) SetDiastolicPressure(u uint8) *BloodStatusRecordCreate {
+	bsrc.mutation.SetDiastolicPressure(u)
 	return bsrc
 }
 
 // SetPulse sets the "pulse" field.
-func (bsrc *BloodStatusRecordCreate) SetPulse(f float64) *BloodStatusRecordCreate {
-	bsrc.mutation.SetPulse(f)
+func (bsrc *BloodStatusRecordCreate) SetPulse(u uint8) *BloodStatusRecordCreate {
+	bsrc.mutation.SetPulse(u)
 	return bsrc
 }
 
@@ -246,7 +246,7 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 		_node.UserID = value
 	}
 	if value, ok := bsrc.mutation.RecordDate(); ok {
-		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeInt, value)
+		_spec.SetField(bloodstatusrecord.FieldRecordDate, field.TypeUint, value)
 		_node.RecordDate = value
 	}
 	if value, ok := bsrc.mutation.TimeOfDay(); ok {
@@ -258,15 +258,15 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 		_node.BeforeAfterMeals = value
 	}
 	if value, ok := bsrc.mutation.SystolicPressure(); ok {
-		_spec.SetField(bloodstatusrecord.FieldSystolicPressure, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldSystolicPressure, field.TypeUint8, value)
 		_node.SystolicPressure = value
 	}
 	if value, ok := bsrc.mutation.DiastolicPressure(); ok {
-		_spec.SetField(bloodstatusrecord.FieldDiastolicPressure, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldDiastolicPressure, field.TypeUint8, value)
 		_node.DiastolicPressure = value
 	}
 	if value, ok := bsrc.mutation.Pulse(); ok {
-		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeFloat64, value)
+		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
 		_node.Pulse = value
 	}
 	if value, ok := bsrc.mutation.CreatedAt(); ok {

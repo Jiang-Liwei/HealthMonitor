@@ -60,22 +60,22 @@ func UserID(v uuid.UUID) predicate.BloodStatusRecord {
 }
 
 // RecordDate applies equality check predicate on the "record_date" field. It's identical to RecordDateEQ.
-func RecordDate(v int) predicate.BloodStatusRecord {
+func RecordDate(v uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldRecordDate, v))
 }
 
 // SystolicPressure applies equality check predicate on the "systolic_pressure" field. It's identical to SystolicPressureEQ.
-func SystolicPressure(v float64) predicate.BloodStatusRecord {
+func SystolicPressure(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldSystolicPressure, v))
 }
 
 // DiastolicPressure applies equality check predicate on the "diastolic_pressure" field. It's identical to DiastolicPressureEQ.
-func DiastolicPressure(v float64) predicate.BloodStatusRecord {
+func DiastolicPressure(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldDiastolicPressure, v))
 }
 
 // Pulse applies equality check predicate on the "pulse" field. It's identical to PulseEQ.
-func Pulse(v float64) predicate.BloodStatusRecord {
+func Pulse(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldPulse, v))
 }
 
@@ -135,42 +135,42 @@ func UserIDLTE(v uuid.UUID) predicate.BloodStatusRecord {
 }
 
 // RecordDateEQ applies the EQ predicate on the "record_date" field.
-func RecordDateEQ(v int) predicate.BloodStatusRecord {
+func RecordDateEQ(v uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldRecordDate, v))
 }
 
 // RecordDateNEQ applies the NEQ predicate on the "record_date" field.
-func RecordDateNEQ(v int) predicate.BloodStatusRecord {
+func RecordDateNEQ(v uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldRecordDate, v))
 }
 
 // RecordDateIn applies the In predicate on the "record_date" field.
-func RecordDateIn(vs ...int) predicate.BloodStatusRecord {
+func RecordDateIn(vs ...uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldIn(FieldRecordDate, vs...))
 }
 
 // RecordDateNotIn applies the NotIn predicate on the "record_date" field.
-func RecordDateNotIn(vs ...int) predicate.BloodStatusRecord {
+func RecordDateNotIn(vs ...uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldRecordDate, vs...))
 }
 
 // RecordDateGT applies the GT predicate on the "record_date" field.
-func RecordDateGT(v int) predicate.BloodStatusRecord {
+func RecordDateGT(v uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGT(FieldRecordDate, v))
 }
 
 // RecordDateGTE applies the GTE predicate on the "record_date" field.
-func RecordDateGTE(v int) predicate.BloodStatusRecord {
+func RecordDateGTE(v uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGTE(FieldRecordDate, v))
 }
 
 // RecordDateLT applies the LT predicate on the "record_date" field.
-func RecordDateLT(v int) predicate.BloodStatusRecord {
+func RecordDateLT(v uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLT(FieldRecordDate, v))
 }
 
 // RecordDateLTE applies the LTE predicate on the "record_date" field.
-func RecordDateLTE(v int) predicate.BloodStatusRecord {
+func RecordDateLTE(v uint) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldRecordDate, v))
 }
 
@@ -215,122 +215,122 @@ func BeforeAfterMealsNotIn(vs ...BeforeAfterMeals) predicate.BloodStatusRecord {
 }
 
 // SystolicPressureEQ applies the EQ predicate on the "systolic_pressure" field.
-func SystolicPressureEQ(v float64) predicate.BloodStatusRecord {
+func SystolicPressureEQ(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldSystolicPressure, v))
 }
 
 // SystolicPressureNEQ applies the NEQ predicate on the "systolic_pressure" field.
-func SystolicPressureNEQ(v float64) predicate.BloodStatusRecord {
+func SystolicPressureNEQ(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldSystolicPressure, v))
 }
 
 // SystolicPressureIn applies the In predicate on the "systolic_pressure" field.
-func SystolicPressureIn(vs ...float64) predicate.BloodStatusRecord {
+func SystolicPressureIn(vs ...uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldIn(FieldSystolicPressure, vs...))
 }
 
 // SystolicPressureNotIn applies the NotIn predicate on the "systolic_pressure" field.
-func SystolicPressureNotIn(vs ...float64) predicate.BloodStatusRecord {
+func SystolicPressureNotIn(vs ...uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldSystolicPressure, vs...))
 }
 
 // SystolicPressureGT applies the GT predicate on the "systolic_pressure" field.
-func SystolicPressureGT(v float64) predicate.BloodStatusRecord {
+func SystolicPressureGT(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGT(FieldSystolicPressure, v))
 }
 
 // SystolicPressureGTE applies the GTE predicate on the "systolic_pressure" field.
-func SystolicPressureGTE(v float64) predicate.BloodStatusRecord {
+func SystolicPressureGTE(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGTE(FieldSystolicPressure, v))
 }
 
 // SystolicPressureLT applies the LT predicate on the "systolic_pressure" field.
-func SystolicPressureLT(v float64) predicate.BloodStatusRecord {
+func SystolicPressureLT(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLT(FieldSystolicPressure, v))
 }
 
 // SystolicPressureLTE applies the LTE predicate on the "systolic_pressure" field.
-func SystolicPressureLTE(v float64) predicate.BloodStatusRecord {
+func SystolicPressureLTE(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldSystolicPressure, v))
 }
 
 // DiastolicPressureEQ applies the EQ predicate on the "diastolic_pressure" field.
-func DiastolicPressureEQ(v float64) predicate.BloodStatusRecord {
+func DiastolicPressureEQ(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldDiastolicPressure, v))
 }
 
 // DiastolicPressureNEQ applies the NEQ predicate on the "diastolic_pressure" field.
-func DiastolicPressureNEQ(v float64) predicate.BloodStatusRecord {
+func DiastolicPressureNEQ(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldDiastolicPressure, v))
 }
 
 // DiastolicPressureIn applies the In predicate on the "diastolic_pressure" field.
-func DiastolicPressureIn(vs ...float64) predicate.BloodStatusRecord {
+func DiastolicPressureIn(vs ...uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldIn(FieldDiastolicPressure, vs...))
 }
 
 // DiastolicPressureNotIn applies the NotIn predicate on the "diastolic_pressure" field.
-func DiastolicPressureNotIn(vs ...float64) predicate.BloodStatusRecord {
+func DiastolicPressureNotIn(vs ...uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldDiastolicPressure, vs...))
 }
 
 // DiastolicPressureGT applies the GT predicate on the "diastolic_pressure" field.
-func DiastolicPressureGT(v float64) predicate.BloodStatusRecord {
+func DiastolicPressureGT(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGT(FieldDiastolicPressure, v))
 }
 
 // DiastolicPressureGTE applies the GTE predicate on the "diastolic_pressure" field.
-func DiastolicPressureGTE(v float64) predicate.BloodStatusRecord {
+func DiastolicPressureGTE(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGTE(FieldDiastolicPressure, v))
 }
 
 // DiastolicPressureLT applies the LT predicate on the "diastolic_pressure" field.
-func DiastolicPressureLT(v float64) predicate.BloodStatusRecord {
+func DiastolicPressureLT(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLT(FieldDiastolicPressure, v))
 }
 
 // DiastolicPressureLTE applies the LTE predicate on the "diastolic_pressure" field.
-func DiastolicPressureLTE(v float64) predicate.BloodStatusRecord {
+func DiastolicPressureLTE(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldDiastolicPressure, v))
 }
 
 // PulseEQ applies the EQ predicate on the "pulse" field.
-func PulseEQ(v float64) predicate.BloodStatusRecord {
+func PulseEQ(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldPulse, v))
 }
 
 // PulseNEQ applies the NEQ predicate on the "pulse" field.
-func PulseNEQ(v float64) predicate.BloodStatusRecord {
+func PulseNEQ(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldPulse, v))
 }
 
 // PulseIn applies the In predicate on the "pulse" field.
-func PulseIn(vs ...float64) predicate.BloodStatusRecord {
+func PulseIn(vs ...uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldIn(FieldPulse, vs...))
 }
 
 // PulseNotIn applies the NotIn predicate on the "pulse" field.
-func PulseNotIn(vs ...float64) predicate.BloodStatusRecord {
+func PulseNotIn(vs ...uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldPulse, vs...))
 }
 
 // PulseGT applies the GT predicate on the "pulse" field.
-func PulseGT(v float64) predicate.BloodStatusRecord {
+func PulseGT(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGT(FieldPulse, v))
 }
 
 // PulseGTE applies the GTE predicate on the "pulse" field.
-func PulseGTE(v float64) predicate.BloodStatusRecord {
+func PulseGTE(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGTE(FieldPulse, v))
 }
 
 // PulseLT applies the LT predicate on the "pulse" field.
-func PulseLT(v float64) predicate.BloodStatusRecord {
+func PulseLT(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLT(FieldPulse, v))
 }
 
 // PulseLTE applies the LTE predicate on the "pulse" field.
-func PulseLTE(v float64) predicate.BloodStatusRecord {
+func PulseLTE(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldPulse, v))
 }
 

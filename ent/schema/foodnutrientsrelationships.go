@@ -16,6 +16,7 @@ type FoodNutrientsRelationships struct {
 func (FoodNutrientsRelationships) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entsql.Annotation{Options: "COMMENT='食物与营养的关联表'"},
+		entsql.WithComments(true),
 	}
 }
 

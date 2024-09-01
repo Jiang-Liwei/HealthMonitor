@@ -3,6 +3,7 @@ syntax = "proto3";
 package api.bloodstatus.v1;
 
 import "google/api/annotations.proto";
+import "validate/validate.proto";
 
 option go_package = "healthmonitor/api/bloodstatus/v1;v1";
 option java_multiple_files = true;
@@ -38,8 +39,26 @@ service BloodStatus {
 	};
 }
 
+// 定义 TimeOfDay 枚举类型
+enum TimeOfDay {
+	morning = 0; // 映射 "morning"
+	noon = 1; // 映射 "noon"
+	evening = 2; // 映射 "evening"
+}
+
+// 定义 TimeOfDay 枚举类型
+enum BeforeAfterMeals {
+	before = 0;	// 映射 "before"
+	after = 1; // 映射 "after"
+}
+
 message CreateBloodStatusRequest {
-	BloodStatusRecord blood_status = 1;
+	uint64 record_date = 1 [(validate.rules).uint64 = {gte: 0, lte: 253402300799000}]; // 毫秒级时间戳
+	TimeOfDay time_of_day = 2 [(validate.rules).enum = {defined_only: true}]; // 记录时间段
+	BeforeAfterMeals before_after_meals = 3 [(validate.rules).enum = {defined_only: true}]; // 餐前餐后
+	uint64 systolic_pressure = 4 [(validate.rules).uint64 = {gte: 30, lte: 300}]; // 收缩压
+	uint64 diastolic_pressure = 5 [(validate.rules).uint64 = {gte: 10, lte: 200}];  // 舒张压
+	uint64 pulse = 6 [(validate.rules).uint64 = {gte: 30, lte: 220}]; // 脉搏
 }
 
 message CreateBloodStatusReply {
@@ -47,7 +66,15 @@ message CreateBloodStatusReply {
 }
 
 message UpdateBloodStatusRequest {
-	BloodStatusRecord blood_status = 1;
+	string id = 1 [(validate.rules).string = {
+		pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+	}];
+	uint64 record_date = 2 [(validate.rules).uint64 = {gte: 0, lte: 253402300799000}]; // 毫秒级时间戳
+	TimeOfDay time_of_day = 3 [(validate.rules).enum = {defined_only: true}]; // 记录时间段
+	BeforeAfterMeals before_after_meals = 4 [(validate.rules).enum = {defined_only: true}]; // 餐前餐后
+	uint64 systolic_pressure = 5 [(validate.rules).uint64 = {gte: 30, lte: 300}]; // 收缩压
+	uint64 diastolic_pressure = 6 [(validate.rules).uint64 = {gte: 10, lte: 200}];  // 舒张压
+	uint64 pulse = 7 [(validate.rules).uint64 = {gte: 30, lte: 220}]; // 脉搏
 }
 
 message UpdateBloodStatusReply {
@@ -69,15 +96,24 @@ message GetBloodStatusReply {
 }
 
 message ListBloodStatusRequest {
-	// Pagination and filtering options can be added here
+	int64 page = 1;
+	int64 pageSize = 2;
 }
 
 message ListBloodStatusReply {
-	repeated BloodStatusRecord blood_statuses = 1;
+	PageData data = 1;
+}
+
+message PageData {
+	int64 page = 1;
+	int64 PageSize = 2;
+	int64 TotalPages = 3;
+	int64 TotalCount = 4;
+	repeated BloodStatusRecord data = 5;
 }
 
 message BloodStatusRecord {
-	string record_date = 1;
+	uint64 record_date = 1;
 	string time_of_day = 2;
 	string before_after_meals = 3;
 	uint32 systolic_pressure = 4;
