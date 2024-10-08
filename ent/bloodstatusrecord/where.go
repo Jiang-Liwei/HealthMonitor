@@ -334,6 +334,26 @@ func PulseLTE(v uint8) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldPulse, v))
 }
 
+// MoodEQ applies the EQ predicate on the "mood" field.
+func MoodEQ(v Mood) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldEQ(FieldMood, v))
+}
+
+// MoodNEQ applies the NEQ predicate on the "mood" field.
+func MoodNEQ(v Mood) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldMood, v))
+}
+
+// MoodIn applies the In predicate on the "mood" field.
+func MoodIn(vs ...Mood) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldIn(FieldMood, vs...))
+}
+
+// MoodNotIn applies the NotIn predicate on the "mood" field.
+func MoodNotIn(vs ...Mood) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldMood, vs...))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v int) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldCreatedAt, v))

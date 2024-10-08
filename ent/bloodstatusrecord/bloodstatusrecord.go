@@ -28,6 +28,8 @@ const (
 	FieldDiastolicPressure = "diastolic_pressure"
 	// FieldPulse holds the string denoting the pulse field in the database.
 	FieldPulse = "pulse"
+	// FieldMood holds the string denoting the mood field in the database.
+	FieldMood = "mood"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -48,6 +50,7 @@ var Columns = []string{
 	FieldSystolicPressure,
 	FieldDiastolicPressure,
 	FieldPulse,
+	FieldMood,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldDeletedAt,
@@ -121,6 +124,30 @@ func BeforeAfterMealsValidator(bam BeforeAfterMeals) error {
 	}
 }
 
+// Mood defines the type for the "mood" enum field.
+type Mood string
+
+// Mood values.
+const (
+	MoodSameAs Mood = "same_as"
+	MoodHappy  Mood = "happy"
+	MoodSad    Mood = "sad"
+)
+
+func (m Mood) String() string {
+	return string(m)
+}
+
+// MoodValidator is a validator for the "mood" field enum values. It is called by the builders before save.
+func MoodValidator(m Mood) error {
+	switch m {
+	case MoodSameAs, MoodHappy, MoodSad:
+		return nil
+	default:
+		return fmt.Errorf("bloodstatusrecord: invalid enum value for mood field: %q", m)
+	}
+}
+
 // OrderOption defines the ordering options for the BloodStatusRecord queries.
 type OrderOption func(*sql.Selector)
 
@@ -162,6 +189,11 @@ func ByDiastolicPressure(opts ...sql.OrderTermOption) OrderOption {
 // ByPulse orders the results by the pulse field.
 func ByPulse(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPulse, opts...).ToFunc()
+}
+
+// ByMood orders the results by the mood field.
+func ByMood(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldMood, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

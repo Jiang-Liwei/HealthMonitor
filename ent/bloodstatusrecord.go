@@ -32,6 +32,8 @@ type BloodStatusRecord struct {
 	DiastolicPressure uint8 `json:"diastolic_pressure,omitempty"`
 	// 脉搏
 	Pulse uint8 `json:"pulse,omitempty"`
+	// 心情:一般,开心,伤心
+	Mood bloodstatusrecord.Mood `json:"mood,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
 	CreatedAt int `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
@@ -48,7 +50,7 @@ func (*BloodStatusRecord) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case bloodstatusrecord.FieldRecordDate, bloodstatusrecord.FieldSystolicPressure, bloodstatusrecord.FieldDiastolicPressure, bloodstatusrecord.FieldPulse, bloodstatusrecord.FieldCreatedAt, bloodstatusrecord.FieldUpdatedAt, bloodstatusrecord.FieldDeletedAt:
 			values[i] = new(sql.NullInt64)
-		case bloodstatusrecord.FieldTimeOfDay, bloodstatusrecord.FieldBeforeAfterMeals:
+		case bloodstatusrecord.FieldTimeOfDay, bloodstatusrecord.FieldBeforeAfterMeals, bloodstatusrecord.FieldMood:
 			values[i] = new(sql.NullString)
 		case bloodstatusrecord.FieldID, bloodstatusrecord.FieldUserID:
 			values[i] = new(uuid.UUID)
@@ -114,6 +116,12 @@ func (bsr *BloodStatusRecord) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field pulse", values[i])
 			} else if value.Valid {
 				bsr.Pulse = uint8(value.Int64)
+			}
+		case bloodstatusrecord.FieldMood:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field mood", values[i])
+			} else if value.Valid {
+				bsr.Mood = bloodstatusrecord.Mood(value.String)
 			}
 		case bloodstatusrecord.FieldCreatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -189,6 +197,9 @@ func (bsr *BloodStatusRecord) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pulse=")
 	builder.WriteString(fmt.Sprintf("%v", bsr.Pulse))
+	builder.WriteString(", ")
+	builder.WriteString("mood=")
+	builder.WriteString(fmt.Sprintf("%v", bsr.Mood))
 	builder.WriteString(", ")
 	builder.WriteString("created_at=")
 	builder.WriteString(fmt.Sprintf("%v", bsr.CreatedAt))

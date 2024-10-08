@@ -62,6 +62,12 @@ func (bsrc *BloodStatusRecordCreate) SetPulse(u uint8) *BloodStatusRecordCreate 
 	return bsrc
 }
 
+// SetMood sets the "mood" field.
+func (bsrc *BloodStatusRecordCreate) SetMood(b bloodstatusrecord.Mood) *BloodStatusRecordCreate {
+	bsrc.mutation.SetMood(b)
+	return bsrc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bsrc *BloodStatusRecordCreate) SetCreatedAt(i int) *BloodStatusRecordCreate {
 	bsrc.mutation.SetCreatedAt(i)
@@ -200,6 +206,14 @@ func (bsrc *BloodStatusRecordCreate) check() error {
 	if _, ok := bsrc.mutation.Pulse(); !ok {
 		return &ValidationError{Name: "pulse", err: errors.New(`ent: missing required field "BloodStatusRecord.pulse"`)}
 	}
+	if _, ok := bsrc.mutation.Mood(); !ok {
+		return &ValidationError{Name: "mood", err: errors.New(`ent: missing required field "BloodStatusRecord.mood"`)}
+	}
+	if v, ok := bsrc.mutation.Mood(); ok {
+		if err := bloodstatusrecord.MoodValidator(v); err != nil {
+			return &ValidationError{Name: "mood", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.mood": %w`, err)}
+		}
+	}
 	if _, ok := bsrc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "BloodStatusRecord.created_at"`)}
 	}
@@ -268,6 +282,10 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 	if value, ok := bsrc.mutation.Pulse(); ok {
 		_spec.SetField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
 		_node.Pulse = value
+	}
+	if value, ok := bsrc.mutation.Mood(); ok {
+		_spec.SetField(bloodstatusrecord.FieldMood, field.TypeEnum, value)
+		_node.Mood = value
 	}
 	if value, ok := bsrc.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)

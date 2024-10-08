@@ -154,6 +154,20 @@ func (bsru *BloodStatusRecordUpdate) AddPulse(u int8) *BloodStatusRecordUpdate {
 	return bsru
 }
 
+// SetMood sets the "mood" field.
+func (bsru *BloodStatusRecordUpdate) SetMood(b bloodstatusrecord.Mood) *BloodStatusRecordUpdate {
+	bsru.mutation.SetMood(b)
+	return bsru
+}
+
+// SetNillableMood sets the "mood" field if the given value is not nil.
+func (bsru *BloodStatusRecordUpdate) SetNillableMood(b *bloodstatusrecord.Mood) *BloodStatusRecordUpdate {
+	if b != nil {
+		bsru.SetMood(*b)
+	}
+	return bsru
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bsru *BloodStatusRecordUpdate) SetCreatedAt(i int) *BloodStatusRecordUpdate {
 	bsru.mutation.ResetCreatedAt()
@@ -268,6 +282,11 @@ func (bsru *BloodStatusRecordUpdate) check() error {
 			return &ValidationError{Name: "before_after_meals", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.before_after_meals": %w`, err)}
 		}
 	}
+	if v, ok := bsru.mutation.Mood(); ok {
+		if err := bloodstatusrecord.MoodValidator(v); err != nil {
+			return &ValidationError{Name: "mood", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.mood": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -315,6 +334,9 @@ func (bsru *BloodStatusRecordUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if value, ok := bsru.mutation.AddedPulse(); ok {
 		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
+	}
+	if value, ok := bsru.mutation.Mood(); ok {
+		_spec.SetField(bloodstatusrecord.FieldMood, field.TypeEnum, value)
 	}
 	if value, ok := bsru.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
@@ -483,6 +505,20 @@ func (bsruo *BloodStatusRecordUpdateOne) AddPulse(u int8) *BloodStatusRecordUpda
 	return bsruo
 }
 
+// SetMood sets the "mood" field.
+func (bsruo *BloodStatusRecordUpdateOne) SetMood(b bloodstatusrecord.Mood) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.SetMood(b)
+	return bsruo
+}
+
+// SetNillableMood sets the "mood" field if the given value is not nil.
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableMood(b *bloodstatusrecord.Mood) *BloodStatusRecordUpdateOne {
+	if b != nil {
+		bsruo.SetMood(*b)
+	}
+	return bsruo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bsruo *BloodStatusRecordUpdateOne) SetCreatedAt(i int) *BloodStatusRecordUpdateOne {
 	bsruo.mutation.ResetCreatedAt()
@@ -610,6 +646,11 @@ func (bsruo *BloodStatusRecordUpdateOne) check() error {
 			return &ValidationError{Name: "before_after_meals", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.before_after_meals": %w`, err)}
 		}
 	}
+	if v, ok := bsruo.mutation.Mood(); ok {
+		if err := bloodstatusrecord.MoodValidator(v); err != nil {
+			return &ValidationError{Name: "mood", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.mood": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -674,6 +715,9 @@ func (bsruo *BloodStatusRecordUpdateOne) sqlSave(ctx context.Context) (_node *Bl
 	}
 	if value, ok := bsruo.mutation.AddedPulse(); ok {
 		_spec.AddField(bloodstatusrecord.FieldPulse, field.TypeUint8, value)
+	}
+	if value, ok := bsruo.mutation.Mood(); ok {
+		_spec.SetField(bloodstatusrecord.FieldMood, field.TypeEnum, value)
 	}
 	if value, ok := bsruo.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)

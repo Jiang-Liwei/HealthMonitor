@@ -43,6 +43,9 @@ func (BloodStatusRecord) Fields() []ent.Field {
 			Comment("舒张压"),
 		field.Uint8("pulse").
 			Comment("脉搏"),
+		field.Enum("mood").
+			Values("same_as", "happy", "sad").
+			Comment("心情:一般,开心,伤心"),
 		field.Int("created_at").
 			Default(int(time.Now().Unix())),
 		field.Int("updated_at").

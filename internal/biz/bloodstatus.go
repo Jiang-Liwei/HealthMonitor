@@ -39,13 +39,13 @@ func NewBloodStatusUsecase(repo BloodStatusRepo, logger log.Logger) *BloodStatus
 	return &BloodStatusUsecase{repo: repo, log: log.NewHelper(logger)}
 }
 
-// Create creates a BloodStatus, and returns the new BloodStatus.
+// Create creates a BloodStatus, and returns the new ent.BloodStatusRecord.
 func (uc *BloodStatusUsecase) Create(ctx context.Context, b *BloodStatus) (*ent.BloodStatusRecord, error) {
 	uc.log.WithContext(ctx).Infof("CreateBloodStatusRecord: %v", b)
 	return uc.repo.Save(ctx, b)
 }
 
-// Update a BloodStatus, and returns the new BloodStatus.
+// Update a BloodStatus, and returns the new ent.BloodStatusRecord.
 func (uc *BloodStatusUsecase) Update(ctx context.Context, id uuid.UUID, b *BloodStatus) (*ent.BloodStatusRecord, error) {
 	uc.log.WithContext(ctx).Infof("UpdateBloodStatusRecord: %v", b)
 	return uc.repo.Update(ctx, id, b)
@@ -57,12 +57,12 @@ func (uc *BloodStatusUsecase) Delete(ctx context.Context, id uuid.UUID) error {
 	return uc.repo.DeleteBloodStatus(ctx, id)
 }
 
-// FindByID returns a BloodStatus.
+// FindByID returns a ent.BloodStatusRecord.
 func (uc *BloodStatusUsecase) FindByID(ctx context.Context, id uuid.UUID) (*ent.BloodStatusRecord, error) {
 	return uc.repo.FindByID(ctx, id)
 }
 
-// List returns the BloodStatus.
+// List returns the common.PageData[*ent.BloodStatusRecord].
 func (uc *BloodStatusUsecase) List(ctx context.Context, page int, pageSize int) (*common.PageData[*ent.BloodStatusRecord], error) {
 	records, _ := uc.repo.ListByUserID(ctx, page, pageSize)
 	return records, nil

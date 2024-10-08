@@ -113,11 +113,11 @@ func init() {
 	bloodstatusrecordFields := schema.BloodStatusRecord{}.Fields()
 	_ = bloodstatusrecordFields
 	// bloodstatusrecordDescCreatedAt is the schema descriptor for created_at field.
-	bloodstatusrecordDescCreatedAt := bloodstatusrecordFields[8].Descriptor()
+	bloodstatusrecordDescCreatedAt := bloodstatusrecordFields[9].Descriptor()
 	// bloodstatusrecord.DefaultCreatedAt holds the default value on creation for the created_at field.
 	bloodstatusrecord.DefaultCreatedAt = bloodstatusrecordDescCreatedAt.Default.(int)
 	// bloodstatusrecordDescUpdatedAt is the schema descriptor for updated_at field.
-	bloodstatusrecordDescUpdatedAt := bloodstatusrecordFields[9].Descriptor()
+	bloodstatusrecordDescUpdatedAt := bloodstatusrecordFields[10].Descriptor()
 	// bloodstatusrecord.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	bloodstatusrecord.DefaultUpdatedAt = bloodstatusrecordDescUpdatedAt.Default.(int)
 	// bloodstatusrecord.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

@@ -14,7 +14,7 @@ var (
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "jti", Type: field.TypeString, Unique: true},
 		{Name: "expires_at", Type: field.TypeInt},
-		{Name: "revoked_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "revoked_at", Type: field.TypeInt, Default: 1728205505},
 	}
 	// AdminJwtBlacklistsTable holds the schema information for the "admin_jwt_blacklists" table.
 	AdminJwtBlacklistsTable = &schema.Table{
@@ -27,7 +27,7 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "action", Type: field.TypeString},
 		{Name: "ip_address", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
 		{Name: "admin_user_logs", Type: field.TypeUUID, Nullable: true},
 	}
 	// AdminLogsTable holds the schema information for the "admin_logs" table.
@@ -51,8 +51,8 @@ var (
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "order", Type: field.TypeUint16, Default: 0},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminMenusTable holds the schema information for the "admin_menus" table.
@@ -68,8 +68,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "method", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminPermissionsTable holds the schema information for the "admin_permissions" table.
@@ -109,8 +109,8 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminRolesTable holds the schema information for the "admin_roles" table.
@@ -128,8 +128,8 @@ var (
 		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "last_login_at", Type: field.TypeInt, Nullable: true},
 		{Name: "jwt_issued_at", Type: field.TypeInt, Nullable: true},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminUsersTable holds the schema information for the "admin_users" table.
@@ -174,8 +174,9 @@ var (
 		{Name: "systolic_pressure", Type: field.TypeUint8, Comment: "收缩压"},
 		{Name: "diastolic_pressure", Type: field.TypeUint8, Comment: "舒张压"},
 		{Name: "pulse", Type: field.TypeUint8, Comment: "脉搏"},
-		{Name: "created_at", Type: field.TypeInt, Default: 1725110824},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1725110824},
+		{Name: "mood", Type: field.TypeEnum, Comment: "心情:一般,开心,伤心", Enums: []string{"same_as", "happy", "sad"}},
+		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// BloodStatusRecordsTable holds the schema information for the "blood_status_records" table.

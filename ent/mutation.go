@@ -5665,6 +5665,7 @@ type BloodStatusRecordMutation struct {
 	adddiastolic_pressure *int8
 	pulse                 *uint8
 	addpulse              *int8
+	mood                  *bloodstatusrecord.Mood
 	created_at            *int
 	addcreated_at         *int
 	updated_at            *int
@@ -6113,6 +6114,42 @@ func (m *BloodStatusRecordMutation) ResetPulse() {
 	m.addpulse = nil
 }
 
+// SetMood sets the "mood" field.
+func (m *BloodStatusRecordMutation) SetMood(b bloodstatusrecord.Mood) {
+	m.mood = &b
+}
+
+// Mood returns the value of the "mood" field in the mutation.
+func (m *BloodStatusRecordMutation) Mood() (r bloodstatusrecord.Mood, exists bool) {
+	v := m.mood
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldMood returns the old "mood" field's value of the BloodStatusRecord entity.
+// If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BloodStatusRecordMutation) OldMood(ctx context.Context) (v bloodstatusrecord.Mood, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldMood is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldMood requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldMood: %w", err)
+	}
+	return oldValue.Mood, nil
+}
+
+// ResetMood resets all changes to the "mood" field.
+func (m *BloodStatusRecordMutation) ResetMood() {
+	m.mood = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *BloodStatusRecordMutation) SetCreatedAt(i int) {
 	m.created_at = &i
@@ -6329,7 +6366,7 @@ func (m *BloodStatusRecordMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BloodStatusRecordMutation) Fields() []string {
-	fields := make([]string, 0, 10)
+	fields := make([]string, 0, 11)
 	if m.user_id != nil {
 		fields = append(fields, bloodstatusrecord.FieldUserID)
 	}
@@ -6350,6 +6387,9 @@ func (m *BloodStatusRecordMutation) Fields() []string {
 	}
 	if m.pulse != nil {
 		fields = append(fields, bloodstatusrecord.FieldPulse)
+	}
+	if m.mood != nil {
+		fields = append(fields, bloodstatusrecord.FieldMood)
 	}
 	if m.created_at != nil {
 		fields = append(fields, bloodstatusrecord.FieldCreatedAt)
@@ -6382,6 +6422,8 @@ func (m *BloodStatusRecordMutation) Field(name string) (ent.Value, bool) {
 		return m.DiastolicPressure()
 	case bloodstatusrecord.FieldPulse:
 		return m.Pulse()
+	case bloodstatusrecord.FieldMood:
+		return m.Mood()
 	case bloodstatusrecord.FieldCreatedAt:
 		return m.CreatedAt()
 	case bloodstatusrecord.FieldUpdatedAt:
@@ -6411,6 +6453,8 @@ func (m *BloodStatusRecordMutation) OldField(ctx context.Context, name string) (
 		return m.OldDiastolicPressure(ctx)
 	case bloodstatusrecord.FieldPulse:
 		return m.OldPulse(ctx)
+	case bloodstatusrecord.FieldMood:
+		return m.OldMood(ctx)
 	case bloodstatusrecord.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case bloodstatusrecord.FieldUpdatedAt:
@@ -6474,6 +6518,13 @@ func (m *BloodStatusRecordMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetPulse(v)
+		return nil
+	case bloodstatusrecord.FieldMood:
+		v, ok := value.(bloodstatusrecord.Mood)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetMood(v)
 		return nil
 	case bloodstatusrecord.FieldCreatedAt:
 		v, ok := value.(int)
@@ -6661,6 +6712,9 @@ func (m *BloodStatusRecordMutation) ResetField(name string) error {
 		return nil
 	case bloodstatusrecord.FieldPulse:
 		m.ResetPulse()
+		return nil
+	case bloodstatusrecord.FieldMood:
+		m.ResetMood()
 		return nil
 	case bloodstatusrecord.FieldCreatedAt:
 		m.ResetCreatedAt()

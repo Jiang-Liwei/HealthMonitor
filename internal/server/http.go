@@ -15,6 +15,7 @@ func NewHTTPServer(cfg HTTPServerConfig) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			//jwt.Server(), // 使用 JWT 中间件
 		),
 	}
 	if cfg.Conf.Http.Network != "" {
