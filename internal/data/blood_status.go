@@ -25,13 +25,7 @@ func NewBloodStatusRepo(data *core.Data, logger log.Logger) biz.BloodStatusRepo 
 	}
 }
 
-const UserIDUUID = "550e8400-e29b-41d4-a716-446655440000"
-
-func (bsr *bloodStatusRepo) Save(ctx context.Context, b *biz.BloodStatus) (*ent.BloodStatusRecord, error) {
-	userID, err := uuid.Parse(UserIDUUID)
-	if err != nil {
-		return nil, err
-	}
+func (bsr *bloodStatusRepo) Save(ctx context.Context, b *biz.BloodStatus, userID uuid.UUID) (*ent.BloodStatusRecord, error) {
 	record, err := bsr.data.DB.BloodStatusRecord.Create().
 		SetUserID(userID).
 		SetRecordDate(b.RecordDate).
@@ -44,14 +38,9 @@ func (bsr *bloodStatusRepo) Save(ctx context.Context, b *biz.BloodStatus) (*ent.
 	return record, err
 }
 
-func (bsr *bloodStatusRepo) Update(ctx context.Context, id uuid.UUID, b *biz.BloodStatus) (*ent.BloodStatusRecord, error) {
+func (bsr *bloodStatusRepo) Update(ctx context.Context, id uuid.UUID, b *biz.BloodStatus, userID uuid.UUID) (*ent.BloodStatusRecord, error) {
 
 	p, err := bsr.data.DB.BloodStatusRecord.Get(ctx, id)
-	if err != nil {
-		return nil, err
-	}
-
-	userID, err := uuid.Parse(UserIDUUID)
 	if err != nil {
 		return nil, err
 	}
@@ -83,12 +72,7 @@ func (bsr *bloodStatusRepo) FindByID(ctx context.Context, id uuid.UUID) (*ent.Bl
 	return p, nil
 }
 
-func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, page int, pageSize int) (*common.PageData[*ent.BloodStatusRecord], error) {
-
-	userID, err := uuid.Parse(UserIDUUID)
-	if err != nil {
-		return nil, err
-	}
+func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, userID uuid.UUID, page int, pageSize int) (*common.PageData[*ent.BloodStatusRecord], error) {
 
 	// 获取总记录数
 	totalCount, err := bsr.data.DB.BloodStatusRecord.Query().
