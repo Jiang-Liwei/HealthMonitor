@@ -12,8 +12,8 @@ import (
 // Tx is a transactional client that is created by calling Client.Tx().
 type Tx struct {
 	config
-	// AdminJWTBlacklist is the client for interacting with the AdminJWTBlacklist builders.
-	AdminJWTBlacklist *AdminJWTBlacklistClient
+	// AdminJWTExpiredTokens is the client for interacting with the AdminJWTExpiredTokens builders.
+	AdminJWTExpiredTokens *AdminJWTExpiredTokensClient
 	// AdminLog is the client for interacting with the AdminLog builders.
 	AdminLog *AdminLogClient
 	// AdminMenu is the client for interacting with the AdminMenu builders.
@@ -175,7 +175,7 @@ func (tx *Tx) Client() *Client {
 }
 
 func (tx *Tx) init() {
-	tx.AdminJWTBlacklist = NewAdminJWTBlacklistClient(tx.config)
+	tx.AdminJWTExpiredTokens = NewAdminJWTExpiredTokensClient(tx.config)
 	tx.AdminLog = NewAdminLogClient(tx.config)
 	tx.AdminMenu = NewAdminMenuClient(tx.config)
 	tx.AdminPermission = NewAdminPermissionClient(tx.config)
@@ -200,7 +200,7 @@ func (tx *Tx) init() {
 // of them in order to commit or rollback the transaction.
 //
 // If a closed transaction is embedded in one of the generated entities, and the entity
-// applies a query, for example: AdminJWTBlacklist.QueryXXX(), the query will be executed
+// applies a query, for example: AdminJWTExpiredTokens.QueryXXX(), the query will be executed
 // through the driver which created this transaction.
 //
 // Note that txDriver is not goroutine safe.

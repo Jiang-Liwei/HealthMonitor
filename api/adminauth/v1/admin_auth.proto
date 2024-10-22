@@ -3,7 +3,6 @@ syntax = "proto3";
 package api.adminauth.v1;
 
 import "google/api/annotations.proto";
-import "validate/validate.proto";
 
 option go_package = "healthmonitor/api/adminauth/v1;v1";
 option java_multiple_files = true;
@@ -12,7 +11,19 @@ option java_package = "api.adminauth.v1";
 service Auth {
 	rpc Login(LoginRequest) returns (LoginResponse) {
 		option (google.api.http) = {
-			post: "/api/v1/auth/login"
+			post: "/admin/v1/auth/login"
+			body: "*"
+		};
+	}
+	rpc User(UserRequest) returns (UserResponse) {
+		option (google.api.http) = {
+			get: "/admin/v1/auth/user"
+		};
+	}
+	rpc Logout(LogoutRequest) returns (LogoutResponse) {
+		option (google.api.http) = {
+			post: "/admin/v1/auth/logout"
+			body: "*"
 		};
 	}
 }
@@ -24,4 +35,25 @@ message LoginRequest {
 
 message LoginResponse {
 	string token = 1; // JWT Token
+}
+
+message UserRequest {
+}
+
+message UserResponse {
+	string id = 1;
+	string username = 2;
+	string email = 3;
+	bool is_active = 4;
+	int64 last_login_at = 5;
+	int64 created_at = 6;
+	int64 updated_at = 7;
+}
+
+message LogoutRequest {
+}
+
+message LogoutResponse {
+	int64 code = 1;
+	string msg = 2;
 }

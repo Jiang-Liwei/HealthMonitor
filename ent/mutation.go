@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/adminjwtexpiredtokens"
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminmenu"
 	"healthmonitor/ent/adminpermission"
@@ -39,7 +39,7 @@ const (
 	OpUpdateOne = ent.OpUpdateOne
 
 	// Node types.
-	TypeAdminJWTBlacklist          = "AdminJWTBlacklist"
+	TypeAdminJWTExpiredTokens      = "AdminJWTExpiredTokens"
 	TypeAdminLog                   = "AdminLog"
 	TypeAdminMenu                  = "AdminMenu"
 	TypeAdminPermission            = "AdminPermission"
@@ -57,8 +57,8 @@ const (
 	TypeUserMealFood               = "UserMealFood"
 )
 
-// AdminJWTBlacklistMutation represents an operation that mutates the AdminJWTBlacklist nodes in the graph.
-type AdminJWTBlacklistMutation struct {
+// AdminJWTExpiredTokensMutation represents an operation that mutates the AdminJWTExpiredTokens nodes in the graph.
+type AdminJWTExpiredTokensMutation struct {
 	config
 	op            Op
 	typ           string
@@ -70,21 +70,21 @@ type AdminJWTBlacklistMutation struct {
 	addrevoked_at *int
 	clearedFields map[string]struct{}
 	done          bool
-	oldValue      func(context.Context) (*AdminJWTBlacklist, error)
-	predicates    []predicate.AdminJWTBlacklist
+	oldValue      func(context.Context) (*AdminJWTExpiredTokens, error)
+	predicates    []predicate.AdminJWTExpiredTokens
 }
 
-var _ ent.Mutation = (*AdminJWTBlacklistMutation)(nil)
+var _ ent.Mutation = (*AdminJWTExpiredTokensMutation)(nil)
 
-// adminjwtblacklistOption allows management of the mutation configuration using functional options.
-type adminjwtblacklistOption func(*AdminJWTBlacklistMutation)
+// adminjwtexpiredtokensOption allows management of the mutation configuration using functional options.
+type adminjwtexpiredtokensOption func(*AdminJWTExpiredTokensMutation)
 
-// newAdminJWTBlacklistMutation creates new mutation for the AdminJWTBlacklist entity.
-func newAdminJWTBlacklistMutation(c config, op Op, opts ...adminjwtblacklistOption) *AdminJWTBlacklistMutation {
-	m := &AdminJWTBlacklistMutation{
+// newAdminJWTExpiredTokensMutation creates new mutation for the AdminJWTExpiredTokens entity.
+func newAdminJWTExpiredTokensMutation(c config, op Op, opts ...adminjwtexpiredtokensOption) *AdminJWTExpiredTokensMutation {
+	m := &AdminJWTExpiredTokensMutation{
 		config:        c,
 		op:            op,
-		typ:           TypeAdminJWTBlacklist,
+		typ:           TypeAdminJWTExpiredTokens,
 		clearedFields: make(map[string]struct{}),
 	}
 	for _, opt := range opts {
@@ -93,20 +93,20 @@ func newAdminJWTBlacklistMutation(c config, op Op, opts ...adminjwtblacklistOpti
 	return m
 }
 
-// withAdminJWTBlacklistID sets the ID field of the mutation.
-func withAdminJWTBlacklistID(id int) adminjwtblacklistOption {
-	return func(m *AdminJWTBlacklistMutation) {
+// withAdminJWTExpiredTokensID sets the ID field of the mutation.
+func withAdminJWTExpiredTokensID(id int) adminjwtexpiredtokensOption {
+	return func(m *AdminJWTExpiredTokensMutation) {
 		var (
 			err   error
 			once  sync.Once
-			value *AdminJWTBlacklist
+			value *AdminJWTExpiredTokens
 		)
-		m.oldValue = func(ctx context.Context) (*AdminJWTBlacklist, error) {
+		m.oldValue = func(ctx context.Context) (*AdminJWTExpiredTokens, error) {
 			once.Do(func() {
 				if m.done {
 					err = errors.New("querying old values post mutation is not allowed")
 				} else {
-					value, err = m.Client().AdminJWTBlacklist.Get(ctx, id)
+					value, err = m.Client().AdminJWTExpiredTokens.Get(ctx, id)
 				}
 			})
 			return value, err
@@ -115,10 +115,10 @@ func withAdminJWTBlacklistID(id int) adminjwtblacklistOption {
 	}
 }
 
-// withAdminJWTBlacklist sets the old AdminJWTBlacklist of the mutation.
-func withAdminJWTBlacklist(node *AdminJWTBlacklist) adminjwtblacklistOption {
-	return func(m *AdminJWTBlacklistMutation) {
-		m.oldValue = func(context.Context) (*AdminJWTBlacklist, error) {
+// withAdminJWTExpiredTokens sets the old AdminJWTExpiredTokens of the mutation.
+func withAdminJWTExpiredTokens(node *AdminJWTExpiredTokens) adminjwtexpiredtokensOption {
+	return func(m *AdminJWTExpiredTokensMutation) {
+		m.oldValue = func(context.Context) (*AdminJWTExpiredTokens, error) {
 			return node, nil
 		}
 		m.id = &node.ID
@@ -127,7 +127,7 @@ func withAdminJWTBlacklist(node *AdminJWTBlacklist) adminjwtblacklistOption {
 
 // Client returns a new `ent.Client` from the mutation. If the mutation was
 // executed in a transaction (ent.Tx), a transactional client is returned.
-func (m AdminJWTBlacklistMutation) Client() *Client {
+func (m AdminJWTExpiredTokensMutation) Client() *Client {
 	client := &Client{config: m.config}
 	client.init()
 	return client
@@ -135,7 +135,7 @@ func (m AdminJWTBlacklistMutation) Client() *Client {
 
 // Tx returns an `ent.Tx` for mutations that were executed in transactions;
 // it returns an error otherwise.
-func (m AdminJWTBlacklistMutation) Tx() (*Tx, error) {
+func (m AdminJWTExpiredTokensMutation) Tx() (*Tx, error) {
 	if _, ok := m.driver.(*txDriver); !ok {
 		return nil, errors.New("ent: mutation is not running in a transaction")
 	}
@@ -146,7 +146,7 @@ func (m AdminJWTBlacklistMutation) Tx() (*Tx, error) {
 
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *AdminJWTBlacklistMutation) ID() (id int, exists bool) {
+func (m *AdminJWTExpiredTokensMutation) ID() (id int, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -157,7 +157,7 @@ func (m *AdminJWTBlacklistMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *AdminJWTBlacklistMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *AdminJWTExpiredTokensMutation) IDs(ctx context.Context) ([]int, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
@@ -166,19 +166,19 @@ func (m *AdminJWTBlacklistMutation) IDs(ctx context.Context) ([]int, error) {
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
-		return m.Client().AdminJWTBlacklist.Query().Where(m.predicates...).IDs(ctx)
+		return m.Client().AdminJWTExpiredTokens.Query().Where(m.predicates...).IDs(ctx)
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
 }
 
 // SetJti sets the "jti" field.
-func (m *AdminJWTBlacklistMutation) SetJti(s string) {
+func (m *AdminJWTExpiredTokensMutation) SetJti(s string) {
 	m.jti = &s
 }
 
 // Jti returns the value of the "jti" field in the mutation.
-func (m *AdminJWTBlacklistMutation) Jti() (r string, exists bool) {
+func (m *AdminJWTExpiredTokensMutation) Jti() (r string, exists bool) {
 	v := m.jti
 	if v == nil {
 		return
@@ -186,10 +186,10 @@ func (m *AdminJWTBlacklistMutation) Jti() (r string, exists bool) {
 	return *v, true
 }
 
-// OldJti returns the old "jti" field's value of the AdminJWTBlacklist entity.
-// If the AdminJWTBlacklist object wasn't provided to the builder, the object is fetched from the database.
+// OldJti returns the old "jti" field's value of the AdminJWTExpiredTokens entity.
+// If the AdminJWTExpiredTokens object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AdminJWTBlacklistMutation) OldJti(ctx context.Context) (v string, err error) {
+func (m *AdminJWTExpiredTokensMutation) OldJti(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldJti is only allowed on UpdateOne operations")
 	}
@@ -204,18 +204,18 @@ func (m *AdminJWTBlacklistMutation) OldJti(ctx context.Context) (v string, err e
 }
 
 // ResetJti resets all changes to the "jti" field.
-func (m *AdminJWTBlacklistMutation) ResetJti() {
+func (m *AdminJWTExpiredTokensMutation) ResetJti() {
 	m.jti = nil
 }
 
 // SetExpiresAt sets the "expires_at" field.
-func (m *AdminJWTBlacklistMutation) SetExpiresAt(i int) {
+func (m *AdminJWTExpiredTokensMutation) SetExpiresAt(i int) {
 	m.expires_at = &i
 	m.addexpires_at = nil
 }
 
 // ExpiresAt returns the value of the "expires_at" field in the mutation.
-func (m *AdminJWTBlacklistMutation) ExpiresAt() (r int, exists bool) {
+func (m *AdminJWTExpiredTokensMutation) ExpiresAt() (r int, exists bool) {
 	v := m.expires_at
 	if v == nil {
 		return
@@ -223,10 +223,10 @@ func (m *AdminJWTBlacklistMutation) ExpiresAt() (r int, exists bool) {
 	return *v, true
 }
 
-// OldExpiresAt returns the old "expires_at" field's value of the AdminJWTBlacklist entity.
-// If the AdminJWTBlacklist object wasn't provided to the builder, the object is fetched from the database.
+// OldExpiresAt returns the old "expires_at" field's value of the AdminJWTExpiredTokens entity.
+// If the AdminJWTExpiredTokens object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AdminJWTBlacklistMutation) OldExpiresAt(ctx context.Context) (v int, err error) {
+func (m *AdminJWTExpiredTokensMutation) OldExpiresAt(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldExpiresAt is only allowed on UpdateOne operations")
 	}
@@ -241,7 +241,7 @@ func (m *AdminJWTBlacklistMutation) OldExpiresAt(ctx context.Context) (v int, er
 }
 
 // AddExpiresAt adds i to the "expires_at" field.
-func (m *AdminJWTBlacklistMutation) AddExpiresAt(i int) {
+func (m *AdminJWTExpiredTokensMutation) AddExpiresAt(i int) {
 	if m.addexpires_at != nil {
 		*m.addexpires_at += i
 	} else {
@@ -250,7 +250,7 @@ func (m *AdminJWTBlacklistMutation) AddExpiresAt(i int) {
 }
 
 // AddedExpiresAt returns the value that was added to the "expires_at" field in this mutation.
-func (m *AdminJWTBlacklistMutation) AddedExpiresAt() (r int, exists bool) {
+func (m *AdminJWTExpiredTokensMutation) AddedExpiresAt() (r int, exists bool) {
 	v := m.addexpires_at
 	if v == nil {
 		return
@@ -259,19 +259,19 @@ func (m *AdminJWTBlacklistMutation) AddedExpiresAt() (r int, exists bool) {
 }
 
 // ResetExpiresAt resets all changes to the "expires_at" field.
-func (m *AdminJWTBlacklistMutation) ResetExpiresAt() {
+func (m *AdminJWTExpiredTokensMutation) ResetExpiresAt() {
 	m.expires_at = nil
 	m.addexpires_at = nil
 }
 
 // SetRevokedAt sets the "revoked_at" field.
-func (m *AdminJWTBlacklistMutation) SetRevokedAt(i int) {
+func (m *AdminJWTExpiredTokensMutation) SetRevokedAt(i int) {
 	m.revoked_at = &i
 	m.addrevoked_at = nil
 }
 
 // RevokedAt returns the value of the "revoked_at" field in the mutation.
-func (m *AdminJWTBlacklistMutation) RevokedAt() (r int, exists bool) {
+func (m *AdminJWTExpiredTokensMutation) RevokedAt() (r int, exists bool) {
 	v := m.revoked_at
 	if v == nil {
 		return
@@ -279,10 +279,10 @@ func (m *AdminJWTBlacklistMutation) RevokedAt() (r int, exists bool) {
 	return *v, true
 }
 
-// OldRevokedAt returns the old "revoked_at" field's value of the AdminJWTBlacklist entity.
-// If the AdminJWTBlacklist object wasn't provided to the builder, the object is fetched from the database.
+// OldRevokedAt returns the old "revoked_at" field's value of the AdminJWTExpiredTokens entity.
+// If the AdminJWTExpiredTokens object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *AdminJWTBlacklistMutation) OldRevokedAt(ctx context.Context) (v int, err error) {
+func (m *AdminJWTExpiredTokensMutation) OldRevokedAt(ctx context.Context) (v int, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldRevokedAt is only allowed on UpdateOne operations")
 	}
@@ -297,7 +297,7 @@ func (m *AdminJWTBlacklistMutation) OldRevokedAt(ctx context.Context) (v int, er
 }
 
 // AddRevokedAt adds i to the "revoked_at" field.
-func (m *AdminJWTBlacklistMutation) AddRevokedAt(i int) {
+func (m *AdminJWTExpiredTokensMutation) AddRevokedAt(i int) {
 	if m.addrevoked_at != nil {
 		*m.addrevoked_at += i
 	} else {
@@ -306,7 +306,7 @@ func (m *AdminJWTBlacklistMutation) AddRevokedAt(i int) {
 }
 
 // AddedRevokedAt returns the value that was added to the "revoked_at" field in this mutation.
-func (m *AdminJWTBlacklistMutation) AddedRevokedAt() (r int, exists bool) {
+func (m *AdminJWTExpiredTokensMutation) AddedRevokedAt() (r int, exists bool) {
 	v := m.addrevoked_at
 	if v == nil {
 		return
@@ -314,21 +314,35 @@ func (m *AdminJWTBlacklistMutation) AddedRevokedAt() (r int, exists bool) {
 	return *v, true
 }
 
-// ResetRevokedAt resets all changes to the "revoked_at" field.
-func (m *AdminJWTBlacklistMutation) ResetRevokedAt() {
+// ClearRevokedAt clears the value of the "revoked_at" field.
+func (m *AdminJWTExpiredTokensMutation) ClearRevokedAt() {
 	m.revoked_at = nil
 	m.addrevoked_at = nil
+	m.clearedFields[adminjwtexpiredtokens.FieldRevokedAt] = struct{}{}
 }
 
-// Where appends a list predicates to the AdminJWTBlacklistMutation builder.
-func (m *AdminJWTBlacklistMutation) Where(ps ...predicate.AdminJWTBlacklist) {
+// RevokedAtCleared returns if the "revoked_at" field was cleared in this mutation.
+func (m *AdminJWTExpiredTokensMutation) RevokedAtCleared() bool {
+	_, ok := m.clearedFields[adminjwtexpiredtokens.FieldRevokedAt]
+	return ok
+}
+
+// ResetRevokedAt resets all changes to the "revoked_at" field.
+func (m *AdminJWTExpiredTokensMutation) ResetRevokedAt() {
+	m.revoked_at = nil
+	m.addrevoked_at = nil
+	delete(m.clearedFields, adminjwtexpiredtokens.FieldRevokedAt)
+}
+
+// Where appends a list predicates to the AdminJWTExpiredTokensMutation builder.
+func (m *AdminJWTExpiredTokensMutation) Where(ps ...predicate.AdminJWTExpiredTokens) {
 	m.predicates = append(m.predicates, ps...)
 }
 
-// WhereP appends storage-level predicates to the AdminJWTBlacklistMutation builder. Using this method,
+// WhereP appends storage-level predicates to the AdminJWTExpiredTokensMutation builder. Using this method,
 // users can use type-assertion to append predicates that do not depend on any generated package.
-func (m *AdminJWTBlacklistMutation) WhereP(ps ...func(*sql.Selector)) {
-	p := make([]predicate.AdminJWTBlacklist, len(ps))
+func (m *AdminJWTExpiredTokensMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.AdminJWTExpiredTokens, len(ps))
 	for i := range ps {
 		p[i] = ps[i]
 	}
@@ -336,33 +350,33 @@ func (m *AdminJWTBlacklistMutation) WhereP(ps ...func(*sql.Selector)) {
 }
 
 // Op returns the operation name.
-func (m *AdminJWTBlacklistMutation) Op() Op {
+func (m *AdminJWTExpiredTokensMutation) Op() Op {
 	return m.op
 }
 
 // SetOp allows setting the mutation operation.
-func (m *AdminJWTBlacklistMutation) SetOp(op Op) {
+func (m *AdminJWTExpiredTokensMutation) SetOp(op Op) {
 	m.op = op
 }
 
-// Type returns the node type of this mutation (AdminJWTBlacklist).
-func (m *AdminJWTBlacklistMutation) Type() string {
+// Type returns the node type of this mutation (AdminJWTExpiredTokens).
+func (m *AdminJWTExpiredTokensMutation) Type() string {
 	return m.typ
 }
 
 // Fields returns all fields that were changed during this mutation. Note that in
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
-func (m *AdminJWTBlacklistMutation) Fields() []string {
+func (m *AdminJWTExpiredTokensMutation) Fields() []string {
 	fields := make([]string, 0, 3)
 	if m.jti != nil {
-		fields = append(fields, adminjwtblacklist.FieldJti)
+		fields = append(fields, adminjwtexpiredtokens.FieldJti)
 	}
 	if m.expires_at != nil {
-		fields = append(fields, adminjwtblacklist.FieldExpiresAt)
+		fields = append(fields, adminjwtexpiredtokens.FieldExpiresAt)
 	}
 	if m.revoked_at != nil {
-		fields = append(fields, adminjwtblacklist.FieldRevokedAt)
+		fields = append(fields, adminjwtexpiredtokens.FieldRevokedAt)
 	}
 	return fields
 }
@@ -370,13 +384,13 @@ func (m *AdminJWTBlacklistMutation) Fields() []string {
 // Field returns the value of a field with the given name. The second boolean
 // return value indicates that this field was not set, or was not defined in the
 // schema.
-func (m *AdminJWTBlacklistMutation) Field(name string) (ent.Value, bool) {
+func (m *AdminJWTExpiredTokensMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case adminjwtblacklist.FieldJti:
+	case adminjwtexpiredtokens.FieldJti:
 		return m.Jti()
-	case adminjwtblacklist.FieldExpiresAt:
+	case adminjwtexpiredtokens.FieldExpiresAt:
 		return m.ExpiresAt()
-	case adminjwtblacklist.FieldRevokedAt:
+	case adminjwtexpiredtokens.FieldRevokedAt:
 		return m.RevokedAt()
 	}
 	return nil, false
@@ -385,38 +399,38 @@ func (m *AdminJWTBlacklistMutation) Field(name string) (ent.Value, bool) {
 // OldField returns the old value of the field from the database. An error is
 // returned if the mutation operation is not UpdateOne, or the query to the
 // database failed.
-func (m *AdminJWTBlacklistMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+func (m *AdminJWTExpiredTokensMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case adminjwtblacklist.FieldJti:
+	case adminjwtexpiredtokens.FieldJti:
 		return m.OldJti(ctx)
-	case adminjwtblacklist.FieldExpiresAt:
+	case adminjwtexpiredtokens.FieldExpiresAt:
 		return m.OldExpiresAt(ctx)
-	case adminjwtblacklist.FieldRevokedAt:
+	case adminjwtexpiredtokens.FieldRevokedAt:
 		return m.OldRevokedAt(ctx)
 	}
-	return nil, fmt.Errorf("unknown AdminJWTBlacklist field %s", name)
+	return nil, fmt.Errorf("unknown AdminJWTExpiredTokens field %s", name)
 }
 
 // SetField sets the value of a field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *AdminJWTBlacklistMutation) SetField(name string, value ent.Value) error {
+func (m *AdminJWTExpiredTokensMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case adminjwtblacklist.FieldJti:
+	case adminjwtexpiredtokens.FieldJti:
 		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetJti(v)
 		return nil
-	case adminjwtblacklist.FieldExpiresAt:
+	case adminjwtexpiredtokens.FieldExpiresAt:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetExpiresAt(v)
 		return nil
-	case adminjwtblacklist.FieldRevokedAt:
+	case adminjwtexpiredtokens.FieldRevokedAt:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -424,18 +438,18 @@ func (m *AdminJWTBlacklistMutation) SetField(name string, value ent.Value) error
 		m.SetRevokedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown AdminJWTBlacklist field %s", name)
+	return fmt.Errorf("unknown AdminJWTExpiredTokens field %s", name)
 }
 
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
-func (m *AdminJWTBlacklistMutation) AddedFields() []string {
+func (m *AdminJWTExpiredTokensMutation) AddedFields() []string {
 	var fields []string
 	if m.addexpires_at != nil {
-		fields = append(fields, adminjwtblacklist.FieldExpiresAt)
+		fields = append(fields, adminjwtexpiredtokens.FieldExpiresAt)
 	}
 	if m.addrevoked_at != nil {
-		fields = append(fields, adminjwtblacklist.FieldRevokedAt)
+		fields = append(fields, adminjwtexpiredtokens.FieldRevokedAt)
 	}
 	return fields
 }
@@ -443,11 +457,11 @@ func (m *AdminJWTBlacklistMutation) AddedFields() []string {
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
-func (m *AdminJWTBlacklistMutation) AddedField(name string) (ent.Value, bool) {
+func (m *AdminJWTExpiredTokensMutation) AddedField(name string) (ent.Value, bool) {
 	switch name {
-	case adminjwtblacklist.FieldExpiresAt:
+	case adminjwtexpiredtokens.FieldExpiresAt:
 		return m.AddedExpiresAt()
-	case adminjwtblacklist.FieldRevokedAt:
+	case adminjwtexpiredtokens.FieldRevokedAt:
 		return m.AddedRevokedAt()
 	}
 	return nil, false
@@ -456,16 +470,16 @@ func (m *AdminJWTBlacklistMutation) AddedField(name string) (ent.Value, bool) {
 // AddField adds the value to the field with the given name. It returns an error if
 // the field is not defined in the schema, or if the type mismatched the field
 // type.
-func (m *AdminJWTBlacklistMutation) AddField(name string, value ent.Value) error {
+func (m *AdminJWTExpiredTokensMutation) AddField(name string, value ent.Value) error {
 	switch name {
-	case adminjwtblacklist.FieldExpiresAt:
+	case adminjwtexpiredtokens.FieldExpiresAt:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddExpiresAt(v)
 		return nil
-	case adminjwtblacklist.FieldRevokedAt:
+	case adminjwtexpiredtokens.FieldRevokedAt:
 		v, ok := value.(int)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
@@ -473,91 +487,100 @@ func (m *AdminJWTBlacklistMutation) AddField(name string, value ent.Value) error
 		m.AddRevokedAt(v)
 		return nil
 	}
-	return fmt.Errorf("unknown AdminJWTBlacklist numeric field %s", name)
+	return fmt.Errorf("unknown AdminJWTExpiredTokens numeric field %s", name)
 }
 
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
-func (m *AdminJWTBlacklistMutation) ClearedFields() []string {
-	return nil
+func (m *AdminJWTExpiredTokensMutation) ClearedFields() []string {
+	var fields []string
+	if m.FieldCleared(adminjwtexpiredtokens.FieldRevokedAt) {
+		fields = append(fields, adminjwtexpiredtokens.FieldRevokedAt)
+	}
+	return fields
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
 // cleared in this mutation.
-func (m *AdminJWTBlacklistMutation) FieldCleared(name string) bool {
+func (m *AdminJWTExpiredTokensMutation) FieldCleared(name string) bool {
 	_, ok := m.clearedFields[name]
 	return ok
 }
 
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
-func (m *AdminJWTBlacklistMutation) ClearField(name string) error {
-	return fmt.Errorf("unknown AdminJWTBlacklist nullable field %s", name)
+func (m *AdminJWTExpiredTokensMutation) ClearField(name string) error {
+	switch name {
+	case adminjwtexpiredtokens.FieldRevokedAt:
+		m.ClearRevokedAt()
+		return nil
+	}
+	return fmt.Errorf("unknown AdminJWTExpiredTokens nullable field %s", name)
 }
 
 // ResetField resets all changes in the mutation for the field with the given name.
 // It returns an error if the field is not defined in the schema.
-func (m *AdminJWTBlacklistMutation) ResetField(name string) error {
+func (m *AdminJWTExpiredTokensMutation) ResetField(name string) error {
 	switch name {
-	case adminjwtblacklist.FieldJti:
+	case adminjwtexpiredtokens.FieldJti:
 		m.ResetJti()
 		return nil
-	case adminjwtblacklist.FieldExpiresAt:
+	case adminjwtexpiredtokens.FieldExpiresAt:
 		m.ResetExpiresAt()
 		return nil
-	case adminjwtblacklist.FieldRevokedAt:
+	case adminjwtexpiredtokens.FieldRevokedAt:
 		m.ResetRevokedAt()
 		return nil
 	}
-	return fmt.Errorf("unknown AdminJWTBlacklist field %s", name)
+	return fmt.Errorf("unknown AdminJWTExpiredTokens field %s", name)
 }
 
 // AddedEdges returns all edge names that were set/added in this mutation.
-func (m *AdminJWTBlacklistMutation) AddedEdges() []string {
+func (m *AdminJWTExpiredTokensMutation) AddedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
-func (m *AdminJWTBlacklistMutation) AddedIDs(name string) []ent.Value {
+func (m *AdminJWTExpiredTokensMutation) AddedIDs(name string) []ent.Value {
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
-func (m *AdminJWTBlacklistMutation) RemovedEdges() []string {
+func (m *AdminJWTExpiredTokensMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
 // the given name in this mutation.
-func (m *AdminJWTBlacklistMutation) RemovedIDs(name string) []ent.Value {
+func (m *AdminJWTExpiredTokensMutation) RemovedIDs(name string) []ent.Value {
 	return nil
 }
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
-func (m *AdminJWTBlacklistMutation) ClearedEdges() []string {
+func (m *AdminJWTExpiredTokensMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 0)
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
-func (m *AdminJWTBlacklistMutation) EdgeCleared(name string) bool {
+func (m *AdminJWTExpiredTokensMutation) EdgeCleared(name string) bool {
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
-func (m *AdminJWTBlacklistMutation) ClearEdge(name string) error {
-	return fmt.Errorf("unknown AdminJWTBlacklist unique edge %s", name)
+func (m *AdminJWTExpiredTokensMutation) ClearEdge(name string) error {
+	return fmt.Errorf("unknown AdminJWTExpiredTokens unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
-func (m *AdminJWTBlacklistMutation) ResetEdge(name string) error {
-	return fmt.Errorf("unknown AdminJWTBlacklist edge %s", name)
+func (m *AdminJWTExpiredTokensMutation) ResetEdge(name string) error {
+	return fmt.Errorf("unknown AdminJWTExpiredTokens edge %s", name)
 }
 
 // AdminLogMutation represents an operation that mutates the AdminLog nodes in the graph.

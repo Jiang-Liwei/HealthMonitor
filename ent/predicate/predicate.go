@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
-// AdminJWTBlacklist is the predicate function for adminjwtblacklist builders.
-type AdminJWTBlacklist func(*sql.Selector)
+// AdminJWTExpiredTokens is the predicate function for adminjwtexpiredtokens builders.
+type AdminJWTExpiredTokens func(*sql.Selector)
 
 // AdminLog is the predicate function for adminlog builders.
 type AdminLog func(*sql.Selector)

@@ -4,15 +4,15 @@ package ent
 
 import (
 	"fmt"
-	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/adminjwtexpiredtokens"
 	"strings"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 )
 
-// AdminJWTBlacklist is the model entity for the AdminJWTBlacklist schema.
-type AdminJWTBlacklist struct {
+// AdminJWTExpiredTokens is the model entity for the AdminJWTExpiredTokens schema.
+type AdminJWTExpiredTokens struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
@@ -26,13 +26,13 @@ type AdminJWTBlacklist struct {
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
-func (*AdminJWTBlacklist) scanValues(columns []string) ([]any, error) {
+func (*AdminJWTExpiredTokens) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case adminjwtblacklist.FieldID, adminjwtblacklist.FieldExpiresAt, adminjwtblacklist.FieldRevokedAt:
+		case adminjwtexpiredtokens.FieldID, adminjwtexpiredtokens.FieldExpiresAt, adminjwtexpiredtokens.FieldRevokedAt:
 			values[i] = new(sql.NullInt64)
-		case adminjwtblacklist.FieldJti:
+		case adminjwtexpiredtokens.FieldJti:
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -42,84 +42,84 @@ func (*AdminJWTBlacklist) scanValues(columns []string) ([]any, error) {
 }
 
 // assignValues assigns the values that were returned from sql.Rows (after scanning)
-// to the AdminJWTBlacklist fields.
-func (ajb *AdminJWTBlacklist) assignValues(columns []string, values []any) error {
+// to the AdminJWTExpiredTokens fields.
+func (ajet *AdminJWTExpiredTokens) assignValues(columns []string, values []any) error {
 	if m, n := len(values), len(columns); m < n {
 		return fmt.Errorf("mismatch number of scan values: %d != %d", m, n)
 	}
 	for i := range columns {
 		switch columns[i] {
-		case adminjwtblacklist.FieldID:
+		case adminjwtexpiredtokens.FieldID:
 			value, ok := values[i].(*sql.NullInt64)
 			if !ok {
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
-			ajb.ID = int(value.Int64)
-		case adminjwtblacklist.FieldJti:
+			ajet.ID = int(value.Int64)
+		case adminjwtexpiredtokens.FieldJti:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field jti", values[i])
 			} else if value.Valid {
-				ajb.Jti = value.String
+				ajet.Jti = value.String
 			}
-		case adminjwtblacklist.FieldExpiresAt:
+		case adminjwtexpiredtokens.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field expires_at", values[i])
 			} else if value.Valid {
-				ajb.ExpiresAt = int(value.Int64)
+				ajet.ExpiresAt = int(value.Int64)
 			}
-		case adminjwtblacklist.FieldRevokedAt:
+		case adminjwtexpiredtokens.FieldRevokedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field revoked_at", values[i])
 			} else if value.Valid {
-				ajb.RevokedAt = int(value.Int64)
+				ajet.RevokedAt = int(value.Int64)
 			}
 		default:
-			ajb.selectValues.Set(columns[i], values[i])
+			ajet.selectValues.Set(columns[i], values[i])
 		}
 	}
 	return nil
 }
 
-// Value returns the ent.Value that was dynamically selected and assigned to the AdminJWTBlacklist.
+// Value returns the ent.Value that was dynamically selected and assigned to the AdminJWTExpiredTokens.
 // This includes values selected through modifiers, order, etc.
-func (ajb *AdminJWTBlacklist) Value(name string) (ent.Value, error) {
-	return ajb.selectValues.Get(name)
+func (ajet *AdminJWTExpiredTokens) Value(name string) (ent.Value, error) {
+	return ajet.selectValues.Get(name)
 }
 
-// Update returns a builder for updating this AdminJWTBlacklist.
-// Note that you need to call AdminJWTBlacklist.Unwrap() before calling this method if this AdminJWTBlacklist
+// Update returns a builder for updating this AdminJWTExpiredTokens.
+// Note that you need to call AdminJWTExpiredTokens.Unwrap() before calling this method if this AdminJWTExpiredTokens
 // was returned from a transaction, and the transaction was committed or rolled back.
-func (ajb *AdminJWTBlacklist) Update() *AdminJWTBlacklistUpdateOne {
-	return NewAdminJWTBlacklistClient(ajb.config).UpdateOne(ajb)
+func (ajet *AdminJWTExpiredTokens) Update() *AdminJWTExpiredTokensUpdateOne {
+	return NewAdminJWTExpiredTokensClient(ajet.config).UpdateOne(ajet)
 }
 
-// Unwrap unwraps the AdminJWTBlacklist entity that was returned from a transaction after it was closed,
+// Unwrap unwraps the AdminJWTExpiredTokens entity that was returned from a transaction after it was closed,
 // so that all future queries will be executed through the driver which created the transaction.
-func (ajb *AdminJWTBlacklist) Unwrap() *AdminJWTBlacklist {
-	_tx, ok := ajb.config.driver.(*txDriver)
+func (ajet *AdminJWTExpiredTokens) Unwrap() *AdminJWTExpiredTokens {
+	_tx, ok := ajet.config.driver.(*txDriver)
 	if !ok {
-		panic("ent: AdminJWTBlacklist is not a transactional entity")
+		panic("ent: AdminJWTExpiredTokens is not a transactional entity")
 	}
-	ajb.config.driver = _tx.drv
-	return ajb
+	ajet.config.driver = _tx.drv
+	return ajet
 }
 
 // String implements the fmt.Stringer.
-func (ajb *AdminJWTBlacklist) String() string {
+func (ajet *AdminJWTExpiredTokens) String() string {
 	var builder strings.Builder
-	builder.WriteString("AdminJWTBlacklist(")
-	builder.WriteString(fmt.Sprintf("id=%v, ", ajb.ID))
+	builder.WriteString("AdminJWTExpiredTokens(")
+	builder.WriteString(fmt.Sprintf("id=%v, ", ajet.ID))
 	builder.WriteString("jti=")
-	builder.WriteString(ajb.Jti)
+	builder.WriteString(ajet.Jti)
 	builder.WriteString(", ")
 	builder.WriteString("expires_at=")
-	builder.WriteString(fmt.Sprintf("%v", ajb.ExpiresAt))
+	builder.WriteString(fmt.Sprintf("%v", ajet.ExpiresAt))
 	builder.WriteString(", ")
 	builder.WriteString("revoked_at=")
-	builder.WriteString(fmt.Sprintf("%v", ajb.RevokedAt))
+	builder.WriteString(fmt.Sprintf("%v", ajet.RevokedAt))
 	builder.WriteByte(')')
 	return builder.String()
 }
 
-// AdminJWTBlacklists is a parsable slice of AdminJWTBlacklist.
-type AdminJWTBlacklists []*AdminJWTBlacklist
+// AdminJWTExpiredTokensSlice is a parsable slice of AdminJWTExpiredTokens.
+type AdminJWTExpiredTokensSlice []*AdminJWTExpiredTokens

@@ -6,7 +6,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/adminjwtexpiredtokens"
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminmenu"
 	"healthmonitor/ent/adminpermission"
@@ -88,7 +88,7 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			adminjwtblacklist.Table:          adminjwtblacklist.ValidColumn,
+			adminjwtexpiredtokens.Table:      adminjwtexpiredtokens.ValidColumn,
 			adminlog.Table:                   adminlog.ValidColumn,
 			adminmenu.Table:                  adminmenu.ValidColumn,
 			adminpermission.Table:            adminpermission.ValidColumn,

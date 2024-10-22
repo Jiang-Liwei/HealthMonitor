@@ -9,25 +9,25 @@ import (
 )
 
 var (
-	// AdminJwtBlacklistsColumns holds the columns for the "admin_jwt_blacklists" table.
-	AdminJwtBlacklistsColumns = []*schema.Column{
+	// AdminJwtExpiredTokensColumns holds the columns for the "admin_jwt_expired_tokens" table.
+	AdminJwtExpiredTokensColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "jti", Type: field.TypeString, Unique: true},
 		{Name: "expires_at", Type: field.TypeInt},
-		{Name: "revoked_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "revoked_at", Type: field.TypeInt, Nullable: true},
 	}
-	// AdminJwtBlacklistsTable holds the schema information for the "admin_jwt_blacklists" table.
-	AdminJwtBlacklistsTable = &schema.Table{
-		Name:       "admin_jwt_blacklists",
-		Columns:    AdminJwtBlacklistsColumns,
-		PrimaryKey: []*schema.Column{AdminJwtBlacklistsColumns[0]},
+	// AdminJwtExpiredTokensTable holds the schema information for the "admin_jwt_expired_tokens" table.
+	AdminJwtExpiredTokensTable = &schema.Table{
+		Name:       "admin_jwt_expired_tokens",
+		Columns:    AdminJwtExpiredTokensColumns,
+		PrimaryKey: []*schema.Column{AdminJwtExpiredTokensColumns[0]},
 	}
 	// AdminLogsColumns holds the columns for the "admin_logs" table.
 	AdminLogsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "action", Type: field.TypeString},
 		{Name: "ip_address", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
 		{Name: "admin_user_logs", Type: field.TypeUUID, Nullable: true},
 	}
 	// AdminLogsTable holds the schema information for the "admin_logs" table.
@@ -51,8 +51,8 @@ var (
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "order", Type: field.TypeUint16, Default: 0},
-		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminMenusTable holds the schema information for the "admin_menus" table.
@@ -68,8 +68,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "method", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminPermissionsTable holds the schema information for the "admin_permissions" table.
@@ -109,8 +109,8 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminRolesTable holds the schema information for the "admin_roles" table.
@@ -128,8 +128,8 @@ var (
 		{Name: "is_active", Type: field.TypeBool, Default: true},
 		{Name: "last_login_at", Type: field.TypeInt, Nullable: true},
 		{Name: "jwt_issued_at", Type: field.TypeInt, Nullable: true},
-		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "created_at", Type: field.TypeInt},
+		{Name: "updated_at", Type: field.TypeInt},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminUsersTable holds the schema information for the "admin_users" table.
@@ -175,8 +175,8 @@ var (
 		{Name: "diastolic_pressure", Type: field.TypeUint8, Comment: "舒张压"},
 		{Name: "pulse", Type: field.TypeUint8, Comment: "脉搏"},
 		{Name: "mood", Type: field.TypeEnum, Comment: "心情:一般,开心,伤心", Enums: []string{"same_as", "happy", "sad"}},
-		{Name: "created_at", Type: field.TypeInt, Default: 1728205505},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1728205505},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// BloodStatusRecordsTable holds the schema information for the "blood_status_records" table.
@@ -315,7 +315,7 @@ var (
 	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
-		AdminJwtBlacklistsTable,
+		AdminJwtExpiredTokensTable,
 		AdminLogsTable,
 		AdminMenusTable,
 		AdminPermissionsTable,

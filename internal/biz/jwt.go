@@ -1,20 +1,21 @@
-package service
+package biz
 
 import (
 	"context"
 	"errors"
+	"healthmonitor/ent/adminjwtexpiredtokens"
+	"healthmonitor/internal/data/core"
 	"time"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/google/uuid"
-	"healthmonitor/ent"
 )
 
 type authKey struct{}
 
-type JWTService struct {
-	data     *ent.Client
+type JWTUsecase struct {
+	data     *core.Data
 	log      *log.Helper
 	secret   []byte
 	lifespan time.Duration
@@ -25,18 +26,18 @@ type Claims struct {
 	UserID string `json:"user_id"`
 }
 
-// NewJWTService 创建新的 JWT 服务
-func NewJWTService(data *ent.Client, logger log.Logger, secret string, lifespan time.Duration) *JWTService {
-	return &JWTService{
+// NewJWTUsecase 创建新的 JWT 服务
+func NewJWTUsecase(data *core.Data, logger log.Logger) *JWTUsecase {
+	return &JWTUsecase{
 		data:     data,
 		log:      log.NewHelper(logger),
-		secret:   []byte(secret),
-		lifespan: lifespan,
+		secret:   []byte("secret"),
+		lifespan: 24 * time.Hour,
 	}
 }
 
 // GenerateToken 生成 JWT 令牌
-func (s *JWTService) GenerateToken(userID string) (string, error) {
+func (s *JWTUsecase) GenerateToken(userID string) (string, error) {
 	claims := &Claims{
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(s.lifespan)),
@@ -51,7 +52,7 @@ func (s *JWTService) GenerateToken(userID string) (string, error) {
 }
 
 // ValidateToken 验证 JWT 令牌
-func (s *JWTService) ValidateToken(tokenString string) (string, error) {
+func (s *JWTUsecase) ValidateToken(tokenString string) (string, error) {
 	claims := &Claims{}
 	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (any, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -69,24 +70,34 @@ func (s *JWTService) ValidateToken(tokenString string) (string, error) {
 	}
 
 	// 检查 JWT 是否在黑名单中
-	blacklisted, err := s.data.AdminJWTBlacklist.Query().Where( /* 条件，例如 jti=claims.ID */ ).Exist(context.Background())
+	blacklisted, err := s.data.DB.AdminJWTExpiredTokens.Query().Where(adminjwtexpiredtokens.JtiEQ(claims.ID)).Exist(context.Background())
 	if err != nil {
 		return "", err
 	}
 
 	if blacklisted {
-		return "", errors.New("token is blacklisted")
+		return "", errors.New("token is expire")
 	}
 
 	return claims.UserID, nil
 }
 
 // RevokeToken 撤销 JWT 令牌
-func (s *JWTService) RevokeToken(jti string) error {
-	_, err := s.data.AdminJWTBlacklist.Create().
+func (s *JWTUsecase) RevokeToken(jti string) error {
+	_, err := s.data.DB.AdminJWTExpiredTokens.Create().
 		SetJti(jti).
 		SetExpiresAt(int(time.Now().Add(s.lifespan).Unix())).
 		Save(context.Background())
 
 	return err
+}
+
+// KeyFunc 用于返回 JWT 签名密钥
+func (s *JWTUsecase) KeyFunc(token *jwt.Token) (interface{}, error) {
+	// 检查签名方法是否为 HMAC-SHA256
+	if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+		return nil, errors.New("unexpected signing method")
+	}
+	// 返回用于签名的密钥
+	return s.secret, nil
 }

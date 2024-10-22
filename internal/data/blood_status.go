@@ -9,15 +9,16 @@ import (
 	"healthmonitor/ent/bloodstatusrecord"
 	"healthmonitor/internal/biz"
 	"healthmonitor/internal/common"
+	"healthmonitor/internal/data/core"
 )
 
 type bloodStatusRepo struct {
-	data *Data
+	data *core.Data
 	log  *log.Helper
 }
 
 // NewBloodStatusRepo creates a new instance of bloodStatusRepo.
-func NewBloodStatusRepo(data *Data, logger log.Logger) biz.BloodStatusRepo {
+func NewBloodStatusRepo(data *core.Data, logger log.Logger) biz.BloodStatusRepo {
 	return &bloodStatusRepo{
 		data: data,
 		log:  log.NewHelper(logger),
@@ -31,7 +32,7 @@ func (bsr *bloodStatusRepo) Save(ctx context.Context, b *biz.BloodStatus) (*ent.
 	if err != nil {
 		return nil, err
 	}
-	record, err := bsr.data.db.BloodStatusRecord.Create().
+	record, err := bsr.data.DB.BloodStatusRecord.Create().
 		SetUserID(userID).
 		SetRecordDate(b.RecordDate).
 		SetTimeOfDay(b.TimeOfDay).
@@ -45,7 +46,7 @@ func (bsr *bloodStatusRepo) Save(ctx context.Context, b *biz.BloodStatus) (*ent.
 
 func (bsr *bloodStatusRepo) Update(ctx context.Context, id uuid.UUID, b *biz.BloodStatus) (*ent.BloodStatusRecord, error) {
 
-	p, err := bsr.data.db.BloodStatusRecord.Get(ctx, id)
+	p, err := bsr.data.DB.BloodStatusRecord.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -71,11 +72,11 @@ func (bsr *bloodStatusRepo) Update(ctx context.Context, id uuid.UUID, b *biz.Blo
 }
 
 func (bsr *bloodStatusRepo) DeleteBloodStatus(ctx context.Context, id uuid.UUID) error {
-	return bsr.data.db.BloodStatusRecord.DeleteOneID(id).Exec(ctx)
+	return bsr.data.DB.BloodStatusRecord.DeleteOneID(id).Exec(ctx)
 }
 
 func (bsr *bloodStatusRepo) FindByID(ctx context.Context, id uuid.UUID) (*ent.BloodStatusRecord, error) {
-	p, err := bsr.data.db.BloodStatusRecord.Get(ctx, id)
+	p, err := bsr.data.DB.BloodStatusRecord.Get(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -90,7 +91,7 @@ func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, page int, pageSize
 	}
 
 	// 获取总记录数
-	totalCount, err := bsr.data.db.BloodStatusRecord.Query().
+	totalCount, err := bsr.data.DB.BloodStatusRecord.Query().
 		Where(bloodstatusrecord.UserIDEQ(userID)).
 		Count(ctx)
 	if err != nil {
@@ -98,7 +99,7 @@ func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, page int, pageSize
 	}
 
 	// 获取实际数据
-	records, err := bsr.data.db.BloodStatusRecord.Query().
+	records, err := bsr.data.DB.BloodStatusRecord.Query().
 		Where(bloodstatusrecord.UserIDEQ(userID)).
 		Limit(pageSize).
 		Offset((page - 1) * pageSize).

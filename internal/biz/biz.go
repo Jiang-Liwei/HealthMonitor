@@ -1,9 +1,13 @@
 package biz
 
-import "github.com/google/wire"
+import (
+	"github.com/google/wire"
+	"healthmonitor/internal/biz/admin"
+)
 
 // ProviderSet is biz providers.
 var ProviderSet = wire.NewSet(
 	NewBloodStatusUsecase,
-	NewAdminUserUsecase,
+	admin.NewAdminUserUsecase,
+	NewJWTUsecase,
 )

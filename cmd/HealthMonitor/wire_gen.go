@@ -10,10 +10,13 @@ import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
 	"healthmonitor/internal/biz"
+	admin2 "healthmonitor/internal/biz/admin"
 	"healthmonitor/internal/conf"
 	"healthmonitor/internal/data"
+	"healthmonitor/internal/data/admin"
 	"healthmonitor/internal/server"
 	"healthmonitor/internal/service"
+	admin3 "healthmonitor/internal/service/admin"
 )
 
 import (
@@ -25,16 +28,20 @@ import (
 // wireApp init kratos application.
 func wireApp(c *conf.Server, d *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
 	indexService := service.NewIndexService()
-	dataData, cleanup, err := data.NewData(d, logger)
+	coreData, cleanup, err := data.NewData(d, logger)
 	if err != nil {
 		return nil, nil, err
 	}
-	bloodStatusRepo := data.NewBloodStatusRepo(dataData, logger)
+	bloodStatusRepo := data.NewBloodStatusRepo(coreData, logger)
 	bloodStatusUsecase := biz.NewBloodStatusUsecase(bloodStatusRepo, logger)
 	bloodStatusService := service.NewBloodStatusService(bloodStatusUsecase, logger)
-	httpServerConfig := ProvideHTTPServerConfig(c, indexService, bloodStatusService, logger)
+	userRepo := admin.NewAdminUserRepo(coreData)
+	userUsecase := admin2.NewAdminUserUsecase(userRepo, logger)
+	jwtUsecase := biz.NewJWTUsecase(coreData, logger)
+	authService := admin3.NewAuthService(userUsecase, logger, jwtUsecase)
+	httpServerConfig := ProvideHTTPServerConfig(c, indexService, bloodStatusService, authService, logger)
 	grpcServer := server.NewGRPCServer(httpServerConfig)
-	httpServer := server.NewHTTPServer(httpServerConfig)
+	httpServer := server.NewHTTPServer(httpServerConfig, userUsecase, jwtUsecase)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
 		cleanup()
@@ -48,12 +55,14 @@ func ProvideHTTPServerConfig(
 	c *conf.Server,
 	index *service.IndexService,
 	bloodStatus *service.BloodStatusService,
+	adminAuth *admin3.AuthService,
 	logger log.Logger,
 ) server.HTTPServerConfig {
 	return server.HTTPServerConfig{
 		Conf:        c,
 		Index:       index,
 		BloodStatus: bloodStatus,
+		AdminAuth:   adminAuth,
 		Logger:      logger,
 	}
 }

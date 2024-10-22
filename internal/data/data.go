@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/redis/go-redis/extra/redisotel/v9"
+	"healthmonitor/internal/data/admin"
+	"healthmonitor/internal/data/core"
 
 	"healthmonitor/ent"
 	"healthmonitor/internal/conf"
@@ -25,17 +27,11 @@ import (
 var ProviderSet = wire.NewSet(
 	NewData,
 	NewBloodStatusRepo,
-	NewAdminUserRepo,
+	admin.NewAdminUserRepo,
 )
 
-// Data holds the database and Redis clients.
-type Data struct {
-	db  *ent.Client
-	rdb *redis.Client
-}
-
-// NewData initializes the Data structure with Redis and Ent clients.
-func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
+// NewData initializes the core.Data structure with Redis and Ent clients.
+func NewData(c *conf.Data, logger log.Logger) (*core.Data, func(), error) {
 	logHelper := log.NewHelper(logger)
 
 	// Initialize Ent client with tracing and logging
@@ -47,17 +43,17 @@ func NewData(c *conf.Data, logger log.Logger) (*Data, func(), error) {
 	// Initialize Redis client with tracing
 	rdb := NewRedis(c)
 
-	d := &Data{
-		db:  client,
-		rdb: rdb,
+	d := &core.Data{
+		DB:  client,
+		RDB: rdb,
 	}
 
 	cleanup := func() {
 		logHelper.Info("closing the data resources")
-		if err := d.db.Close(); err != nil {
+		if err := d.DB.Close(); err != nil {
 			logHelper.Error(err)
 		}
-		if err := d.rdb.Close(); err != nil {
+		if err := d.RDB.Close(); err != nil {
 			logHelper.Error(err)
 		}
 	}

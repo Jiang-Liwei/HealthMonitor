@@ -3,7 +3,6 @@
 package ent
 
 import (
-	"healthmonitor/ent/adminjwtblacklist"
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminmenu"
 	"healthmonitor/ent/adminpermission"
@@ -22,12 +21,6 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
-	adminjwtblacklistFields := schema.AdminJWTBlacklist{}.Fields()
-	_ = adminjwtblacklistFields
-	// adminjwtblacklistDescRevokedAt is the schema descriptor for revoked_at field.
-	adminjwtblacklistDescRevokedAt := adminjwtblacklistFields[2].Descriptor()
-	// adminjwtblacklist.DefaultRevokedAt holds the default value on creation for the revoked_at field.
-	adminjwtblacklist.DefaultRevokedAt = adminjwtblacklistDescRevokedAt.Default.(int)
 	adminlogFields := schema.AdminLog{}.Fields()
 	_ = adminlogFields
 	// adminlogDescCreatedAt is the schema descriptor for created_at field.
@@ -96,16 +89,6 @@ func init() {
 	adminuserDescIsActive := adminuserFields[4].Descriptor()
 	// adminuser.DefaultIsActive holds the default value on creation for the is_active field.
 	adminuser.DefaultIsActive = adminuserDescIsActive.Default.(bool)
-	// adminuserDescCreatedAt is the schema descriptor for created_at field.
-	adminuserDescCreatedAt := adminuserFields[7].Descriptor()
-	// adminuser.DefaultCreatedAt holds the default value on creation for the created_at field.
-	adminuser.DefaultCreatedAt = adminuserDescCreatedAt.Default.(int)
-	// adminuserDescUpdatedAt is the schema descriptor for updated_at field.
-	adminuserDescUpdatedAt := adminuserFields[8].Descriptor()
-	// adminuser.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	adminuser.DefaultUpdatedAt = adminuserDescUpdatedAt.Default.(int)
-	// adminuser.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	adminuser.UpdateDefaultUpdatedAt = adminuserDescUpdatedAt.UpdateDefault.(func() int)
 	// adminuserDescID is the schema descriptor for id field.
 	adminuserDescID := adminuserFields[0].Descriptor()
 	// adminuser.DefaultID holds the default value on creation for the id field.

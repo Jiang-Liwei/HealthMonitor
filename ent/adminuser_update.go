@@ -168,6 +168,14 @@ func (auu *AdminUserUpdate) SetUpdatedAt(i int) *AdminUserUpdate {
 	return auu
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (auu *AdminUserUpdate) SetNillableUpdatedAt(i *int) *AdminUserUpdate {
+	if i != nil {
+		auu.SetUpdatedAt(*i)
+	}
+	return auu
+}
+
 // AddUpdatedAt adds i to the "updated_at" field.
 func (auu *AdminUserUpdate) AddUpdatedAt(i int) *AdminUserUpdate {
 	auu.mutation.AddUpdatedAt(i)
@@ -280,7 +288,6 @@ func (auu *AdminUserUpdate) RemoveLogs(a ...*AdminLog) *AdminUserUpdate {
 
 // Save executes the query and returns the number of nodes affected by the update operation.
 func (auu *AdminUserUpdate) Save(ctx context.Context) (int, error) {
-	auu.defaults()
 	return withHooks(ctx, auu.sqlSave, auu.mutation, auu.hooks)
 }
 
@@ -303,14 +310,6 @@ func (auu *AdminUserUpdate) Exec(ctx context.Context) error {
 func (auu *AdminUserUpdate) ExecX(ctx context.Context) {
 	if err := auu.Exec(ctx); err != nil {
 		panic(err)
-	}
-}
-
-// defaults sets the default values of the builder before save.
-func (auu *AdminUserUpdate) defaults() {
-	if _, ok := auu.mutation.UpdatedAt(); !ok {
-		v := adminuser.UpdateDefaultUpdatedAt()
-		auu.mutation.SetUpdatedAt(v)
 	}
 }
 
@@ -622,6 +621,14 @@ func (auuo *AdminUserUpdateOne) SetUpdatedAt(i int) *AdminUserUpdateOne {
 	return auuo
 }
 
+// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
+func (auuo *AdminUserUpdateOne) SetNillableUpdatedAt(i *int) *AdminUserUpdateOne {
+	if i != nil {
+		auuo.SetUpdatedAt(*i)
+	}
+	return auuo
+}
+
 // AddUpdatedAt adds i to the "updated_at" field.
 func (auuo *AdminUserUpdateOne) AddUpdatedAt(i int) *AdminUserUpdateOne {
 	auuo.mutation.AddUpdatedAt(i)
@@ -747,7 +754,6 @@ func (auuo *AdminUserUpdateOne) Select(field string, fields ...string) *AdminUse
 
 // Save executes the query and returns the updated AdminUser entity.
 func (auuo *AdminUserUpdateOne) Save(ctx context.Context) (*AdminUser, error) {
-	auuo.defaults()
 	return withHooks(ctx, auuo.sqlSave, auuo.mutation, auuo.hooks)
 }
 
@@ -770,14 +776,6 @@ func (auuo *AdminUserUpdateOne) Exec(ctx context.Context) error {
 func (auuo *AdminUserUpdateOne) ExecX(ctx context.Context) {
 	if err := auuo.Exec(ctx); err != nil {
 		panic(err)
-	}
-}
-
-// defaults sets the default values of the builder before save.
-func (auuo *AdminUserUpdateOne) defaults() {
-	if _, ok := auuo.mutation.UpdatedAt(); !ok {
-		v := adminuser.UpdateDefaultUpdatedAt()
-		auuo.mutation.SetUpdatedAt(v)
 	}
 }
 

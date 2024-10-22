@@ -88,25 +88,9 @@ func (auc *AdminUserCreate) SetCreatedAt(i int) *AdminUserCreate {
 	return auc
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (auc *AdminUserCreate) SetNillableCreatedAt(i *int) *AdminUserCreate {
-	if i != nil {
-		auc.SetCreatedAt(*i)
-	}
-	return auc
-}
-
 // SetUpdatedAt sets the "updated_at" field.
 func (auc *AdminUserCreate) SetUpdatedAt(i int) *AdminUserCreate {
 	auc.mutation.SetUpdatedAt(i)
-	return auc
-}
-
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (auc *AdminUserCreate) SetNillableUpdatedAt(i *int) *AdminUserCreate {
-	if i != nil {
-		auc.SetUpdatedAt(*i)
-	}
 	return auc
 }
 
@@ -206,14 +190,6 @@ func (auc *AdminUserCreate) defaults() {
 	if _, ok := auc.mutation.IsActive(); !ok {
 		v := adminuser.DefaultIsActive
 		auc.mutation.SetIsActive(v)
-	}
-	if _, ok := auc.mutation.CreatedAt(); !ok {
-		v := adminuser.DefaultCreatedAt
-		auc.mutation.SetCreatedAt(v)
-	}
-	if _, ok := auc.mutation.UpdatedAt(); !ok {
-		v := adminuser.DefaultUpdatedAt
-		auc.mutation.SetUpdatedAt(v)
 	}
 	if _, ok := auc.mutation.ID(); !ok {
 		v := adminuser.DefaultID()

@@ -4,8 +4,11 @@ import (
 	"context"
 	"fmt"
 	"github.com/google/uuid"
+	"healthmonitor/ent"
 	"healthmonitor/internal/biz"
+	"healthmonitor/internal/biz/admin"
 	"strings"
+	"sync"
 
 	"github.com/golang-jwt/jwt/v4"
 
@@ -14,7 +17,13 @@ import (
 	"github.com/go-kratos/kratos/v2/transport"
 )
 
-type authKey struct{}
+type authKey struct {
+}
+
+type AuthInfo struct {
+	User  *ent.AdminUser
+	Token *jwt.Token
+}
 
 const (
 
@@ -43,6 +52,9 @@ var (
 	ErrSignToken              = errors.Unauthorized(reason, "Can not sign token.Is the key correct?")
 	ErrGetKey                 = errors.Unauthorized(reason, "Can not get key while signing token")
 )
+
+// Global user variable (use sync for thread safety)
+var globalUser sync.Map
 
 // Option is jwt option.
 type Option func(*options)
@@ -78,13 +90,14 @@ func WithTokenHeader(header map[string]interface{}) Option {
 }
 
 // Server is a server auth middleware. Check the token and extract the info from token.
-func Server(keyFunc jwt.Keyfunc, adminUserUsecase *biz.AdminUserUsecase, opts ...Option) middleware.Middleware {
+func Server(jwtUsecase *biz.JWTUsecase, adminUserUsecase *admin.UserUsecase, opts ...Option) middleware.Middleware {
 	o := &options{
 		signingMethod: jwt.SigningMethodHS256,
 	}
 	for _, opt := range opts {
 		opt(o)
 	}
+	keyFunc := jwtUsecase.KeyFunc
 	return func(handler middleware.Handler) middleware.Handler {
 		return func(ctx context.Context, req interface{}) (interface{}, error) {
 			if header, ok := transport.FromServerContext(ctx); ok {
@@ -96,10 +109,16 @@ func Server(keyFunc jwt.Keyfunc, adminUserUsecase *biz.AdminUserUsecase, opts ..
 					return nil, ErrMissingJwtToken
 				}
 				jwtToken := auths[1]
+
 				var (
 					tokenInfo *jwt.Token
 					err       error
 				)
+				// 使用 ValidateToken 验证令牌
+				_, err = jwtUsecase.ValidateToken(jwtToken)
+				if err != nil {
+					return nil, errors.Unauthorized(reason, err.Error())
+				}
 				if o.claims != nil {
 					tokenInfo, err = jwt.ParseWithClaims(jwtToken, o.claims(), keyFunc)
 				} else {
@@ -124,16 +143,27 @@ func Server(keyFunc jwt.Keyfunc, adminUserUsecase *biz.AdminUserUsecase, opts ..
 				if tokenInfo.Method != o.signingMethod {
 					return nil, ErrUnSupportSigningMethod
 				}
-				ctx = NewContext(ctx, tokenInfo.Claims)
+				// 将认证信息存入上下文
+				authInfo := &AuthInfo{
+					Token: tokenInfo,
+				}
+				ctx = NewContext(ctx, authInfo)
+
 				// 获取用户 ID
 				if claims, ok := tokenInfo.Claims.(jwt.MapClaims); ok {
-					if userID, ok := claims["user_id"].(uuid.UUID); ok {
-						// 查询用户信息
+					if userIDStr, ok := claims["user_id"].(string); ok {
+						fmt.Printf("%s", userIDStr)
+						fmt.Printf("%v", userIDStr)
+						userID, err := uuid.Parse(userIDStr) // 转换为 UUID 类型
+						if err != nil {
+							return nil, errors.Unauthorized(reason, "Invalid user_id format")
+						}
+						// 查询用户信息并存入上下文
 						user, err := adminUserUsecase.GetUser(ctx, userID)
 						if err != nil {
 							return nil, errors.Unauthorized(reason, err.Error())
 						}
-						ctx = context.WithValue(ctx, "user", user) // 将用户信息存入上下文
+						authInfo.User = user
 					}
 				}
 				return handler(ctx, req)
@@ -182,12 +212,45 @@ func Client(keyProvider jwt.Keyfunc, opts ...Option) middleware.Middleware {
 }
 
 // NewContext put auth info into context
-func NewContext(ctx context.Context, info jwt.Claims) context.Context {
+func NewContext(ctx context.Context, info *AuthInfo) context.Context {
 	return context.WithValue(ctx, authKey{}, info)
 }
 
+// UserFromContext 从上下文中提取 *ent.AdminUser 信息
+func UserFromContext(ctx context.Context) (*ent.AdminUser, bool) {
+	authInfo, ok := ctx.Value(authKey{}).(*AuthInfo)
+	if !ok {
+		return nil, false
+	}
+	return authInfo.User, true
+}
+
+// TokenFromContext 从上下文中提取 *jwt.Token 信息
+func TokenFromContext(ctx context.Context) (*jwt.Token, bool) {
+	authInfo, ok := ctx.Value(authKey{}).(*AuthInfo)
+	if !ok {
+		return nil, false
+	}
+	return authInfo.Token, true
+}
+
 // FromContext extract auth info from context
-func FromContext(ctx context.Context) (token jwt.Claims, ok bool) {
-	token, ok = ctx.Value(authKey{}).(jwt.Claims)
-	return
+func FromContext(ctx context.Context) (*AuthInfo, bool) {
+	authInfo, ok := ctx.Value(authKey{}).(*AuthInfo)
+	return authInfo, ok
+}
+
+func GetStringToken(token *jwt.Token) (string, error) {
+	// 提取 JWT ID（jti）
+	claims, ok := token.Claims.(jwt.MapClaims)
+	if !ok {
+		return "", errors.InternalServer("INTERNAL_SERVER_ERROR", "无法解析令牌声明")
+	}
+
+	jti, ok := claims["jti"].(string)
+	if !ok {
+		return "", errors.InternalServer("INTERNAL_SERVER_ERROR", "无效的 JWT ID")
+	}
+
+	return jti, nil
 }

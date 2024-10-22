@@ -4,15 +4,15 @@
 package main
 
 import (
+	"github.com/go-kratos/kratos/v2"
+	"github.com/go-kratos/kratos/v2/log"
+	"github.com/google/wire"
 	"healthmonitor/internal/biz"
 	"healthmonitor/internal/conf"
 	"healthmonitor/internal/data"
 	"healthmonitor/internal/server"
 	"healthmonitor/internal/service"
-
-	"github.com/go-kratos/kratos/v2"
-	"github.com/go-kratos/kratos/v2/log"
-	"github.com/google/wire"
+	"healthmonitor/internal/service/admin"
 )
 
 // ProvideHTTPServerConfig provides the HTTP server configuration.
@@ -20,12 +20,14 @@ func ProvideHTTPServerConfig(
 	c *conf.Server,
 	index *service.IndexService,
 	bloodStatus *service.BloodStatusService,
+	adminAuth *admin.AuthService,
 	logger log.Logger,
 ) server.HTTPServerConfig {
 	return server.HTTPServerConfig{
 		Conf:        c,
 		Index:       index,
 		BloodStatus: bloodStatus,
+		AdminAuth:   adminAuth,
 		Logger:      logger,
 	}
 }

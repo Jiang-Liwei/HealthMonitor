@@ -5,6 +5,7 @@ import (
 	"github.com/google/wire"
 	"healthmonitor/internal/conf"
 	"healthmonitor/internal/service"
+	"healthmonitor/internal/service/admin"
 )
 
 // ProviderSet is server providers.
@@ -15,6 +16,7 @@ type HTTPServerConfig struct {
 	Conf        *conf.Server
 	Index       *service.IndexService
 	BloodStatus *service.BloodStatusService
+	AdminAuth   *admin.AuthService
 	Logger      log.Logger
 }
 

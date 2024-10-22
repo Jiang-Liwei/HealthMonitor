@@ -11,7 +11,7 @@ import (
 
 	"healthmonitor/ent/migrate"
 
-	"healthmonitor/ent/adminjwtblacklist"
+	"healthmonitor/ent/adminjwtexpiredtokens"
 	"healthmonitor/ent/adminlog"
 	"healthmonitor/ent/adminmenu"
 	"healthmonitor/ent/adminpermission"
@@ -40,8 +40,8 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
-	// AdminJWTBlacklist is the client for interacting with the AdminJWTBlacklist builders.
-	AdminJWTBlacklist *AdminJWTBlacklistClient
+	// AdminJWTExpiredTokens is the client for interacting with the AdminJWTExpiredTokens builders.
+	AdminJWTExpiredTokens *AdminJWTExpiredTokensClient
 	// AdminLog is the client for interacting with the AdminLog builders.
 	AdminLog *AdminLogClient
 	// AdminMenu is the client for interacting with the AdminMenu builders.
@@ -83,7 +83,7 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
-	c.AdminJWTBlacklist = NewAdminJWTBlacklistClient(c.config)
+	c.AdminJWTExpiredTokens = NewAdminJWTExpiredTokensClient(c.config)
 	c.AdminLog = NewAdminLogClient(c.config)
 	c.AdminMenu = NewAdminMenuClient(c.config)
 	c.AdminPermission = NewAdminPermissionClient(c.config)
@@ -191,7 +191,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	return &Tx{
 		ctx:                        ctx,
 		config:                     cfg,
-		AdminJWTBlacklist:          NewAdminJWTBlacklistClient(cfg),
+		AdminJWTExpiredTokens:      NewAdminJWTExpiredTokensClient(cfg),
 		AdminLog:                   NewAdminLogClient(cfg),
 		AdminMenu:                  NewAdminMenuClient(cfg),
 		AdminPermission:            NewAdminPermissionClient(cfg),
@@ -226,7 +226,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	return &Tx{
 		ctx:                        ctx,
 		config:                     cfg,
-		AdminJWTBlacklist:          NewAdminJWTBlacklistClient(cfg),
+		AdminJWTExpiredTokens:      NewAdminJWTExpiredTokensClient(cfg),
 		AdminLog:                   NewAdminLogClient(cfg),
 		AdminMenu:                  NewAdminMenuClient(cfg),
 		AdminPermission:            NewAdminPermissionClient(cfg),
@@ -248,7 +248,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		AdminJWTBlacklist.
+//		AdminJWTExpiredTokens.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -271,7 +271,7 @@ func (c *Client) Close() error {
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
 	for _, n := range []interface{ Use(...Hook) }{
-		c.AdminJWTBlacklist, c.AdminLog, c.AdminMenu, c.AdminPermission,
+		c.AdminJWTExpiredTokens, c.AdminLog, c.AdminMenu, c.AdminPermission,
 		c.AdminRolePermission, c.AdminRoles, c.AdminUser, c.AdminUserRole,
 		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrientsRelationships,
 		c.Ingredients, c.Nutrient, c.UserMeal, c.UserMealFood,
@@ -284,7 +284,7 @@ func (c *Client) Use(hooks ...Hook) {
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
 	for _, n := range []interface{ Intercept(...Interceptor) }{
-		c.AdminJWTBlacklist, c.AdminLog, c.AdminMenu, c.AdminPermission,
+		c.AdminJWTExpiredTokens, c.AdminLog, c.AdminMenu, c.AdminPermission,
 		c.AdminRolePermission, c.AdminRoles, c.AdminUser, c.AdminUserRole,
 		c.BloodStatusRecord, c.Food, c.FoodIngredients, c.FoodNutrientsRelationships,
 		c.Ingredients, c.Nutrient, c.UserMeal, c.UserMealFood,
@@ -296,8 +296,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
-	case *AdminJWTBlacklistMutation:
-		return c.AdminJWTBlacklist.mutate(ctx, m)
+	case *AdminJWTExpiredTokensMutation:
+		return c.AdminJWTExpiredTokens.mutate(ctx, m)
 	case *AdminLogMutation:
 		return c.AdminLog.mutate(ctx, m)
 	case *AdminMenuMutation:
@@ -333,107 +333,107 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	}
 }
 
-// AdminJWTBlacklistClient is a client for the AdminJWTBlacklist schema.
-type AdminJWTBlacklistClient struct {
+// AdminJWTExpiredTokensClient is a client for the AdminJWTExpiredTokens schema.
+type AdminJWTExpiredTokensClient struct {
 	config
 }
 
-// NewAdminJWTBlacklistClient returns a client for the AdminJWTBlacklist from the given config.
-func NewAdminJWTBlacklistClient(c config) *AdminJWTBlacklistClient {
-	return &AdminJWTBlacklistClient{config: c}
+// NewAdminJWTExpiredTokensClient returns a client for the AdminJWTExpiredTokens from the given config.
+func NewAdminJWTExpiredTokensClient(c config) *AdminJWTExpiredTokensClient {
+	return &AdminJWTExpiredTokensClient{config: c}
 }
 
 // Use adds a list of mutation hooks to the hooks stack.
-// A call to `Use(f, g, h)` equals to `adminjwtblacklist.Hooks(f(g(h())))`.
-func (c *AdminJWTBlacklistClient) Use(hooks ...Hook) {
-	c.hooks.AdminJWTBlacklist = append(c.hooks.AdminJWTBlacklist, hooks...)
+// A call to `Use(f, g, h)` equals to `adminjwtexpiredtokens.Hooks(f(g(h())))`.
+func (c *AdminJWTExpiredTokensClient) Use(hooks ...Hook) {
+	c.hooks.AdminJWTExpiredTokens = append(c.hooks.AdminJWTExpiredTokens, hooks...)
 }
 
 // Intercept adds a list of query interceptors to the interceptors stack.
-// A call to `Intercept(f, g, h)` equals to `adminjwtblacklist.Intercept(f(g(h())))`.
-func (c *AdminJWTBlacklistClient) Intercept(interceptors ...Interceptor) {
-	c.inters.AdminJWTBlacklist = append(c.inters.AdminJWTBlacklist, interceptors...)
+// A call to `Intercept(f, g, h)` equals to `adminjwtexpiredtokens.Intercept(f(g(h())))`.
+func (c *AdminJWTExpiredTokensClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AdminJWTExpiredTokens = append(c.inters.AdminJWTExpiredTokens, interceptors...)
 }
 
-// Create returns a builder for creating a AdminJWTBlacklist entity.
-func (c *AdminJWTBlacklistClient) Create() *AdminJWTBlacklistCreate {
-	mutation := newAdminJWTBlacklistMutation(c.config, OpCreate)
-	return &AdminJWTBlacklistCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Create returns a builder for creating a AdminJWTExpiredTokens entity.
+func (c *AdminJWTExpiredTokensClient) Create() *AdminJWTExpiredTokensCreate {
+	mutation := newAdminJWTExpiredTokensMutation(c.config, OpCreate)
+	return &AdminJWTExpiredTokensCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// CreateBulk returns a builder for creating a bulk of AdminJWTBlacklist entities.
-func (c *AdminJWTBlacklistClient) CreateBulk(builders ...*AdminJWTBlacklistCreate) *AdminJWTBlacklistCreateBulk {
-	return &AdminJWTBlacklistCreateBulk{config: c.config, builders: builders}
+// CreateBulk returns a builder for creating a bulk of AdminJWTExpiredTokens entities.
+func (c *AdminJWTExpiredTokensClient) CreateBulk(builders ...*AdminJWTExpiredTokensCreate) *AdminJWTExpiredTokensCreateBulk {
+	return &AdminJWTExpiredTokensCreateBulk{config: c.config, builders: builders}
 }
 
 // MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
 // a builder and applies setFunc on it.
-func (c *AdminJWTBlacklistClient) MapCreateBulk(slice any, setFunc func(*AdminJWTBlacklistCreate, int)) *AdminJWTBlacklistCreateBulk {
+func (c *AdminJWTExpiredTokensClient) MapCreateBulk(slice any, setFunc func(*AdminJWTExpiredTokensCreate, int)) *AdminJWTExpiredTokensCreateBulk {
 	rv := reflect.ValueOf(slice)
 	if rv.Kind() != reflect.Slice {
-		return &AdminJWTBlacklistCreateBulk{err: fmt.Errorf("calling to AdminJWTBlacklistClient.MapCreateBulk with wrong type %T, need slice", slice)}
+		return &AdminJWTExpiredTokensCreateBulk{err: fmt.Errorf("calling to AdminJWTExpiredTokensClient.MapCreateBulk with wrong type %T, need slice", slice)}
 	}
-	builders := make([]*AdminJWTBlacklistCreate, rv.Len())
+	builders := make([]*AdminJWTExpiredTokensCreate, rv.Len())
 	for i := 0; i < rv.Len(); i++ {
 		builders[i] = c.Create()
 		setFunc(builders[i], i)
 	}
-	return &AdminJWTBlacklistCreateBulk{config: c.config, builders: builders}
+	return &AdminJWTExpiredTokensCreateBulk{config: c.config, builders: builders}
 }
 
-// Update returns an update builder for AdminJWTBlacklist.
-func (c *AdminJWTBlacklistClient) Update() *AdminJWTBlacklistUpdate {
-	mutation := newAdminJWTBlacklistMutation(c.config, OpUpdate)
-	return &AdminJWTBlacklistUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Update returns an update builder for AdminJWTExpiredTokens.
+func (c *AdminJWTExpiredTokensClient) Update() *AdminJWTExpiredTokensUpdate {
+	mutation := newAdminJWTExpiredTokensMutation(c.config, OpUpdate)
+	return &AdminJWTExpiredTokensUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOne returns an update builder for the given entity.
-func (c *AdminJWTBlacklistClient) UpdateOne(ajb *AdminJWTBlacklist) *AdminJWTBlacklistUpdateOne {
-	mutation := newAdminJWTBlacklistMutation(c.config, OpUpdateOne, withAdminJWTBlacklist(ajb))
-	return &AdminJWTBlacklistUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *AdminJWTExpiredTokensClient) UpdateOne(ajet *AdminJWTExpiredTokens) *AdminJWTExpiredTokensUpdateOne {
+	mutation := newAdminJWTExpiredTokensMutation(c.config, OpUpdateOne, withAdminJWTExpiredTokens(ajet))
+	return &AdminJWTExpiredTokensUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *AdminJWTBlacklistClient) UpdateOneID(id int) *AdminJWTBlacklistUpdateOne {
-	mutation := newAdminJWTBlacklistMutation(c.config, OpUpdateOne, withAdminJWTBlacklistID(id))
-	return &AdminJWTBlacklistUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+func (c *AdminJWTExpiredTokensClient) UpdateOneID(id int) *AdminJWTExpiredTokensUpdateOne {
+	mutation := newAdminJWTExpiredTokensMutation(c.config, OpUpdateOne, withAdminJWTExpiredTokensID(id))
+	return &AdminJWTExpiredTokensUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
-// Delete returns a delete builder for AdminJWTBlacklist.
-func (c *AdminJWTBlacklistClient) Delete() *AdminJWTBlacklistDelete {
-	mutation := newAdminJWTBlacklistMutation(c.config, OpDelete)
-	return &AdminJWTBlacklistDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+// Delete returns a delete builder for AdminJWTExpiredTokens.
+func (c *AdminJWTExpiredTokensClient) Delete() *AdminJWTExpiredTokensDelete {
+	mutation := newAdminJWTExpiredTokensMutation(c.config, OpDelete)
+	return &AdminJWTExpiredTokensDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
 
 // DeleteOne returns a builder for deleting the given entity.
-func (c *AdminJWTBlacklistClient) DeleteOne(ajb *AdminJWTBlacklist) *AdminJWTBlacklistDeleteOne {
-	return c.DeleteOneID(ajb.ID)
+func (c *AdminJWTExpiredTokensClient) DeleteOne(ajet *AdminJWTExpiredTokens) *AdminJWTExpiredTokensDeleteOne {
+	return c.DeleteOneID(ajet.ID)
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *AdminJWTBlacklistClient) DeleteOneID(id int) *AdminJWTBlacklistDeleteOne {
-	builder := c.Delete().Where(adminjwtblacklist.ID(id))
+func (c *AdminJWTExpiredTokensClient) DeleteOneID(id int) *AdminJWTExpiredTokensDeleteOne {
+	builder := c.Delete().Where(adminjwtexpiredtokens.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
-	return &AdminJWTBlacklistDeleteOne{builder}
+	return &AdminJWTExpiredTokensDeleteOne{builder}
 }
 
-// Query returns a query builder for AdminJWTBlacklist.
-func (c *AdminJWTBlacklistClient) Query() *AdminJWTBlacklistQuery {
-	return &AdminJWTBlacklistQuery{
+// Query returns a query builder for AdminJWTExpiredTokens.
+func (c *AdminJWTExpiredTokensClient) Query() *AdminJWTExpiredTokensQuery {
+	return &AdminJWTExpiredTokensQuery{
 		config: c.config,
-		ctx:    &QueryContext{Type: TypeAdminJWTBlacklist},
+		ctx:    &QueryContext{Type: TypeAdminJWTExpiredTokens},
 		inters: c.Interceptors(),
 	}
 }
 
-// Get returns a AdminJWTBlacklist entity by its id.
-func (c *AdminJWTBlacklistClient) Get(ctx context.Context, id int) (*AdminJWTBlacklist, error) {
-	return c.Query().Where(adminjwtblacklist.ID(id)).Only(ctx)
+// Get returns a AdminJWTExpiredTokens entity by its id.
+func (c *AdminJWTExpiredTokensClient) Get(ctx context.Context, id int) (*AdminJWTExpiredTokens, error) {
+	return c.Query().Where(adminjwtexpiredtokens.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *AdminJWTBlacklistClient) GetX(ctx context.Context, id int) *AdminJWTBlacklist {
+func (c *AdminJWTExpiredTokensClient) GetX(ctx context.Context, id int) *AdminJWTExpiredTokens {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)
@@ -442,27 +442,27 @@ func (c *AdminJWTBlacklistClient) GetX(ctx context.Context, id int) *AdminJWTBla
 }
 
 // Hooks returns the client hooks.
-func (c *AdminJWTBlacklistClient) Hooks() []Hook {
-	return c.hooks.AdminJWTBlacklist
+func (c *AdminJWTExpiredTokensClient) Hooks() []Hook {
+	return c.hooks.AdminJWTExpiredTokens
 }
 
 // Interceptors returns the client interceptors.
-func (c *AdminJWTBlacklistClient) Interceptors() []Interceptor {
-	return c.inters.AdminJWTBlacklist
+func (c *AdminJWTExpiredTokensClient) Interceptors() []Interceptor {
+	return c.inters.AdminJWTExpiredTokens
 }
 
-func (c *AdminJWTBlacklistClient) mutate(ctx context.Context, m *AdminJWTBlacklistMutation) (Value, error) {
+func (c *AdminJWTExpiredTokensClient) mutate(ctx context.Context, m *AdminJWTExpiredTokensMutation) (Value, error) {
 	switch m.Op() {
 	case OpCreate:
-		return (&AdminJWTBlacklistCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&AdminJWTExpiredTokensCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdate:
-		return (&AdminJWTBlacklistUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&AdminJWTExpiredTokensUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpUpdateOne:
-		return (&AdminJWTBlacklistUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+		return (&AdminJWTExpiredTokensUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
 	case OpDelete, OpDeleteOne:
-		return (&AdminJWTBlacklistDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+		return (&AdminJWTExpiredTokensDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
-		return nil, fmt.Errorf("ent: unknown AdminJWTBlacklist mutation op: %q", m.Op())
+		return nil, fmt.Errorf("ent: unknown AdminJWTExpiredTokens mutation op: %q", m.Op())
 	}
 }
 
@@ -2816,15 +2816,15 @@ func (c *UserMealFoodClient) mutate(ctx context.Context, m *UserMealFoodMutation
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		AdminJWTBlacklist, AdminLog, AdminMenu, AdminPermission, AdminRolePermission,
-		AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord, Food, FoodIngredients,
-		FoodNutrientsRelationships, Ingredients, Nutrient, UserMeal,
-		UserMealFood []ent.Hook
+		AdminJWTExpiredTokens, AdminLog, AdminMenu, AdminPermission,
+		AdminRolePermission, AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord,
+		Food, FoodIngredients, FoodNutrientsRelationships, Ingredients, Nutrient,
+		UserMeal, UserMealFood []ent.Hook
 	}
 	inters struct {
-		AdminJWTBlacklist, AdminLog, AdminMenu, AdminPermission, AdminRolePermission,
-		AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord, Food, FoodIngredients,
-		FoodNutrientsRelationships, Ingredients, Nutrient, UserMeal,
-		UserMealFood []ent.Interceptor
+		AdminJWTExpiredTokens, AdminLog, AdminMenu, AdminPermission,
+		AdminRolePermission, AdminRoles, AdminUser, AdminUserRole, BloodStatusRecord,
+		Food, FoodIngredients, FoodNutrientsRelationships, Ingredients, Nutrient,
+		UserMeal, UserMealFood []ent.Interceptor
 	}
 )

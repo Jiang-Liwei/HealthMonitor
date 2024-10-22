@@ -8,16 +8,16 @@ import (
 	"healthmonitor/ent"
 )
 
-// The AdminJWTBlacklistFunc type is an adapter to allow the use of ordinary
-// function as AdminJWTBlacklist mutator.
-type AdminJWTBlacklistFunc func(context.Context, *ent.AdminJWTBlacklistMutation) (ent.Value, error)
+// The AdminJWTExpiredTokensFunc type is an adapter to allow the use of ordinary
+// function as AdminJWTExpiredTokens mutator.
+type AdminJWTExpiredTokensFunc func(context.Context, *ent.AdminJWTExpiredTokensMutation) (ent.Value, error)
 
 // Mutate calls f(ctx, m).
-func (f AdminJWTBlacklistFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-	if mv, ok := m.(*ent.AdminJWTBlacklistMutation); ok {
+func (f AdminJWTExpiredTokensFunc) Mutate(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+	if mv, ok := m.(*ent.AdminJWTExpiredTokensMutation); ok {
 		return f(ctx, mv)
 	}
-	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AdminJWTBlacklistMutation", m)
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *ent.AdminJWTExpiredTokensMutation", m)
 }
 
 // The AdminLogFunc type is an adapter to allow the use of ordinary
