@@ -46,6 +46,9 @@ func (BloodStatusRecord) Fields() []ent.Field {
 		field.Enum("mood").
 			Values("same_as", "happy", "sad").
 			Comment("心情:一般,开心,伤心"),
+		field.Enum("status_summary").
+			Values("perfect", "good", "common", "bad", "very bad").
+			Comment("整体情况总结:完美，好，一般，差，糟糕的"),
 		field.Int("created_at").
 			Default(int(time.Now().Unix())),
 		field.Int("updated_at").

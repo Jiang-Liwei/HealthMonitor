@@ -27,7 +27,7 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "action", Type: field.TypeString},
 		{Name: "ip_address", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729823177},
 		{Name: "admin_user_logs", Type: field.TypeUUID, Nullable: true},
 	}
 	// AdminLogsTable holds the schema information for the "admin_logs" table.
@@ -51,8 +51,8 @@ var (
 		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "order", Type: field.TypeUint16, Default: 0},
-		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729823177},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729823177},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminMenusTable holds the schema information for the "admin_menus" table.
@@ -68,8 +68,8 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "path", Type: field.TypeString},
 		{Name: "method", Type: field.TypeString},
-		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729823177},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729823177},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminPermissionsTable holds the schema information for the "admin_permissions" table.
@@ -109,8 +109,8 @@ var (
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString, Unique: true},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729823177},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729823177},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// AdminRolesTable holds the schema information for the "admin_roles" table.
@@ -175,8 +175,9 @@ var (
 		{Name: "diastolic_pressure", Type: field.TypeUint8, Comment: "舒张压"},
 		{Name: "pulse", Type: field.TypeUint8, Comment: "脉搏"},
 		{Name: "mood", Type: field.TypeEnum, Comment: "心情:一般,开心,伤心", Enums: []string{"same_as", "happy", "sad"}},
-		{Name: "created_at", Type: field.TypeInt, Default: 1729567617},
-		{Name: "updated_at", Type: field.TypeInt, Default: 1729567617},
+		{Name: "status_summary", Type: field.TypeEnum, Comment: "整体情况总结:完美，好，一般，差，糟糕的", Enums: []string{"perfect", "good", "common", "bad", "very bad"}},
+		{Name: "created_at", Type: field.TypeInt, Default: 1729823177},
+		{Name: "updated_at", Type: field.TypeInt, Default: 1729823177},
 		{Name: "deleted_at", Type: field.TypeInt, Nullable: true},
 	}
 	// BloodStatusRecordsTable holds the schema information for the "blood_status_records" table.

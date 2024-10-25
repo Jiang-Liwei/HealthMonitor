@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	pb "healthmonitor/api/bloodstatus/v1"
@@ -29,18 +30,22 @@ func (s *BloodStatusService) CreateBloodStatus(ctx context.Context, req *pb.Crea
 		SystolicPressure:  uint8(req.SystolicPressure),
 		DiastolicPressure: uint8(req.DiastolicPressure),
 		Pulse:             uint8(req.Pulse),
+		Mood:              bloodstatusrecord.Mood(req.Mood.String()),
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &pb.CreateBloodStatusReply{
 		BloodStatus: &pb.BloodStatusRecord{
+			Id:                record.ID.String(),
 			RecordDate:        uint64(record.RecordDate),
 			TimeOfDay:         record.TimeOfDay.String(),
 			BeforeAfterMeals:  record.BeforeAfterMeals.String(),
 			SystolicPressure:  uint32(record.SystolicPressure),
 			DiastolicPressure: uint32(record.DiastolicPressure),
 			Pulse:             uint32(record.Pulse),
+			Mood:              string(record.Mood),
+			StatusSummary:     string(record.StatusSummary),
 		},
 	}, nil
 }
@@ -49,6 +54,8 @@ func (s *BloodStatusService) UpdateBloodStatus(ctx context.Context, req *pb.Upda
 	s.log.Infof("input data %v", req)
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
+		fmt.Printf("/n%s/n", req)
+		println("11111111111111111111111111111111")
 		return nil, err
 	}
 	record, err := s.uc.Update(ctx, id, &biz.BloodStatus{
@@ -58,18 +65,22 @@ func (s *BloodStatusService) UpdateBloodStatus(ctx context.Context, req *pb.Upda
 		SystolicPressure:  uint8(req.SystolicPressure),
 		DiastolicPressure: uint8(req.DiastolicPressure),
 		Pulse:             uint8(req.Pulse),
+		Mood:              bloodstatusrecord.Mood(req.Mood.String()),
 	})
 	if err != nil {
 		return nil, err
 	}
 	return &pb.UpdateBloodStatusReply{
 		BloodStatus: &pb.BloodStatusRecord{
+			Id:                record.ID.String(),
 			RecordDate:        uint64(record.RecordDate),
 			TimeOfDay:         record.TimeOfDay.String(),
 			BeforeAfterMeals:  record.BeforeAfterMeals.String(),
 			SystolicPressure:  uint32(record.SystolicPressure),
 			DiastolicPressure: uint32(record.DiastolicPressure),
 			Pulse:             uint32(record.Pulse),
+			Mood:              string(record.Mood),
+			StatusSummary:     string(record.StatusSummary),
 		},
 	}, nil
 }
@@ -96,12 +107,15 @@ func (s *BloodStatusService) GetBloodStatus(ctx context.Context, req *pb.GetBloo
 	}
 	return &pb.GetBloodStatusReply{
 		BloodStatus: &pb.BloodStatusRecord{
+			Id:                record.ID.String(),
 			RecordDate:        uint64(record.RecordDate),
 			TimeOfDay:         record.TimeOfDay.String(),
 			BeforeAfterMeals:  record.BeforeAfterMeals.String(),
 			SystolicPressure:  uint32(record.SystolicPressure),
 			DiastolicPressure: uint32(record.DiastolicPressure),
 			Pulse:             uint32(record.Pulse),
+			Mood:              string(record.Mood),
+			StatusSummary:     string(record.StatusSummary),
 		},
 	}, nil
 }
@@ -110,32 +124,29 @@ func (s *BloodStatusService) ListBloodStatus(ctx context.Context, req *pb.ListBl
 	s.log.Infof("input data %v", req)
 
 	// 调用 Usecase 层的方法获取数据
-	data, err := s.uc.List(ctx, int(req.Page), int(req.PageSize))
+	data, err := s.uc.List(ctx, int(req.StartTime), int(req.EndTime))
 
 	if err != nil {
 		return nil, err
 	}
 	// 转换数据为 Protobuf 格式
 	replyData := make([]*pb.BloodStatusRecord, 0)
-	for _, v := range data.Data {
+	for _, v := range data {
 		replyData = append(replyData, &pb.BloodStatusRecord{
+			Id:                v.ID.String(),
 			RecordDate:        uint64(v.RecordDate),
 			TimeOfDay:         v.TimeOfDay.String(),
 			BeforeAfterMeals:  v.BeforeAfterMeals.String(),
 			SystolicPressure:  uint32(v.SystolicPressure),
 			DiastolicPressure: uint32(v.DiastolicPressure),
 			Pulse:             uint32(v.Pulse),
+			Mood:              string(v.Mood),
+			StatusSummary:     string(v.StatusSummary),
 		})
 	}
 
 	// 构造并返回分页响应
 	return &pb.ListBloodStatusReply{
-		Data: &pb.PageData{
-			Page:       int64(data.Page),
-			PageSize:   int64(data.PageSize),
-			TotalPages: int64(data.TotalPages),
-			TotalCount: int64(data.TotalCount),
-			Data:       replyData, // 注意这里使用 replyData
-		},
+		Data: replyData,
 	}, nil
 }

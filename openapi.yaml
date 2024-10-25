@@ -3,69 +3,123 @@
 
 openapi: 3.0.3
 info:
-    title: Auth API
+    title: BloodStatus API
     version: 0.0.1
 paths:
-    /admin/v1/auth/login:
-        post:
-            tags:
-                - Auth
-            operationId: Auth_Login
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LoginRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LoginResponse'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /admin/v1/auth/logout:
-        post:
-            tags:
-                - Auth
-            operationId: Auth_Logout
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/LogoutRequest'
-                required: true
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/LogoutResponse'
-                default:
-                    description: Default error response
-                    content:
-                        application/json:
-                            schema:
-                                $ref: '#/components/schemas/Status'
-    /admin/v1/auth/user:
+    api/v1/blood_status:
         get:
             tags:
-                - Auth
-            operationId: Auth_User
+                - BloodStatus
+            operationId: BloodStatus_ListBloodStatus
+            parameters:
+                - name: startTime
+                  in: query
+                  schema:
+                    type: string
+                - name: endTime
+                  in: query
+                  schema:
+                    type: string
             responses:
                 "200":
                     description: OK
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/UserResponse'
+                                $ref: '#/components/schemas/ListBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        put:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_UpdateBloodStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateBloodStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/UpdateBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        post:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_CreateBloodStatus
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateBloodStatusRequest'
+                required: true
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+    api/v1/blood_status/{id}:
+        get:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_GetBloodStatus
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetBloodStatusReply'
+                default:
+                    description: Default error response
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Status'
+        delete:
+            tags:
+                - BloodStatus
+            operationId: BloodStatus_DeleteBloodStatus
+            parameters:
+                - name: id
+                  in: path
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/DeleteBloodStatusReply'
                 default:
                     description: Default error response
                     content:
@@ -74,6 +128,63 @@ paths:
                                 $ref: '#/components/schemas/Status'
 components:
     schemas:
+        BloodStatusRecord:
+            type: object
+            properties:
+                id:
+                    type: string
+                recordDate:
+                    type: string
+                timeOfDay:
+                    type: string
+                beforeAfterMeals:
+                    type: string
+                systolicPressure:
+                    type: integer
+                    format: uint32
+                diastolicPressure:
+                    type: integer
+                    format: uint32
+                pulse:
+                    type: integer
+                    format: uint32
+                mood:
+                    type: string
+                statusSummary:
+                    type: string
+        CreateBloodStatusReply:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
+        CreateBloodStatusRequest:
+            type: object
+            properties:
+                recordDate:
+                    type: string
+                timeOfDay:
+                    type: integer
+                    format: enum
+                beforeAfterMeals:
+                    type: integer
+                    format: enum
+                systolicPressure:
+                    type: string
+                diastolicPressure:
+                    type: string
+                pulse:
+                    type: string
+                mood:
+                    type: integer
+                    format: enum
+        DeleteBloodStatusReply:
+            type: object
+            properties: {}
+        GetBloodStatusReply:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
         GoogleProtobufAny:
             type: object
             properties:
@@ -82,28 +193,13 @@ components:
                     description: The type of the serialized message.
             additionalProperties: true
             description: Contains an arbitrary serialized message along with a @type that describes the type of the serialized message.
-        LoginRequest:
+        ListBloodStatusReply:
             type: object
             properties:
-                username:
-                    type: string
-                password:
-                    type: string
-        LoginResponse:
-            type: object
-            properties:
-                token:
-                    type: string
-        LogoutRequest:
-            type: object
-            properties: {}
-        LogoutResponse:
-            type: object
-            properties:
-                code:
-                    type: string
-                msg:
-                    type: string
+                data:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/BloodStatusRecord'
         Status:
             type: object
             properties:
@@ -120,22 +216,32 @@ components:
                         $ref: '#/components/schemas/GoogleProtobufAny'
                     description: A list of messages that carry the error details.  There is a common set of message types for APIs to use.
             description: 'The `Status` type defines a logical error model that is suitable for different programming environments, including REST APIs and RPC APIs. It is used by [gRPC](https://github.com/grpc). Each `Status` message contains three pieces of data: error code, error message, and error details. You can find out more about this error model and how to work with it in the [API Design Guide](https://cloud.google.com/apis/design/errors).'
-        UserResponse:
+        UpdateBloodStatusReply:
+            type: object
+            properties:
+                bloodStatus:
+                    $ref: '#/components/schemas/BloodStatusRecord'
+        UpdateBloodStatusRequest:
             type: object
             properties:
                 id:
                     type: string
-                username:
+                recordDate:
                     type: string
-                email:
+                timeOfDay:
+                    type: integer
+                    format: enum
+                beforeAfterMeals:
+                    type: integer
+                    format: enum
+                systolicPressure:
                     type: string
-                isActive:
-                    type: boolean
-                lastLoginAt:
+                diastolicPressure:
                     type: string
-                createdAt:
+                pulse:
                     type: string
-                updatedAt:
-                    type: string
+                mood:
+                    type: integer
+                    format: enum
 tags:
-    - name: Auth
+    - name: BloodStatus

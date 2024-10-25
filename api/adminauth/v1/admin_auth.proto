@@ -9,15 +9,15 @@ option java_multiple_files = true;
 option java_package = "api.adminauth.v1";
 
 service Auth {
-	rpc Login(LoginRequest) returns (LoginResponse) {
+	rpc SignIn(SignInRequest) returns (SignInResponse) {
 		option (google.api.http) = {
-			post: "/admin/v1/auth/login"
+			post: "/admin/v1/auth/sign-in"
 			body: "*"
 		};
 	}
-	rpc User(UserRequest) returns (UserResponse) {
+	rpc Me(MeRequest) returns (MeResponse) {
 		option (google.api.http) = {
-			get: "/admin/v1/auth/user"
+			get: "/admin/v1/auth/me"
 		};
 	}
 	rpc Logout(LogoutRequest) returns (LogoutResponse) {
@@ -28,19 +28,20 @@ service Auth {
 	}
 }
 
-message LoginRequest {
+message SignInRequest {
 	string username = 1; // 用户名
 	string password = 2; // 密码
 }
 
-message LoginResponse {
-	string token = 1; // JWT Token
+message SignInResponse {
+	string accessToken = 1; // JWT Token
+	MeResponse user = 2;
 }
 
-message UserRequest {
+message MeRequest {
 }
 
-message UserResponse {
+message MeResponse {
 	string id = 1;
 	string username = 2;
 	string email = 3;

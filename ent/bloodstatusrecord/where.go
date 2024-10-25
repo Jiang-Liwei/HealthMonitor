@@ -354,6 +354,26 @@ func MoodNotIn(vs ...Mood) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldMood, vs...))
 }
 
+// StatusSummaryEQ applies the EQ predicate on the "status_summary" field.
+func StatusSummaryEQ(v StatusSummary) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldEQ(FieldStatusSummary, v))
+}
+
+// StatusSummaryNEQ applies the NEQ predicate on the "status_summary" field.
+func StatusSummaryNEQ(v StatusSummary) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldStatusSummary, v))
+}
+
+// StatusSummaryIn applies the In predicate on the "status_summary" field.
+func StatusSummaryIn(vs ...StatusSummary) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldIn(FieldStatusSummary, vs...))
+}
+
+// StatusSummaryNotIn applies the NotIn predicate on the "status_summary" field.
+func StatusSummaryNotIn(vs ...StatusSummary) predicate.BloodStatusRecord {
+	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldStatusSummary, vs...))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v int) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldCreatedAt, v))

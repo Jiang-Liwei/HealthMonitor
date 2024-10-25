@@ -30,6 +30,8 @@ const (
 	FieldPulse = "pulse"
 	// FieldMood holds the string denoting the mood field in the database.
 	FieldMood = "mood"
+	// FieldStatusSummary holds the string denoting the status_summary field in the database.
+	FieldStatusSummary = "status_summary"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
 	FieldCreatedAt = "created_at"
 	// FieldUpdatedAt holds the string denoting the updated_at field in the database.
@@ -51,6 +53,7 @@ var Columns = []string{
 	FieldDiastolicPressure,
 	FieldPulse,
 	FieldMood,
+	FieldStatusSummary,
 	FieldCreatedAt,
 	FieldUpdatedAt,
 	FieldDeletedAt,
@@ -148,6 +151,32 @@ func MoodValidator(m Mood) error {
 	}
 }
 
+// StatusSummary defines the type for the "status_summary" enum field.
+type StatusSummary string
+
+// StatusSummary values.
+const (
+	StatusSummaryPerfect StatusSummary = "perfect"
+	StatusSummaryGood    StatusSummary = "good"
+	StatusSummaryCommon  StatusSummary = "common"
+	StatusSummaryBad     StatusSummary = "bad"
+	StatusSummaryVeryBad StatusSummary = "very bad"
+)
+
+func (ss StatusSummary) String() string {
+	return string(ss)
+}
+
+// StatusSummaryValidator is a validator for the "status_summary" field enum values. It is called by the builders before save.
+func StatusSummaryValidator(ss StatusSummary) error {
+	switch ss {
+	case StatusSummaryPerfect, StatusSummaryGood, StatusSummaryCommon, StatusSummaryBad, StatusSummaryVeryBad:
+		return nil
+	default:
+		return fmt.Errorf("bloodstatusrecord: invalid enum value for status_summary field: %q", ss)
+	}
+}
+
 // OrderOption defines the ordering options for the BloodStatusRecord queries.
 type OrderOption func(*sql.Selector)
 
@@ -194,6 +223,11 @@ func ByPulse(opts ...sql.OrderTermOption) OrderOption {
 // ByMood orders the results by the mood field.
 func ByMood(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldMood, opts...).ToFunc()
+}
+
+// ByStatusSummary orders the results by the status_summary field.
+func ByStatusSummary(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStatusSummary, opts...).ToFunc()
 }
 
 // ByCreatedAt orders the results by the created_at field.

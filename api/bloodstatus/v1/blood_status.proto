@@ -34,7 +34,7 @@ service BloodStatus {
 	};
 	rpc ListBloodStatus (ListBloodStatusRequest) returns (ListBloodStatusReply) {
 		option (google.api.http) = {
-			get: "api/v1/blood_status_list"
+			get: "api/v1/blood_status"
 		};
 	};
 }
@@ -52,13 +52,20 @@ enum BeforeAfterMeals {
 	after = 1; // 映射 "after"
 }
 
+enum Mood {
+		same_as = 0;
+		happy = 1;
+		sad = 2;
+}
+
 message CreateBloodStatusRequest {
-	uint64 record_date = 1 [(validate.rules).uint64 = {gte: 0, lte: 253402300799000}]; // 毫秒级时间戳
-	TimeOfDay time_of_day = 2 [(validate.rules).enum = {defined_only: true}]; // 记录时间段
-	BeforeAfterMeals before_after_meals = 3 [(validate.rules).enum = {defined_only: true}]; // 餐前餐后
-	uint64 systolic_pressure = 4 [(validate.rules).uint64 = {gte: 30, lte: 300}]; // 收缩压
-	uint64 diastolic_pressure = 5 [(validate.rules).uint64 = {gte: 10, lte: 200}];  // 舒张压
+	uint64 recordDate = 1 [(validate.rules).uint64 = {gte: 0, lte: 253402300799000}]; // 毫秒级时间戳
+	TimeOfDay timeOfDay = 2 [(validate.rules).enum = {defined_only: true}]; // 记录时间段
+	BeforeAfterMeals beforeAfterMeals = 3 [(validate.rules).enum = {defined_only: true}]; // 餐前餐后
+	uint64 systolicPressure = 4 [(validate.rules).uint64 = {gte: 30, lte: 300}]; // 收缩压
+	uint64 diastolicPressure = 5 [(validate.rules).uint64 = {gte: 10, lte: 200}];  // 舒张压
 	uint64 pulse = 6 [(validate.rules).uint64 = {gte: 30, lte: 220}]; // 脉搏
+	Mood mood = 7 [(validate.rules).enum = {defined_only: true}]; // 心情
 }
 
 message CreateBloodStatusReply {
@@ -75,6 +82,7 @@ message UpdateBloodStatusRequest {
 	uint64 systolic_pressure = 5 [(validate.rules).uint64 = {gte: 30, lte: 300}]; // 收缩压
 	uint64 diastolic_pressure = 6 [(validate.rules).uint64 = {gte: 10, lte: 200}];  // 舒张压
 	uint64 pulse = 7 [(validate.rules).uint64 = {gte: 30, lte: 220}]; // 脉搏
+	Mood mood = 8 [(validate.rules).enum = {defined_only: true}]; // 心情
 }
 
 message UpdateBloodStatusReply {
@@ -96,27 +104,30 @@ message GetBloodStatusReply {
 }
 
 message ListBloodStatusRequest {
-	int64 page = 1;
-	int64 pageSize = 2;
+	int64 startTime = 1;
+	int64 endTime = 2;
 }
 
 message ListBloodStatusReply {
-	PageData data = 1;
+	repeated BloodStatusRecord data = 1;
 }
 
 message PageData {
 	int64 page = 1;
-	int64 PageSize = 2;
-	int64 TotalPages = 3;
-	int64 TotalCount = 4;
+	int64 pageSize = 2;
+	int64 totalPages = 3;
+	int64 totalCount = 4;
 	repeated BloodStatusRecord data = 5;
 }
 
 message BloodStatusRecord {
-	uint64 record_date = 1;
-	string time_of_day = 2;
-	string before_after_meals = 3;
-	uint32 systolic_pressure = 4;
-	uint32 diastolic_pressure = 5;
-	uint32 pulse = 6;
+	string id = 1;
+	uint64 recordDate = 2;
+	string timeOfDay = 3;
+	string beforeAfterMeals = 4;
+	uint32 systolicPressure = 5;
+	uint32 diastolicPressure = 6;
+	uint32 pulse = 7;
+	string mood = 8;
+	string statusSummary = 9;
 }

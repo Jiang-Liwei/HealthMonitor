@@ -168,6 +168,20 @@ func (bsru *BloodStatusRecordUpdate) SetNillableMood(b *bloodstatusrecord.Mood) 
 	return bsru
 }
 
+// SetStatusSummary sets the "status_summary" field.
+func (bsru *BloodStatusRecordUpdate) SetStatusSummary(bs bloodstatusrecord.StatusSummary) *BloodStatusRecordUpdate {
+	bsru.mutation.SetStatusSummary(bs)
+	return bsru
+}
+
+// SetNillableStatusSummary sets the "status_summary" field if the given value is not nil.
+func (bsru *BloodStatusRecordUpdate) SetNillableStatusSummary(bs *bloodstatusrecord.StatusSummary) *BloodStatusRecordUpdate {
+	if bs != nil {
+		bsru.SetStatusSummary(*bs)
+	}
+	return bsru
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bsru *BloodStatusRecordUpdate) SetCreatedAt(i int) *BloodStatusRecordUpdate {
 	bsru.mutation.ResetCreatedAt()
@@ -287,6 +301,11 @@ func (bsru *BloodStatusRecordUpdate) check() error {
 			return &ValidationError{Name: "mood", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.mood": %w`, err)}
 		}
 	}
+	if v, ok := bsru.mutation.StatusSummary(); ok {
+		if err := bloodstatusrecord.StatusSummaryValidator(v); err != nil {
+			return &ValidationError{Name: "status_summary", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.status_summary": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -337,6 +356,9 @@ func (bsru *BloodStatusRecordUpdate) sqlSave(ctx context.Context) (n int, err er
 	}
 	if value, ok := bsru.mutation.Mood(); ok {
 		_spec.SetField(bloodstatusrecord.FieldMood, field.TypeEnum, value)
+	}
+	if value, ok := bsru.mutation.StatusSummary(); ok {
+		_spec.SetField(bloodstatusrecord.FieldStatusSummary, field.TypeEnum, value)
 	}
 	if value, ok := bsru.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
@@ -519,6 +541,20 @@ func (bsruo *BloodStatusRecordUpdateOne) SetNillableMood(b *bloodstatusrecord.Mo
 	return bsruo
 }
 
+// SetStatusSummary sets the "status_summary" field.
+func (bsruo *BloodStatusRecordUpdateOne) SetStatusSummary(bs bloodstatusrecord.StatusSummary) *BloodStatusRecordUpdateOne {
+	bsruo.mutation.SetStatusSummary(bs)
+	return bsruo
+}
+
+// SetNillableStatusSummary sets the "status_summary" field if the given value is not nil.
+func (bsruo *BloodStatusRecordUpdateOne) SetNillableStatusSummary(bs *bloodstatusrecord.StatusSummary) *BloodStatusRecordUpdateOne {
+	if bs != nil {
+		bsruo.SetStatusSummary(*bs)
+	}
+	return bsruo
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bsruo *BloodStatusRecordUpdateOne) SetCreatedAt(i int) *BloodStatusRecordUpdateOne {
 	bsruo.mutation.ResetCreatedAt()
@@ -651,6 +687,11 @@ func (bsruo *BloodStatusRecordUpdateOne) check() error {
 			return &ValidationError{Name: "mood", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.mood": %w`, err)}
 		}
 	}
+	if v, ok := bsruo.mutation.StatusSummary(); ok {
+		if err := bloodstatusrecord.StatusSummaryValidator(v); err != nil {
+			return &ValidationError{Name: "status_summary", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.status_summary": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -718,6 +759,9 @@ func (bsruo *BloodStatusRecordUpdateOne) sqlSave(ctx context.Context) (_node *Bl
 	}
 	if value, ok := bsruo.mutation.Mood(); ok {
 		_spec.SetField(bloodstatusrecord.FieldMood, field.TypeEnum, value)
+	}
+	if value, ok := bsruo.mutation.StatusSummary(); ok {
+		_spec.SetField(bloodstatusrecord.FieldStatusSummary, field.TypeEnum, value)
 	}
 	if value, ok := bsruo.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)

@@ -68,6 +68,12 @@ func (bsrc *BloodStatusRecordCreate) SetMood(b bloodstatusrecord.Mood) *BloodSta
 	return bsrc
 }
 
+// SetStatusSummary sets the "status_summary" field.
+func (bsrc *BloodStatusRecordCreate) SetStatusSummary(bs bloodstatusrecord.StatusSummary) *BloodStatusRecordCreate {
+	bsrc.mutation.SetStatusSummary(bs)
+	return bsrc
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (bsrc *BloodStatusRecordCreate) SetCreatedAt(i int) *BloodStatusRecordCreate {
 	bsrc.mutation.SetCreatedAt(i)
@@ -214,6 +220,14 @@ func (bsrc *BloodStatusRecordCreate) check() error {
 			return &ValidationError{Name: "mood", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.mood": %w`, err)}
 		}
 	}
+	if _, ok := bsrc.mutation.StatusSummary(); !ok {
+		return &ValidationError{Name: "status_summary", err: errors.New(`ent: missing required field "BloodStatusRecord.status_summary"`)}
+	}
+	if v, ok := bsrc.mutation.StatusSummary(); ok {
+		if err := bloodstatusrecord.StatusSummaryValidator(v); err != nil {
+			return &ValidationError{Name: "status_summary", err: fmt.Errorf(`ent: validator failed for field "BloodStatusRecord.status_summary": %w`, err)}
+		}
+	}
 	if _, ok := bsrc.mutation.CreatedAt(); !ok {
 		return &ValidationError{Name: "created_at", err: errors.New(`ent: missing required field "BloodStatusRecord.created_at"`)}
 	}
@@ -286,6 +300,10 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 	if value, ok := bsrc.mutation.Mood(); ok {
 		_spec.SetField(bloodstatusrecord.FieldMood, field.TypeEnum, value)
 		_node.Mood = value
+	}
+	if value, ok := bsrc.mutation.StatusSummary(); ok {
+		_spec.SetField(bloodstatusrecord.FieldStatusSummary, field.TypeEnum, value)
+		_node.StatusSummary = value
 	}
 	if value, ok := bsrc.mutation.CreatedAt(); ok {
 		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)

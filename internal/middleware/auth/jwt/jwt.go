@@ -7,6 +7,7 @@ import (
 	"healthmonitor/ent"
 	"healthmonitor/internal/biz"
 	"healthmonitor/internal/biz/admin"
+	"healthmonitor/internal/middleware/auth"
 	"strings"
 	"sync"
 
@@ -53,8 +54,8 @@ var (
 	ErrGetKey                 = errors.Unauthorized(reason, "Can not get key while signing token")
 )
 
-// Global user variable (use sync for thread safety)
-var globalUser sync.Map
+// GlobalUser user variable (use sync for thread safety)
+var GlobalUser sync.Map
 
 // Option is jwt option.
 type Option func(*options)
@@ -144,10 +145,10 @@ func Server(jwtUsecase *biz.JWTUsecase, adminUserUsecase *admin.UserUsecase, opt
 					return nil, ErrUnSupportSigningMethod
 				}
 				// 将认证信息存入上下文
-				authInfo := &AuthInfo{
+				authInfo := &auth.AuthInfo{
 					Token: tokenInfo,
 				}
-				ctx = NewContext(ctx, authInfo)
+				ctx = auth.NewContext(ctx, authInfo)
 
 				// 获取用户 ID
 				if claims, ok := tokenInfo.Claims.(jwt.MapClaims); ok {
@@ -209,48 +210,4 @@ func Client(keyProvider jwt.Keyfunc, opts ...Option) middleware.Middleware {
 			return nil, ErrWrongContext
 		}
 	}
-}
-
-// NewContext put auth info into context
-func NewContext(ctx context.Context, info *AuthInfo) context.Context {
-	return context.WithValue(ctx, authKey{}, info)
-}
-
-// UserFromContext 从上下文中提取 *ent.AdminUser 信息
-func UserFromContext(ctx context.Context) (*ent.AdminUser, bool) {
-	authInfo, ok := ctx.Value(authKey{}).(*AuthInfo)
-	if !ok {
-		return nil, false
-	}
-	return authInfo.User, true
-}
-
-// TokenFromContext 从上下文中提取 *jwt.Token 信息
-func TokenFromContext(ctx context.Context) (*jwt.Token, bool) {
-	authInfo, ok := ctx.Value(authKey{}).(*AuthInfo)
-	if !ok {
-		return nil, false
-	}
-	return authInfo.Token, true
-}
-
-// FromContext extract auth info from context
-func FromContext(ctx context.Context) (*AuthInfo, bool) {
-	authInfo, ok := ctx.Value(authKey{}).(*AuthInfo)
-	return authInfo, ok
-}
-
-func GetStringToken(token *jwt.Token) (string, error) {
-	// 提取 JWT ID（jti）
-	claims, ok := token.Claims.(jwt.MapClaims)
-	if !ok {
-		return "", errors.InternalServer("INTERNAL_SERVER_ERROR", "无法解析令牌声明")
-	}
-
-	jti, ok := claims["jti"].(string)
-	if !ok {
-		return "", errors.InternalServer("INTERNAL_SERVER_ERROR", "无效的 JWT ID")
-	}
-
-	return jti, nil
 }

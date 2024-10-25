@@ -34,6 +34,8 @@ func (bsr *bloodStatusRepo) Save(ctx context.Context, b *biz.BloodStatus, userID
 		SetSystolicPressure(b.SystolicPressure).
 		SetDiastolicPressure(b.DiastolicPressure).
 		SetPulse(b.Pulse).
+		SetMood(b.Mood).
+		SetStatusSummary(b.StatusSummary).
 		Save(ctx)
 	return record, err
 }
@@ -56,6 +58,8 @@ func (bsr *bloodStatusRepo) Update(ctx context.Context, id uuid.UUID, b *biz.Blo
 		SetSystolicPressure(b.SystolicPressure).
 		SetDiastolicPressure(b.DiastolicPressure).
 		SetPulse(b.Pulse).
+		SetMood(b.Mood).
+		SetStatusSummary(b.StatusSummary).
 		Save(ctx)
 	return record, nil
 }
@@ -72,7 +76,7 @@ func (bsr *bloodStatusRepo) FindByID(ctx context.Context, id uuid.UUID) (*ent.Bl
 	return p, nil
 }
 
-func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, userID uuid.UUID, page int, pageSize int) (*common.PageData[*ent.BloodStatusRecord], error) {
+func (bsr *bloodStatusRepo) PageListByUserID(ctx context.Context, userID uuid.UUID, page int, pageSize int) (*common.PageData[*ent.BloodStatusRecord], error) {
 
 	// 获取总记录数
 	totalCount, err := bsr.data.DB.BloodStatusRecord.Query().
@@ -93,4 +97,17 @@ func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, userID uuid.UUID, 
 		return nil, err
 	}
 	return common.NewPageData(page, pageSize, totalCount, records), nil
+}
+
+func (bsr *bloodStatusRepo) ListByUserID(ctx context.Context, userID uuid.UUID, start int, end int) ([]*ent.BloodStatusRecord, error) {
+
+	// 获取实际数据
+	records, err := bsr.data.DB.BloodStatusRecord.Query().
+		Where(bloodstatusrecord.UserIDEQ(userID)).
+		Order(ent.Desc("record_date")).
+		All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return records, nil
 }

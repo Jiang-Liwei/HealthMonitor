@@ -12,6 +12,7 @@ import (
 	indexV1 "healthmonitor/api/index/v1"
 	"healthmonitor/internal/biz"
 	"healthmonitor/internal/biz/admin"
+	"healthmonitor/internal/middleware"
 	jwtMiddleware "healthmonitor/internal/middleware/auth/jwt"
 )
 
@@ -20,13 +21,19 @@ func NewHTTPServer(cfg HTTPServerConfig, adminUserUsecase *admin.UserUsecase, jw
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
+			middleware.CORS(), // 注册 CORS 中间件  但是没有用。。。。
 			selector.Server(jwtMiddleware.Server(
 				jwtUsecase,
 				adminUserUsecase,
-			)).Path("/api.adminauth.v1.Auth/User", "/api.adminauth.v1.Auth/Logout").
+			)).Path("/api.adminauth.v1.Auth/Me", "/api.adminauth.v1.Auth/Logout").
 				Prefix("/api.bloodstatus.v1.BloodStatus/").
 				Build(),
 		),
+		http.Filter(handlers.CORS(
+			handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
+			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
+			handlers.AllowedOrigins([]string{"*"}),
+		)),
 	}
 	if cfg.Conf.Http.Network != "" {
 		opts = append(opts, http.Network(cfg.Conf.Http.Network))
@@ -37,10 +44,6 @@ func NewHTTPServer(cfg HTTPServerConfig, adminUserUsecase *admin.UserUsecase, jw
 	if cfg.Conf.Http.Timeout != nil {
 		opts = append(opts, http.Timeout(cfg.Conf.Http.Timeout.AsDuration()))
 	}
-	opts = append(opts, http.Filter(handlers.CORS(
-		handlers.AllowedOrigins([]string{"*"}),
-		handlers.AllowedMethods([]string{"GET", "POST"}),
-	)))
 
 	srv := http.NewServer(opts...)
 	indexV1.RegisterIndexHTTPServer(srv, cfg.Index)

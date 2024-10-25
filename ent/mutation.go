@@ -5689,6 +5689,7 @@ type BloodStatusRecordMutation struct {
 	pulse                 *uint8
 	addpulse              *int8
 	mood                  *bloodstatusrecord.Mood
+	status_summary        *bloodstatusrecord.StatusSummary
 	created_at            *int
 	addcreated_at         *int
 	updated_at            *int
@@ -6173,6 +6174,42 @@ func (m *BloodStatusRecordMutation) ResetMood() {
 	m.mood = nil
 }
 
+// SetStatusSummary sets the "status_summary" field.
+func (m *BloodStatusRecordMutation) SetStatusSummary(bs bloodstatusrecord.StatusSummary) {
+	m.status_summary = &bs
+}
+
+// StatusSummary returns the value of the "status_summary" field in the mutation.
+func (m *BloodStatusRecordMutation) StatusSummary() (r bloodstatusrecord.StatusSummary, exists bool) {
+	v := m.status_summary
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldStatusSummary returns the old "status_summary" field's value of the BloodStatusRecord entity.
+// If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *BloodStatusRecordMutation) OldStatusSummary(ctx context.Context) (v bloodstatusrecord.StatusSummary, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldStatusSummary is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldStatusSummary requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldStatusSummary: %w", err)
+	}
+	return oldValue.StatusSummary, nil
+}
+
+// ResetStatusSummary resets all changes to the "status_summary" field.
+func (m *BloodStatusRecordMutation) ResetStatusSummary() {
+	m.status_summary = nil
+}
+
 // SetCreatedAt sets the "created_at" field.
 func (m *BloodStatusRecordMutation) SetCreatedAt(i int) {
 	m.created_at = &i
@@ -6389,7 +6426,7 @@ func (m *BloodStatusRecordMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *BloodStatusRecordMutation) Fields() []string {
-	fields := make([]string, 0, 11)
+	fields := make([]string, 0, 12)
 	if m.user_id != nil {
 		fields = append(fields, bloodstatusrecord.FieldUserID)
 	}
@@ -6413,6 +6450,9 @@ func (m *BloodStatusRecordMutation) Fields() []string {
 	}
 	if m.mood != nil {
 		fields = append(fields, bloodstatusrecord.FieldMood)
+	}
+	if m.status_summary != nil {
+		fields = append(fields, bloodstatusrecord.FieldStatusSummary)
 	}
 	if m.created_at != nil {
 		fields = append(fields, bloodstatusrecord.FieldCreatedAt)
@@ -6447,6 +6487,8 @@ func (m *BloodStatusRecordMutation) Field(name string) (ent.Value, bool) {
 		return m.Pulse()
 	case bloodstatusrecord.FieldMood:
 		return m.Mood()
+	case bloodstatusrecord.FieldStatusSummary:
+		return m.StatusSummary()
 	case bloodstatusrecord.FieldCreatedAt:
 		return m.CreatedAt()
 	case bloodstatusrecord.FieldUpdatedAt:
@@ -6478,6 +6520,8 @@ func (m *BloodStatusRecordMutation) OldField(ctx context.Context, name string) (
 		return m.OldPulse(ctx)
 	case bloodstatusrecord.FieldMood:
 		return m.OldMood(ctx)
+	case bloodstatusrecord.FieldStatusSummary:
+		return m.OldStatusSummary(ctx)
 	case bloodstatusrecord.FieldCreatedAt:
 		return m.OldCreatedAt(ctx)
 	case bloodstatusrecord.FieldUpdatedAt:
@@ -6548,6 +6592,13 @@ func (m *BloodStatusRecordMutation) SetField(name string, value ent.Value) error
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetMood(v)
+		return nil
+	case bloodstatusrecord.FieldStatusSummary:
+		v, ok := value.(bloodstatusrecord.StatusSummary)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetStatusSummary(v)
 		return nil
 	case bloodstatusrecord.FieldCreatedAt:
 		v, ok := value.(int)
@@ -6738,6 +6789,9 @@ func (m *BloodStatusRecordMutation) ResetField(name string) error {
 		return nil
 	case bloodstatusrecord.FieldMood:
 		m.ResetMood()
+		return nil
+	case bloodstatusrecord.FieldStatusSummary:
+		m.ResetStatusSummary()
 		return nil
 	case bloodstatusrecord.FieldCreatedAt:
 		m.ResetCreatedAt()

@@ -8,7 +8,7 @@ import (
 	pb "healthmonitor/api/adminauth/v1"
 	"healthmonitor/internal/biz"
 	"healthmonitor/internal/biz/admin"
-	"healthmonitor/internal/middleware/auth/jwt"
+	"healthmonitor/internal/middleware/auth"
 )
 
 type AuthService struct {
@@ -27,24 +27,33 @@ func NewAuthService(uc *admin.UserUsecase, logger log.Logger, jwt *biz.JWTUsecas
 	}
 }
 
-func (s *AuthService) Login(ctx context.Context, req *pb.LoginRequest) (*pb.LoginResponse, error) {
+func (s *AuthService) SignIn(ctx context.Context, req *pb.SignInRequest) (*pb.SignInResponse, error) {
 	user, err := s.uc.FindByUsername(ctx, req.Username)
 	if err != nil || biz.CheckPassword(user.PasswordHash, req.Password) != nil {
 		return nil, errors.New("账号或密码错误")
 	}
 	token, err := s.jwt.GenerateToken(user.ID.String())
-	return &pb.LoginResponse{
-		Token: token,
+	return &pb.SignInResponse{
+		AccessToken: token,
+		User: &pb.MeResponse{
+			Id:          user.ID.String(),
+			Username:    user.Username,
+			Email:       user.Email,
+			IsActive:    user.IsActive,
+			LastLoginAt: int64(user.LastLoginAt),
+			CreatedAt:   int64(user.CreatedAt),
+			UpdatedAt:   int64(user.UpdatedAt),
+		},
 	}, nil
 }
 
-func (s *AuthService) User(ctx context.Context, req *pb.UserRequest) (*pb.UserResponse, error) {
-	user, ok := jwt.UserFromContext(ctx)
+func (s *AuthService) Me(ctx context.Context, req *pb.MeRequest) (*pb.MeResponse, error) {
+	user, ok := auth.UserFromContext(ctx)
 	if !ok {
 		return nil, errors2.Unauthorized("UNAUTHORIZED", "User is not login")
 	}
 
-	return &pb.UserResponse{
+	return &pb.MeResponse{
 		Id:          user.ID.String(),
 		Username:    user.Username,
 		Email:       user.Email,
@@ -56,11 +65,11 @@ func (s *AuthService) User(ctx context.Context, req *pb.UserRequest) (*pb.UserRe
 }
 
 func (s *AuthService) Logout(ctx context.Context, req *pb.LogoutRequest) (*pb.LogoutResponse, error) {
-	claims, ok := jwt.TokenFromContext(ctx)
+	claims, ok := auth.TokenFromContext(ctx)
 	if !ok {
 		return nil, errors2.Unauthorized("UNAUTHORIZED", "无效的令牌")
 	}
-	token, err := jwt.GetStringToken(claims)
+	token, err := auth.GetStringToken(claims)
 	if err != nil {
 		return nil, err
 	}

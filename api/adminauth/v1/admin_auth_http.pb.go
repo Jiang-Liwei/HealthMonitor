@@ -19,60 +19,60 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationAuthLogin = "/api.adminauth.v1.Auth/Login"
 const OperationAuthLogout = "/api.adminauth.v1.Auth/Logout"
-const OperationAuthUser = "/api.adminauth.v1.Auth/User"
+const OperationAuthMe = "/api.adminauth.v1.Auth/Me"
+const OperationAuthSignIn = "/api.adminauth.v1.Auth/SignIn"
 
 type AuthHTTPServer interface {
-	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Logout(context.Context, *LogoutRequest) (*LogoutResponse, error)
-	User(context.Context, *UserRequest) (*UserResponse, error)
+	Me(context.Context, *MeRequest) (*MeResponse, error)
+	SignIn(context.Context, *SignInRequest) (*SignInResponse, error)
 }
 
 func RegisterAuthHTTPServer(s *http.Server, srv AuthHTTPServer) {
 	r := s.Route("/")
-	r.POST("/admin/v1/auth/login", _Auth_Login0_HTTP_Handler(srv))
-	r.GET("/admin/v1/auth/user", _Auth_User0_HTTP_Handler(srv))
+	r.POST("/admin/v1/auth/sign-in", _Auth_SignIn0_HTTP_Handler(srv))
+	r.GET("/admin/v1/auth/me", _Auth_Me0_HTTP_Handler(srv))
 	r.POST("/admin/v1/auth/logout", _Auth_Logout0_HTTP_Handler(srv))
 }
 
-func _Auth_Login0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
+func _Auth_SignIn0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in LoginRequest
+		var in SignInRequest
 		if err := ctx.Bind(&in); err != nil {
 			return err
 		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthLogin)
+		http.SetOperation(ctx, OperationAuthSignIn)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.Login(ctx, req.(*LoginRequest))
+			return srv.SignIn(ctx, req.(*SignInRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*LoginResponse)
+		reply := out.(*SignInResponse)
 		return ctx.Result(200, reply)
 	}
 }
 
-func _Auth_User0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
+func _Auth_Me0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
-		var in UserRequest
+		var in MeRequest
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
-		http.SetOperation(ctx, OperationAuthUser)
+		http.SetOperation(ctx, OperationAuthMe)
 		h := ctx.Middleware(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return srv.User(ctx, req.(*UserRequest))
+			return srv.Me(ctx, req.(*MeRequest))
 		})
 		out, err := h(ctx, &in)
 		if err != nil {
 			return err
 		}
-		reply := out.(*UserResponse)
+		reply := out.(*MeResponse)
 		return ctx.Result(200, reply)
 	}
 }
@@ -100,9 +100,9 @@ func _Auth_Logout0_HTTP_Handler(srv AuthHTTPServer) func(ctx http.Context) error
 }
 
 type AuthHTTPClient interface {
-	Login(ctx context.Context, req *LoginRequest, opts ...http.CallOption) (rsp *LoginResponse, err error)
 	Logout(ctx context.Context, req *LogoutRequest, opts ...http.CallOption) (rsp *LogoutResponse, err error)
-	User(ctx context.Context, req *UserRequest, opts ...http.CallOption) (rsp *UserResponse, err error)
+	Me(ctx context.Context, req *MeRequest, opts ...http.CallOption) (rsp *MeResponse, err error)
+	SignIn(ctx context.Context, req *SignInRequest, opts ...http.CallOption) (rsp *SignInResponse, err error)
 }
 
 type AuthHTTPClientImpl struct {
@@ -111,19 +111,6 @@ type AuthHTTPClientImpl struct {
 
 func NewAuthHTTPClient(client *http.Client) AuthHTTPClient {
 	return &AuthHTTPClientImpl{client}
-}
-
-func (c *AuthHTTPClientImpl) Login(ctx context.Context, in *LoginRequest, opts ...http.CallOption) (*LoginResponse, error) {
-	var out LoginResponse
-	pattern := "/admin/v1/auth/login"
-	path := binding.EncodeURL(pattern, in, false)
-	opts = append(opts, http.Operation(OperationAuthLogin))
-	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return &out, nil
 }
 
 func (c *AuthHTTPClientImpl) Logout(ctx context.Context, in *LogoutRequest, opts ...http.CallOption) (*LogoutResponse, error) {
@@ -139,13 +126,26 @@ func (c *AuthHTTPClientImpl) Logout(ctx context.Context, in *LogoutRequest, opts
 	return &out, nil
 }
 
-func (c *AuthHTTPClientImpl) User(ctx context.Context, in *UserRequest, opts ...http.CallOption) (*UserResponse, error) {
-	var out UserResponse
-	pattern := "/admin/v1/auth/user"
+func (c *AuthHTTPClientImpl) Me(ctx context.Context, in *MeRequest, opts ...http.CallOption) (*MeResponse, error) {
+	var out MeResponse
+	pattern := "/admin/v1/auth/me"
 	path := binding.EncodeURL(pattern, in, true)
-	opts = append(opts, http.Operation(OperationAuthUser))
+	opts = append(opts, http.Operation(OperationAuthMe))
 	opts = append(opts, http.PathTemplate(pattern))
 	err := c.cc.Invoke(ctx, "GET", path, nil, &out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return &out, nil
+}
+
+func (c *AuthHTTPClientImpl) SignIn(ctx context.Context, in *SignInRequest, opts ...http.CallOption) (*SignInResponse, error) {
+	var out SignInResponse
+	pattern := "/admin/v1/auth/sign-in"
+	path := binding.EncodeURL(pattern, in, false)
+	opts = append(opts, http.Operation(OperationAuthSignIn))
+	opts = append(opts, http.PathTemplate(pattern))
+	err := c.cc.Invoke(ctx, "POST", path, in, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

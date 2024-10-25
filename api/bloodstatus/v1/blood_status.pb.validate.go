@@ -123,6 +123,17 @@ func (m *CreateBloodStatusRequest) validate(all bool) error {
 		errors = append(errors, err)
 	}
 
+	if _, ok := Mood_name[int32(m.GetMood())]; !ok {
+		err := CreateBloodStatusRequestValidationError{
+			field:  "Mood",
+			reason: "value must be one of the defined enum values",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
 	if len(errors) > 0 {
 		return CreateBloodStatusRequestMultiError(errors)
 	}
@@ -426,6 +437,17 @@ func (m *UpdateBloodStatusRequest) validate(all bool) error {
 		err := UpdateBloodStatusRequestValidationError{
 			field:  "Pulse",
 			reason: "value must be inside range [30, 220]",
+		}
+		if !all {
+			return err
+		}
+		errors = append(errors, err)
+	}
+
+	if _, ok := Mood_name[int32(m.GetMood())]; !ok {
+		err := UpdateBloodStatusRequestValidationError{
+			field:  "Mood",
+			reason: "value must be one of the defined enum values",
 		}
 		if !all {
 			return err
@@ -1109,9 +1131,9 @@ func (m *ListBloodStatusRequest) validate(all bool) error {
 
 	var errors []error
 
-	// no validation rules for Page
+	// no validation rules for StartTime
 
-	// no validation rules for PageSize
+	// no validation rules for EndTime
 
 	if len(errors) > 0 {
 		return ListBloodStatusRequestMultiError(errors)
@@ -1215,33 +1237,38 @@ func (m *ListBloodStatusReply) validate(all bool) error {
 
 	var errors []error
 
-	if all {
-		switch v := interface{}(m.GetData()).(type) {
-		case interface{ ValidateAll() error }:
-			if err := v.ValidateAll(); err != nil {
-				errors = append(errors, ListBloodStatusReplyValidationError{
-					field:  "Data",
-					reason: "embedded message failed validation",
-					cause:  err,
-				})
+	for idx, item := range m.GetData() {
+		_, _ = idx, item
+
+		if all {
+			switch v := interface{}(item).(type) {
+			case interface{ ValidateAll() error }:
+				if err := v.ValidateAll(); err != nil {
+					errors = append(errors, ListBloodStatusReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
+			case interface{ Validate() error }:
+				if err := v.Validate(); err != nil {
+					errors = append(errors, ListBloodStatusReplyValidationError{
+						field:  fmt.Sprintf("Data[%v]", idx),
+						reason: "embedded message failed validation",
+						cause:  err,
+					})
+				}
 			}
-		case interface{ Validate() error }:
+		} else if v, ok := interface{}(item).(interface{ Validate() error }); ok {
 			if err := v.Validate(); err != nil {
-				errors = append(errors, ListBloodStatusReplyValidationError{
-					field:  "Data",
+				return ListBloodStatusReplyValidationError{
+					field:  fmt.Sprintf("Data[%v]", idx),
 					reason: "embedded message failed validation",
 					cause:  err,
-				})
+				}
 			}
 		}
-	} else if v, ok := interface{}(m.GetData()).(interface{ Validate() error }); ok {
-		if err := v.Validate(); err != nil {
-			return ListBloodStatusReplyValidationError{
-				field:  "Data",
-				reason: "embedded message failed validation",
-				cause:  err,
-			}
-		}
+
 	}
 
 	if len(errors) > 0 {
@@ -1487,6 +1514,8 @@ func (m *BloodStatusRecord) validate(all bool) error {
 
 	var errors []error
 
+	// no validation rules for Id
+
 	// no validation rules for RecordDate
 
 	// no validation rules for TimeOfDay
@@ -1498,6 +1527,10 @@ func (m *BloodStatusRecord) validate(all bool) error {
 	// no validation rules for DiastolicPressure
 
 	// no validation rules for Pulse
+
+	// no validation rules for Mood
+
+	// no validation rules for StatusSummary
 
 	if len(errors) > 0 {
 		return BloodStatusRecordMultiError(errors)
