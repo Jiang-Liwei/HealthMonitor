@@ -37,7 +37,7 @@ func RegisterBloodStatusHTTPServer(s *http.Server, srv BloodStatusHTTPServer) {
 	r := s.Route("/")
 	r.POST("api/v1/blood_status", _BloodStatus_CreateBloodStatus0_HTTP_Handler(srv))
 	r.PUT("api/v1/blood_status", _BloodStatus_UpdateBloodStatus0_HTTP_Handler(srv))
-	r.DELETE("api/v1/blood_status/{id}", _BloodStatus_DeleteBloodStatus0_HTTP_Handler(srv))
+	r.PATCH("api/v1/blood_status/{id}", _BloodStatus_DeleteBloodStatus0_HTTP_Handler(srv))
 	r.GET("api/v1/blood_status/{id}", _BloodStatus_GetBloodStatus0_HTTP_Handler(srv))
 	r.GET("api/v1/blood_status", _BloodStatus_ListBloodStatus0_HTTP_Handler(srv))
 }
@@ -184,7 +184,7 @@ func (c *BloodStatusHTTPClientImpl) DeleteBloodStatus(ctx context.Context, in *D
 	path := binding.EncodeURL(pattern, in, true)
 	opts = append(opts, http.Operation(OperationBloodStatusDeleteBloodStatus))
 	opts = append(opts, http.PathTemplate(pattern))
-	err := c.cc.Invoke(ctx, "DELETE", path, nil, &out, opts...)
+	err := c.cc.Invoke(ctx, "PATCH", path, nil, &out, opts...)
 	if err != nil {
 		return nil, err
 	}

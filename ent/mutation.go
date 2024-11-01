@@ -5690,12 +5690,12 @@ type BloodStatusRecordMutation struct {
 	addpulse              *int8
 	mood                  *bloodstatusrecord.Mood
 	status_summary        *bloodstatusrecord.StatusSummary
-	created_at            *int
-	addcreated_at         *int
-	updated_at            *int
-	addupdated_at         *int
-	deleted_at            *int
-	adddeleted_at         *int
+	created_at            *int64
+	addcreated_at         *int64
+	updated_at            *int64
+	addupdated_at         *int64
+	deleted_at            *int64
+	adddeleted_at         *int64
 	clearedFields         map[string]struct{}
 	done                  bool
 	oldValue              func(context.Context) (*BloodStatusRecord, error)
@@ -6211,13 +6211,13 @@ func (m *BloodStatusRecordMutation) ResetStatusSummary() {
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (m *BloodStatusRecordMutation) SetCreatedAt(i int) {
+func (m *BloodStatusRecordMutation) SetCreatedAt(i int64) {
 	m.created_at = &i
 	m.addcreated_at = nil
 }
 
 // CreatedAt returns the value of the "created_at" field in the mutation.
-func (m *BloodStatusRecordMutation) CreatedAt() (r int, exists bool) {
+func (m *BloodStatusRecordMutation) CreatedAt() (r int64, exists bool) {
 	v := m.created_at
 	if v == nil {
 		return
@@ -6228,7 +6228,7 @@ func (m *BloodStatusRecordMutation) CreatedAt() (r int, exists bool) {
 // OldCreatedAt returns the old "created_at" field's value of the BloodStatusRecord entity.
 // If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BloodStatusRecordMutation) OldCreatedAt(ctx context.Context) (v int, err error) {
+func (m *BloodStatusRecordMutation) OldCreatedAt(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldCreatedAt is only allowed on UpdateOne operations")
 	}
@@ -6243,7 +6243,7 @@ func (m *BloodStatusRecordMutation) OldCreatedAt(ctx context.Context) (v int, er
 }
 
 // AddCreatedAt adds i to the "created_at" field.
-func (m *BloodStatusRecordMutation) AddCreatedAt(i int) {
+func (m *BloodStatusRecordMutation) AddCreatedAt(i int64) {
 	if m.addcreated_at != nil {
 		*m.addcreated_at += i
 	} else {
@@ -6252,7 +6252,7 @@ func (m *BloodStatusRecordMutation) AddCreatedAt(i int) {
 }
 
 // AddedCreatedAt returns the value that was added to the "created_at" field in this mutation.
-func (m *BloodStatusRecordMutation) AddedCreatedAt() (r int, exists bool) {
+func (m *BloodStatusRecordMutation) AddedCreatedAt() (r int64, exists bool) {
 	v := m.addcreated_at
 	if v == nil {
 		return
@@ -6267,13 +6267,13 @@ func (m *BloodStatusRecordMutation) ResetCreatedAt() {
 }
 
 // SetUpdatedAt sets the "updated_at" field.
-func (m *BloodStatusRecordMutation) SetUpdatedAt(i int) {
+func (m *BloodStatusRecordMutation) SetUpdatedAt(i int64) {
 	m.updated_at = &i
 	m.addupdated_at = nil
 }
 
 // UpdatedAt returns the value of the "updated_at" field in the mutation.
-func (m *BloodStatusRecordMutation) UpdatedAt() (r int, exists bool) {
+func (m *BloodStatusRecordMutation) UpdatedAt() (r int64, exists bool) {
 	v := m.updated_at
 	if v == nil {
 		return
@@ -6284,7 +6284,7 @@ func (m *BloodStatusRecordMutation) UpdatedAt() (r int, exists bool) {
 // OldUpdatedAt returns the old "updated_at" field's value of the BloodStatusRecord entity.
 // If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BloodStatusRecordMutation) OldUpdatedAt(ctx context.Context) (v int, err error) {
+func (m *BloodStatusRecordMutation) OldUpdatedAt(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldUpdatedAt is only allowed on UpdateOne operations")
 	}
@@ -6299,7 +6299,7 @@ func (m *BloodStatusRecordMutation) OldUpdatedAt(ctx context.Context) (v int, er
 }
 
 // AddUpdatedAt adds i to the "updated_at" field.
-func (m *BloodStatusRecordMutation) AddUpdatedAt(i int) {
+func (m *BloodStatusRecordMutation) AddUpdatedAt(i int64) {
 	if m.addupdated_at != nil {
 		*m.addupdated_at += i
 	} else {
@@ -6308,7 +6308,7 @@ func (m *BloodStatusRecordMutation) AddUpdatedAt(i int) {
 }
 
 // AddedUpdatedAt returns the value that was added to the "updated_at" field in this mutation.
-func (m *BloodStatusRecordMutation) AddedUpdatedAt() (r int, exists bool) {
+func (m *BloodStatusRecordMutation) AddedUpdatedAt() (r int64, exists bool) {
 	v := m.addupdated_at
 	if v == nil {
 		return
@@ -6323,13 +6323,13 @@ func (m *BloodStatusRecordMutation) ResetUpdatedAt() {
 }
 
 // SetDeletedAt sets the "deleted_at" field.
-func (m *BloodStatusRecordMutation) SetDeletedAt(i int) {
+func (m *BloodStatusRecordMutation) SetDeletedAt(i int64) {
 	m.deleted_at = &i
 	m.adddeleted_at = nil
 }
 
 // DeletedAt returns the value of the "deleted_at" field in the mutation.
-func (m *BloodStatusRecordMutation) DeletedAt() (r int, exists bool) {
+func (m *BloodStatusRecordMutation) DeletedAt() (r int64, exists bool) {
 	v := m.deleted_at
 	if v == nil {
 		return
@@ -6340,7 +6340,7 @@ func (m *BloodStatusRecordMutation) DeletedAt() (r int, exists bool) {
 // OldDeletedAt returns the old "deleted_at" field's value of the BloodStatusRecord entity.
 // If the BloodStatusRecord object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *BloodStatusRecordMutation) OldDeletedAt(ctx context.Context) (v int, err error) {
+func (m *BloodStatusRecordMutation) OldDeletedAt(ctx context.Context) (v int64, err error) {
 	if !m.op.Is(OpUpdateOne) {
 		return v, errors.New("OldDeletedAt is only allowed on UpdateOne operations")
 	}
@@ -6355,7 +6355,7 @@ func (m *BloodStatusRecordMutation) OldDeletedAt(ctx context.Context) (v int, er
 }
 
 // AddDeletedAt adds i to the "deleted_at" field.
-func (m *BloodStatusRecordMutation) AddDeletedAt(i int) {
+func (m *BloodStatusRecordMutation) AddDeletedAt(i int64) {
 	if m.adddeleted_at != nil {
 		*m.adddeleted_at += i
 	} else {
@@ -6364,7 +6364,7 @@ func (m *BloodStatusRecordMutation) AddDeletedAt(i int) {
 }
 
 // AddedDeletedAt returns the value that was added to the "deleted_at" field in this mutation.
-func (m *BloodStatusRecordMutation) AddedDeletedAt() (r int, exists bool) {
+func (m *BloodStatusRecordMutation) AddedDeletedAt() (r int64, exists bool) {
 	v := m.adddeleted_at
 	if v == nil {
 		return
@@ -6372,24 +6372,10 @@ func (m *BloodStatusRecordMutation) AddedDeletedAt() (r int, exists bool) {
 	return *v, true
 }
 
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (m *BloodStatusRecordMutation) ClearDeletedAt() {
-	m.deleted_at = nil
-	m.adddeleted_at = nil
-	m.clearedFields[bloodstatusrecord.FieldDeletedAt] = struct{}{}
-}
-
-// DeletedAtCleared returns if the "deleted_at" field was cleared in this mutation.
-func (m *BloodStatusRecordMutation) DeletedAtCleared() bool {
-	_, ok := m.clearedFields[bloodstatusrecord.FieldDeletedAt]
-	return ok
-}
-
 // ResetDeletedAt resets all changes to the "deleted_at" field.
 func (m *BloodStatusRecordMutation) ResetDeletedAt() {
 	m.deleted_at = nil
 	m.adddeleted_at = nil
-	delete(m.clearedFields, bloodstatusrecord.FieldDeletedAt)
 }
 
 // Where appends a list predicates to the BloodStatusRecordMutation builder.
@@ -6601,21 +6587,21 @@ func (m *BloodStatusRecordMutation) SetField(name string, value ent.Value) error
 		m.SetStatusSummary(v)
 		return nil
 	case bloodstatusrecord.FieldCreatedAt:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetCreatedAt(v)
 		return nil
 	case bloodstatusrecord.FieldUpdatedAt:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetUpdatedAt(v)
 		return nil
 	case bloodstatusrecord.FieldDeletedAt:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6710,21 +6696,21 @@ func (m *BloodStatusRecordMutation) AddField(name string, value ent.Value) error
 		m.AddPulse(v)
 		return nil
 	case bloodstatusrecord.FieldCreatedAt:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddCreatedAt(v)
 		return nil
 	case bloodstatusrecord.FieldUpdatedAt:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.AddUpdatedAt(v)
 		return nil
 	case bloodstatusrecord.FieldDeletedAt:
-		v, ok := value.(int)
+		v, ok := value.(int64)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
@@ -6737,11 +6723,7 @@ func (m *BloodStatusRecordMutation) AddField(name string, value ent.Value) error
 // ClearedFields returns all nullable fields that were cleared during this
 // mutation.
 func (m *BloodStatusRecordMutation) ClearedFields() []string {
-	var fields []string
-	if m.FieldCleared(bloodstatusrecord.FieldDeletedAt) {
-		fields = append(fields, bloodstatusrecord.FieldDeletedAt)
-	}
-	return fields
+	return nil
 }
 
 // FieldCleared returns a boolean indicating if a field with the given name was
@@ -6754,11 +6736,6 @@ func (m *BloodStatusRecordMutation) FieldCleared(name string) bool {
 // ClearField clears the value of the field with the given name. It returns an
 // error if the field is not defined in the schema.
 func (m *BloodStatusRecordMutation) ClearField(name string) error {
-	switch name {
-	case bloodstatusrecord.FieldDeletedAt:
-		m.ClearDeletedAt()
-		return nil
-	}
 	return fmt.Errorf("unknown BloodStatusRecord nullable field %s", name)
 }
 

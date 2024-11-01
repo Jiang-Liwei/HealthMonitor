@@ -95,16 +95,10 @@ func init() {
 	adminuser.DefaultID = adminuserDescID.Default.(func() uuid.UUID)
 	bloodstatusrecordFields := schema.BloodStatusRecord{}.Fields()
 	_ = bloodstatusrecordFields
-	// bloodstatusrecordDescCreatedAt is the schema descriptor for created_at field.
-	bloodstatusrecordDescCreatedAt := bloodstatusrecordFields[10].Descriptor()
-	// bloodstatusrecord.DefaultCreatedAt holds the default value on creation for the created_at field.
-	bloodstatusrecord.DefaultCreatedAt = bloodstatusrecordDescCreatedAt.Default.(int)
-	// bloodstatusrecordDescUpdatedAt is the schema descriptor for updated_at field.
-	bloodstatusrecordDescUpdatedAt := bloodstatusrecordFields[11].Descriptor()
-	// bloodstatusrecord.DefaultUpdatedAt holds the default value on creation for the updated_at field.
-	bloodstatusrecord.DefaultUpdatedAt = bloodstatusrecordDescUpdatedAt.Default.(int)
-	// bloodstatusrecord.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
-	bloodstatusrecord.UpdateDefaultUpdatedAt = bloodstatusrecordDescUpdatedAt.UpdateDefault.(func() int)
+	// bloodstatusrecordDescDeletedAt is the schema descriptor for deleted_at field.
+	bloodstatusrecordDescDeletedAt := bloodstatusrecordFields[12].Descriptor()
+	// bloodstatusrecord.DefaultDeletedAt holds the default value on creation for the deleted_at field.
+	bloodstatusrecord.DefaultDeletedAt = bloodstatusrecordDescDeletedAt.Default.(int64)
 	// bloodstatusrecordDescID is the schema descriptor for id field.
 	bloodstatusrecordDescID := bloodstatusrecordFields[0].Descriptor()
 	// bloodstatusrecord.DefaultID holds the default value on creation for the id field.

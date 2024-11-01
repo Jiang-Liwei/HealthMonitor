@@ -80,17 +80,17 @@ func Pulse(v uint8) predicate.BloodStatusRecord {
 }
 
 // CreatedAt applies equality check predicate on the "created_at" field. It's identical to CreatedAtEQ.
-func CreatedAt(v int) predicate.BloodStatusRecord {
+func CreatedAt(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // UpdatedAt applies equality check predicate on the "updated_at" field. It's identical to UpdatedAtEQ.
-func UpdatedAt(v int) predicate.BloodStatusRecord {
+func UpdatedAt(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
-func DeletedAt(v int) predicate.BloodStatusRecord {
+func DeletedAt(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldDeletedAt, v))
 }
 
@@ -375,133 +375,123 @@ func StatusSummaryNotIn(vs ...StatusSummary) predicate.BloodStatusRecord {
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
-func CreatedAtEQ(v int) predicate.BloodStatusRecord {
+func CreatedAtEQ(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtNEQ applies the NEQ predicate on the "created_at" field.
-func CreatedAtNEQ(v int) predicate.BloodStatusRecord {
+func CreatedAtNEQ(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldCreatedAt, v))
 }
 
 // CreatedAtIn applies the In predicate on the "created_at" field.
-func CreatedAtIn(vs ...int) predicate.BloodStatusRecord {
+func CreatedAtIn(vs ...int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtNotIn applies the NotIn predicate on the "created_at" field.
-func CreatedAtNotIn(vs ...int) predicate.BloodStatusRecord {
+func CreatedAtNotIn(vs ...int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldCreatedAt, vs...))
 }
 
 // CreatedAtGT applies the GT predicate on the "created_at" field.
-func CreatedAtGT(v int) predicate.BloodStatusRecord {
+func CreatedAtGT(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGT(FieldCreatedAt, v))
 }
 
 // CreatedAtGTE applies the GTE predicate on the "created_at" field.
-func CreatedAtGTE(v int) predicate.BloodStatusRecord {
+func CreatedAtGTE(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGTE(FieldCreatedAt, v))
 }
 
 // CreatedAtLT applies the LT predicate on the "created_at" field.
-func CreatedAtLT(v int) predicate.BloodStatusRecord {
+func CreatedAtLT(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLT(FieldCreatedAt, v))
 }
 
 // CreatedAtLTE applies the LTE predicate on the "created_at" field.
-func CreatedAtLTE(v int) predicate.BloodStatusRecord {
+func CreatedAtLTE(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldCreatedAt, v))
 }
 
 // UpdatedAtEQ applies the EQ predicate on the "updated_at" field.
-func UpdatedAtEQ(v int) predicate.BloodStatusRecord {
+func UpdatedAtEQ(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtNEQ applies the NEQ predicate on the "updated_at" field.
-func UpdatedAtNEQ(v int) predicate.BloodStatusRecord {
+func UpdatedAtNEQ(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldUpdatedAt, v))
 }
 
 // UpdatedAtIn applies the In predicate on the "updated_at" field.
-func UpdatedAtIn(vs ...int) predicate.BloodStatusRecord {
+func UpdatedAtIn(vs ...int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtNotIn applies the NotIn predicate on the "updated_at" field.
-func UpdatedAtNotIn(vs ...int) predicate.BloodStatusRecord {
+func UpdatedAtNotIn(vs ...int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldUpdatedAt, vs...))
 }
 
 // UpdatedAtGT applies the GT predicate on the "updated_at" field.
-func UpdatedAtGT(v int) predicate.BloodStatusRecord {
+func UpdatedAtGT(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtGTE applies the GTE predicate on the "updated_at" field.
-func UpdatedAtGTE(v int) predicate.BloodStatusRecord {
+func UpdatedAtGTE(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGTE(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLT applies the LT predicate on the "updated_at" field.
-func UpdatedAtLT(v int) predicate.BloodStatusRecord {
+func UpdatedAtLT(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLT(FieldUpdatedAt, v))
 }
 
 // UpdatedAtLTE applies the LTE predicate on the "updated_at" field.
-func UpdatedAtLTE(v int) predicate.BloodStatusRecord {
+func UpdatedAtLTE(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldUpdatedAt, v))
 }
 
 // DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
-func DeletedAtEQ(v int) predicate.BloodStatusRecord {
+func DeletedAtEQ(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldEQ(FieldDeletedAt, v))
 }
 
 // DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
-func DeletedAtNEQ(v int) predicate.BloodStatusRecord {
+func DeletedAtNEQ(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNEQ(FieldDeletedAt, v))
 }
 
 // DeletedAtIn applies the In predicate on the "deleted_at" field.
-func DeletedAtIn(vs ...int) predicate.BloodStatusRecord {
+func DeletedAtIn(vs ...int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldIn(FieldDeletedAt, vs...))
 }
 
 // DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
-func DeletedAtNotIn(vs ...int) predicate.BloodStatusRecord {
+func DeletedAtNotIn(vs ...int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldNotIn(FieldDeletedAt, vs...))
 }
 
 // DeletedAtGT applies the GT predicate on the "deleted_at" field.
-func DeletedAtGT(v int) predicate.BloodStatusRecord {
+func DeletedAtGT(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGT(FieldDeletedAt, v))
 }
 
 // DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
-func DeletedAtGTE(v int) predicate.BloodStatusRecord {
+func DeletedAtGTE(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldGTE(FieldDeletedAt, v))
 }
 
 // DeletedAtLT applies the LT predicate on the "deleted_at" field.
-func DeletedAtLT(v int) predicate.BloodStatusRecord {
+func DeletedAtLT(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLT(FieldDeletedAt, v))
 }
 
 // DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
-func DeletedAtLTE(v int) predicate.BloodStatusRecord {
+func DeletedAtLTE(v int64) predicate.BloodStatusRecord {
 	return predicate.BloodStatusRecord(sql.FieldLTE(FieldDeletedAt, v))
-}
-
-// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
-func DeletedAtIsNil() predicate.BloodStatusRecord {
-	return predicate.BloodStatusRecord(sql.FieldIsNull(FieldDeletedAt))
-}
-
-// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
-func DeletedAtNotNil() predicate.BloodStatusRecord {
-	return predicate.BloodStatusRecord(sql.FieldNotNull(FieldDeletedAt))
 }
 
 // And groups predicates with the AND operator between them.

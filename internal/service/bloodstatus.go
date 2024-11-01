@@ -2,28 +2,27 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/uuid"
 	pb "healthmonitor/api/bloodstatus/v1"
 	"healthmonitor/ent/bloodstatusrecord"
-	"healthmonitor/internal/biz"
+	"healthmonitor/internal/biz/api"
 )
 
 type BloodStatusService struct {
 	pb.UnimplementedBloodStatusServer
 
-	uc  *biz.BloodStatusUsecase
+	uc  *api.BloodStatusUsecase
 	log *log.Helper
 }
 
-func NewBloodStatusService(uc *biz.BloodStatusUsecase, logger log.Logger) *BloodStatusService {
+func NewBloodStatusService(uc *api.BloodStatusUsecase, logger log.Logger) *BloodStatusService {
 	return &BloodStatusService{uc: uc, log: log.NewHelper(logger)}
 }
 
 func (s *BloodStatusService) CreateBloodStatus(ctx context.Context, req *pb.CreateBloodStatusRequest) (*pb.CreateBloodStatusReply, error) {
 	s.log.Infof("input data %v", req)
-	record, err := s.uc.Create(ctx, &biz.BloodStatus{
+	record, err := s.uc.Create(ctx, &api.BloodStatus{
 		RecordDate:        uint(req.RecordDate),
 		TimeOfDay:         bloodstatusrecord.TimeOfDay(req.TimeOfDay.String()),
 		BeforeAfterMeals:  bloodstatusrecord.BeforeAfterMeals(req.BeforeAfterMeals.String()),
@@ -54,11 +53,9 @@ func (s *BloodStatusService) UpdateBloodStatus(ctx context.Context, req *pb.Upda
 	s.log.Infof("input data %v", req)
 	id, err := uuid.Parse(req.Id)
 	if err != nil {
-		fmt.Printf("/n%s/n", req)
-		println("11111111111111111111111111111111")
 		return nil, err
 	}
-	record, err := s.uc.Update(ctx, id, &biz.BloodStatus{
+	record, err := s.uc.Update(ctx, id, &api.BloodStatus{
 		RecordDate:        uint(req.RecordDate),
 		TimeOfDay:         bloodstatusrecord.TimeOfDay(req.TimeOfDay.String()),
 		BeforeAfterMeals:  bloodstatusrecord.BeforeAfterMeals(req.BeforeAfterMeals.String()),

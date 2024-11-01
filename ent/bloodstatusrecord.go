@@ -37,11 +37,11 @@ type BloodStatusRecord struct {
 	// 整体情况总结:完美，好，一般，差，糟糕的
 	StatusSummary bloodstatusrecord.StatusSummary `json:"status_summary,omitempty"`
 	// CreatedAt holds the value of the "created_at" field.
-	CreatedAt int `json:"created_at,omitempty"`
+	CreatedAt int64 `json:"created_at,omitempty"`
 	// UpdatedAt holds the value of the "updated_at" field.
-	UpdatedAt int `json:"updated_at,omitempty"`
+	UpdatedAt int64 `json:"updated_at,omitempty"`
 	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt    int `json:"deleted_at,omitempty"`
+	DeletedAt    int64 `json:"deleted_at,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -135,19 +135,19 @@ func (bsr *BloodStatusRecord) assignValues(columns []string, values []any) error
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field created_at", values[i])
 			} else if value.Valid {
-				bsr.CreatedAt = int(value.Int64)
+				bsr.CreatedAt = value.Int64
 			}
 		case bloodstatusrecord.FieldUpdatedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field updated_at", values[i])
 			} else if value.Valid {
-				bsr.UpdatedAt = int(value.Int64)
+				bsr.UpdatedAt = value.Int64
 			}
 		case bloodstatusrecord.FieldDeletedAt:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
 			} else if value.Valid {
-				bsr.DeletedAt = int(value.Int64)
+				bsr.DeletedAt = value.Int64
 			}
 		default:
 			bsr.selectValues.Set(columns[i], values[i])

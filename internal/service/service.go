@@ -10,4 +10,5 @@ var ProviderSet = wire.NewSet(
 	NewIndexService,
 	NewBloodStatusService,
 	admin.NewAuthService,
+	admin.NewDashboardService,
 )

@@ -1,4 +1,4 @@
-package biz
+package api
 
 import (
 	"context"
@@ -30,6 +30,11 @@ type BloodStatusRepo interface {
 	FindByID(context.Context, uuid.UUID) (*ent.BloodStatusRecord, error)
 	PageListByUserID(context.Context, uuid.UUID, int, int) (*common.PageData[*ent.BloodStatusRecord], error)
 	ListByUserID(context.Context, uuid.UUID, int, int) ([]*ent.BloodStatusRecord, error)
+	CountByUserID(context.Context, uuid.UUID) (int, error)
+	CountByStatusSummaryAndUserID(context.Context, uuid.UUID, bloodstatusrecord.StatusSummary) (int, error)
+	GetPeriodNum(context.Context, uuid.UUID, int64, int64) (int, error)
+	GetByStatusSummaryAndPeriodNum(context.Context, uuid.UUID, int64, int64, bloodstatusrecord.StatusSummary) (int, error)
+	GetRecentRecords(context.Context, uuid.UUID, int) ([]*ent.BloodStatusRecord, error)
 }
 
 // BloodStatusUsecase is a Greeter usecase.

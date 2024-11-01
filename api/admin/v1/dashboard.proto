@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package api.admin.v1;
+
+import "google/api/annotations.proto";
+
+option go_package = "healthmonitor/api/admin/v1;v1";
+option java_multiple_files = true;
+option java_package = "api.admin.v1";
+
+service Dashboard {
+	rpc Dashboard(DashboardRequest) returns (DashboardReply) {
+		option (google.api.http) = {
+			get: "/admin/v1/dashboard"
+		};
+	}
+}
+
+message DashboardRequest {}
+
+message DashboardReply {
+	repeated CardList cardList = 1;
+	repeated LastSevenRecords lastSevenRecords = 2;
+}
+
+message CardList {
+	int64 num = 1;
+	float changeRatio = 2;
+	string category = 3;
+	repeated MonthDetails monthDetails = 4;
+}
+
+message MonthDetails {
+	int64 num = 1;
+	string month = 2;
+}
+
+message LastSevenRecords {
+	int64 recordDate = 1;
+	string statusSummary = 2;
+	uint64 systolicPressure = 3;
+	uint64 diastolicPressure = 4;
+	uint64 pulse = 5;
+	string mood = 6;
+	string id = 7;
+}

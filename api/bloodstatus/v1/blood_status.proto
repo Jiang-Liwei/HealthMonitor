@@ -24,7 +24,7 @@ service BloodStatus {
 	};
 	rpc DeleteBloodStatus (DeleteBloodStatusRequest) returns (DeleteBloodStatusReply) {
 		option (google.api.http) = {
-			delete: "api/v1/blood_status/{id}"
+			patch: "api/v1/blood_status/{id}"
 		};
 	};
 	rpc GetBloodStatus (GetBloodStatusRequest) returns (GetBloodStatusReply) {

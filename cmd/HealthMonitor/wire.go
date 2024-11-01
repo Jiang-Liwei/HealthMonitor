@@ -21,6 +21,7 @@ func ProvideHTTPServerConfig(
 	index *service.IndexService,
 	bloodStatus *service.BloodStatusService,
 	adminAuth *admin.AuthService,
+	dashboard *admin.DashboardService,
 	logger log.Logger,
 ) server.HTTPServerConfig {
 	return server.HTTPServerConfig{
@@ -28,6 +29,7 @@ func ProvideHTTPServerConfig(
 		Index:       index,
 		BloodStatus: bloodStatus,
 		AdminAuth:   adminAuth,
+		Dashboard:   dashboard,
 		Logger:      logger,
 	}
 }

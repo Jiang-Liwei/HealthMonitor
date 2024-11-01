@@ -17,6 +17,7 @@ type HTTPServerConfig struct {
 	Index       *service.IndexService
 	BloodStatus *service.BloodStatusService
 	AdminAuth   *admin.AuthService
+	Dashboard   *admin.DashboardService
 	Logger      log.Logger
 }
 

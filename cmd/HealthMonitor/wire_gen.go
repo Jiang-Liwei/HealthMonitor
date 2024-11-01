@@ -11,6 +11,7 @@ import (
 	"github.com/go-kratos/kratos/v2/log"
 	"healthmonitor/internal/biz"
 	admin2 "healthmonitor/internal/biz/admin"
+	"healthmonitor/internal/biz/api"
 	"healthmonitor/internal/conf"
 	"healthmonitor/internal/data"
 	"healthmonitor/internal/data/admin"
@@ -33,13 +34,15 @@ func wireApp(c *conf.Server, d *conf.Data, logger log.Logger) (*kratos.App, func
 		return nil, nil, err
 	}
 	bloodStatusRepo := data.NewBloodStatusRepo(coreData, logger)
-	bloodStatusUsecase := biz.NewBloodStatusUsecase(bloodStatusRepo, logger)
+	bloodStatusUsecase := api.NewBloodStatusUsecase(bloodStatusRepo, logger)
 	bloodStatusService := service.NewBloodStatusService(bloodStatusUsecase, logger)
 	userRepo := admin.NewAdminUserRepo(coreData)
 	userUsecase := admin2.NewAdminUserUsecase(userRepo, logger)
 	jwtUsecase := biz.NewJWTUsecase(coreData, logger)
 	authService := admin3.NewAuthService(userUsecase, logger, jwtUsecase)
-	httpServerConfig := ProvideHTTPServerConfig(c, indexService, bloodStatusService, authService, logger)
+	dashboardUsecase := admin2.NewDashboardUsecase(bloodStatusRepo, logger)
+	dashboardService := admin3.NewDashboardService(logger, dashboardUsecase, jwtUsecase)
+	httpServerConfig := ProvideHTTPServerConfig(c, indexService, bloodStatusService, authService, dashboardService, logger)
 	grpcServer := server.NewGRPCServer(httpServerConfig)
 	httpServer := server.NewHTTPServer(httpServerConfig, userUsecase, jwtUsecase)
 	app := newApp(logger, grpcServer, httpServer)
@@ -56,6 +59,7 @@ func ProvideHTTPServerConfig(
 	index *service.IndexService,
 	bloodStatus *service.BloodStatusService,
 	adminAuth *admin3.AuthService,
+	dashboard *admin3.DashboardService,
 	logger log.Logger,
 ) server.HTTPServerConfig {
 	return server.HTTPServerConfig{
@@ -63,6 +67,7 @@ func ProvideHTTPServerConfig(
 		Index:       index,
 		BloodStatus: bloodStatus,
 		AdminAuth:   adminAuth,
+		Dashboard:   dashboard,
 		Logger:      logger,
 	}
 }

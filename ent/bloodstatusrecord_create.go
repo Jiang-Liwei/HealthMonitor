@@ -75,41 +75,25 @@ func (bsrc *BloodStatusRecordCreate) SetStatusSummary(bs bloodstatusrecord.Statu
 }
 
 // SetCreatedAt sets the "created_at" field.
-func (bsrc *BloodStatusRecordCreate) SetCreatedAt(i int) *BloodStatusRecordCreate {
+func (bsrc *BloodStatusRecordCreate) SetCreatedAt(i int64) *BloodStatusRecordCreate {
 	bsrc.mutation.SetCreatedAt(i)
 	return bsrc
 }
 
-// SetNillableCreatedAt sets the "created_at" field if the given value is not nil.
-func (bsrc *BloodStatusRecordCreate) SetNillableCreatedAt(i *int) *BloodStatusRecordCreate {
-	if i != nil {
-		bsrc.SetCreatedAt(*i)
-	}
-	return bsrc
-}
-
 // SetUpdatedAt sets the "updated_at" field.
-func (bsrc *BloodStatusRecordCreate) SetUpdatedAt(i int) *BloodStatusRecordCreate {
+func (bsrc *BloodStatusRecordCreate) SetUpdatedAt(i int64) *BloodStatusRecordCreate {
 	bsrc.mutation.SetUpdatedAt(i)
 	return bsrc
 }
 
-// SetNillableUpdatedAt sets the "updated_at" field if the given value is not nil.
-func (bsrc *BloodStatusRecordCreate) SetNillableUpdatedAt(i *int) *BloodStatusRecordCreate {
-	if i != nil {
-		bsrc.SetUpdatedAt(*i)
-	}
-	return bsrc
-}
-
 // SetDeletedAt sets the "deleted_at" field.
-func (bsrc *BloodStatusRecordCreate) SetDeletedAt(i int) *BloodStatusRecordCreate {
+func (bsrc *BloodStatusRecordCreate) SetDeletedAt(i int64) *BloodStatusRecordCreate {
 	bsrc.mutation.SetDeletedAt(i)
 	return bsrc
 }
 
 // SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (bsrc *BloodStatusRecordCreate) SetNillableDeletedAt(i *int) *BloodStatusRecordCreate {
+func (bsrc *BloodStatusRecordCreate) SetNillableDeletedAt(i *int64) *BloodStatusRecordCreate {
 	if i != nil {
 		bsrc.SetDeletedAt(*i)
 	}
@@ -165,13 +149,9 @@ func (bsrc *BloodStatusRecordCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (bsrc *BloodStatusRecordCreate) defaults() {
-	if _, ok := bsrc.mutation.CreatedAt(); !ok {
-		v := bloodstatusrecord.DefaultCreatedAt
-		bsrc.mutation.SetCreatedAt(v)
-	}
-	if _, ok := bsrc.mutation.UpdatedAt(); !ok {
-		v := bloodstatusrecord.DefaultUpdatedAt
-		bsrc.mutation.SetUpdatedAt(v)
+	if _, ok := bsrc.mutation.DeletedAt(); !ok {
+		v := bloodstatusrecord.DefaultDeletedAt
+		bsrc.mutation.SetDeletedAt(v)
 	}
 	if _, ok := bsrc.mutation.ID(); !ok {
 		v := bloodstatusrecord.DefaultID()
@@ -233,6 +213,9 @@ func (bsrc *BloodStatusRecordCreate) check() error {
 	}
 	if _, ok := bsrc.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "BloodStatusRecord.updated_at"`)}
+	}
+	if _, ok := bsrc.mutation.DeletedAt(); !ok {
+		return &ValidationError{Name: "deleted_at", err: errors.New(`ent: missing required field "BloodStatusRecord.deleted_at"`)}
 	}
 	return nil
 }
@@ -306,15 +289,15 @@ func (bsrc *BloodStatusRecordCreate) createSpec() (*BloodStatusRecord, *sqlgraph
 		_node.StatusSummary = value
 	}
 	if value, ok := bsrc.mutation.CreatedAt(); ok {
-		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt, value)
+		_spec.SetField(bloodstatusrecord.FieldCreatedAt, field.TypeInt64, value)
 		_node.CreatedAt = value
 	}
 	if value, ok := bsrc.mutation.UpdatedAt(); ok {
-		_spec.SetField(bloodstatusrecord.FieldUpdatedAt, field.TypeInt, value)
+		_spec.SetField(bloodstatusrecord.FieldUpdatedAt, field.TypeInt64, value)
 		_node.UpdatedAt = value
 	}
 	if value, ok := bsrc.mutation.DeletedAt(); ok {
-		_spec.SetField(bloodstatusrecord.FieldDeletedAt, field.TypeInt, value)
+		_spec.SetField(bloodstatusrecord.FieldDeletedAt, field.TypeInt64, value)
 		_node.DeletedAt = value
 	}
 	return _node, _spec
